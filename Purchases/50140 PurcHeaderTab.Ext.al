@@ -189,6 +189,36 @@ tableextension 50140 PurchHeader extends "Purchase Header"
         TestField("Shortcut Dimension 2 Code");
     end;
 
+    procedure CheckRemaingInvoice()
+    var
+        PurchLine: Record "Purchase Line";
+        RemainingQty: Decimal;
+    begin
+        PurchLine.SetRange("Document No.", Rec."No.");
+        if PurchLine.FindFirst() then
+            repeat
+                RemainingQty := PurchLine."Quantity Received" - PurchLine."Quantity Invoiced";
+                if PurchLine."Qty. to Invoice" > RemainingQty then
+                    Error('You cannot invoice more than %1', RemainingQty);
+            until PurchLine.Next() = 0
+    end;
+
+    procedure CalculateNewQtytoInvoice()
+    var
+        PurchLine: Record "Purchase Line";
+    begin
+        Commit();
+        PurchLine.SetRange("Document Type", PurchLine."Document Type"::Order);
+        PurchLine.SetRange("Document No.", Rec."No.");
+        if PurchLine.FindFirst() then
+            repeat
+                PurchLine."Qty. to Invoice" := PurchLine."Quantity Received" - PurchLine."Quantity Invoiced";
+                PurchLine.Modify()
+            until PurchLine.Next() = 0
+
+    end;
+
+
     var
 
         TCode: Record "Tariff Codes";

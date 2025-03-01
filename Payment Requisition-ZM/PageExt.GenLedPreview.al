@@ -1,17 +1,8 @@
-pageextension 50023 GeneralLedgerEntries extends "General Ledger Entries"
+pageextension 50024 GLPostingPreviewExt extends "G/L Entries Preview"
 {
     layout
     {
-        addbefore(Amount)
-        {
-            field(CurrencyCode; Rec."Source Currency Code")
-            {
-                ApplicationArea = All;
-                Caption = 'Currency Code';
-            }
-        }
-       
-          addafter(Description)
+        addafter(Description)
         {
             field("G/L Account Name ";Rec."G/L Account Name") { }
         }
@@ -30,7 +21,6 @@ pageextension 50023 GeneralLedgerEntries extends "General Ledger Entries"
     begin
         if PurchInvHdr.Get(Rec."Document No.") then;
     end;
-
     var
         PurchInvHdr: Record "Purch. Inv. Header";
 }

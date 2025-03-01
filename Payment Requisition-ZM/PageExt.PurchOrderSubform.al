@@ -1,11 +1,10 @@
-pageextension 50015 PurchInvoiceSubform extends "Purch. Invoice Subform"
+pageextension 50050 PurchOrderSubform extends "Purchase Order Subform"
 {
     layout
     {
         modify("Description 2")
         {
             Visible = true;
-            Caption = 'Narration';
         }
         addbefore("Shortcut Dimension 1 Code")
         {
@@ -20,15 +19,12 @@ pageextension 50015 PurchInvoiceSubform extends "Purch. Invoice Subform"
         {
             field("Tax Type"; Rec."Tax Type")
             {
-                Visible = false;
                 ApplicationArea = All;
             }
             field("Unit Cost b/f Adjusted"; Rec."Unit Cost b/f Adjusted")
             {
-                Visible = false;
                 ApplicationArea = All;
             }
-
         }
         modify("Direct Unit Cost")
         {
@@ -45,7 +41,7 @@ pageextension 50015 PurchInvoiceSubform extends "Purch. Invoice Subform"
     actions
     {
 
-        addafter("&Line")
+        addafter("O&rder")
         {
             group(WHTVAT)
             {
@@ -64,7 +60,43 @@ pageextension 50015 PurchInvoiceSubform extends "Purch. Invoice Subform"
             }
         }
     }
+    // local procedure PurchaseVATEntry(Rec: Record "Purchase Line")
+    // var
+    //     VATAndWHTEntry: Record VATAndWHTEntry;
+    //     VATAndWHTEntries: Page VATAndWHTEntries;
+    //     VATWHTPostingGrp: Record "VAT/WHT Posting Group";
+    //     PurchaseLine: Record "Purchase Line";
+    // begin
+    //     PurchaseLine := Rec;
+    //     PurchaseLine.SetRecFilter();
+    //     VATAndWHTEntry.SetRange("Document No.", Rec."Document No.");
+    //     VATAndWHTEntry.SetRange("Line No.", Rec."Line No.");
+    //     if not VATAndWHTEntry.FindSet() then begin
+    //         VATWHTPostingGrp.FindSet();
+    //         repeat
+    //             VATAndWHTEntry.Init();
+    //             VATAndWHTEntry."Document Type" := 'PURCH ' + Format(PurchaseLine."Document Type");
+    //             VATAndWHTEntry."Document No." := PurchaseLine."Document No.";
+    //             VATAndWHTEntry."Line No." := PurchaseLine."Line No.";
+    //             VATAndWHTEntry.Quantity := 1;
+    //             VATAndWHTEntry."VAT/WHT Posting Group" := VATWHTPostingGrp.Code;
+    //             VATAndWHTEntry."VAT/WHT Percent" := VATWHTPostingGrp."WithHolding Tax %";
+    //             VATAndWHTEntry."Tax Account" := VATWHTPostingGrp."Tax Account";
+    //             VATAndWHTEntry.Description := VATWHTPostingGrp.Description;
+    //             VATAndWHTEntry."Adjustment %" := VATAndWHTEntry."Adjustment %";
+    //             VATAndWHTEntry.Insert();
+    //         until VATWHTPostingGrp.Next() = 0;
+    //         Commit();
+    //     end;
+    //     VATAndWHTEntries.LOOKUPMODE := TRUE;
+
+
+    //     VATAndWHTEntries.SETTABLEVIEW(VATAndWHTEntry);
+
+    //     //VATAndWHTEntries.SetPaymentHeader(CashLiteTransHeader);
+    //     VATAndWHTEntries.RUNMODAL;
+    // end;
+
     var
         GeneralCodeunit: Codeunit GeneralCodeunit;
-
 }

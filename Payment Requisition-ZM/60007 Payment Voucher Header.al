@@ -358,7 +358,6 @@ table 60009 "Payment Voucher Header"
                     "Applies-to Invoice No." := VendLedgerEntry."Document No.";
                     InsertVoucherLine();
                 end;
-
                 Clear(VendLedgerEntryList);
                 Clear(VendLedgerEntry);
             end;
