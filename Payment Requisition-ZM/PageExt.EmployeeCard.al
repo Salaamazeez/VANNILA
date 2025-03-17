@@ -9,6 +9,20 @@ pageextension 50009 EmployeeExt extends "Employee Card"
                 ApplicationArea = All;
 
             }
+
+        }
+        addafter(Gender)
+        {
+            field("Leave Setup Code"; Rec."Leave Setup Code")
+            {
+                ApplicationArea = All;
+                TableRelation = LeaveSetup;
+            }
+            field("Manager No."; Rec."Manager No.")
+            {
+                ApplicationArea = All;
+                TableRelation = Employee;
+            }
         }
     }
 

@@ -24,6 +24,17 @@ pageextension 50006 UserSetupExt extends "User Setup"
             {
                 ApplicationArea = All;
             }
+
+            field("Appraiser Line Manager"; Rec."Appraiser Line Manager")
+            {
+
+            }
+            field("HR Administrator"; Rec."HR Administrator")
+            {
+
+            }
+
+
         }
     }
 
