@@ -1,5 +1,8 @@
 codeunit 50102 GeneralCodeunit
 {
+
+
+    
     procedure CreatePurchaseLine(Rec: Record VATAndWHTEntry)
     var
         LastNo: Integer;
@@ -162,6 +165,7 @@ codeunit 50102 GeneralCodeunit
                 VATAndWHTEntry."Adjustment %" := VATAndWHTEntry."Adjustment %";
                 VATAndWHTEntry.Credit := VATWHTPostingGrp.Credit;
                 VATAndWHTEntry.Type := VATWHTPostingGrp.Type;
+                VATAndWHTEntry."Linked to VAT/WHT":=VATWHTPostingGrp."Linked to VAT/WHT";
                 VATAndWHTEntry."Transaction Type" := VATWHTPostingGrp."Transaction Type"::Purchase;
                 VATAndWHTEntry.Insert();
             until VATWHTPostingGrp.Next() = 0;
@@ -209,6 +213,7 @@ codeunit 50102 GeneralCodeunit
                 VATAndWHTEntry.Type := VATWHTPostingGrp.Type;
                 VATAndWHTEntry.Credit := VATWHTPostingGrp.Credit;
                 VATAndWHTEntry."Transaction Type" := VATWHTPostingGrp."Transaction Type"::Sales;
+                VATAndWHTEntry."Linked to VAT/WHT":=VATWHTPostingGrp."Linked to VAT/WHT";
                 VATAndWHTEntry.Insert();
             until VATWHTPostingGrp.Next() = 0;
             Commit();
@@ -218,4 +223,6 @@ codeunit 50102 GeneralCodeunit
         VATAndWHTEntries.Editable := true;
         VATAndWHTEntries.RUNMODAL;
     end;
+
+    
 }

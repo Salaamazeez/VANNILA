@@ -69,33 +69,33 @@ pageextension 50002 ProjectManagerRCExt extends "Job Project Manager RC"
                     Caption = 'Cash Adv. Retirements';
                     RunObject = Page "Retirement List";
                 }
-                action("Payment Vouchers")
-                {
-                    ApplicationArea = Basic;
-                    Image = List;
-                    Promoted = true;
-                    RunObject = page "Payment Voucher List";
-                }
-                action("Pending Payment Voucher")
-                {
-                    ApplicationArea = Basic;
-                    Caption = 'Pending Payment Voucher';
-                    RunObject = Page "Pending Payment Voucher List";
-                }
-                action("Approved Payment Vouchers")
-                {
-                    ApplicationArea = Basic;
-                    Image = List;
-                    Promoted = true;
-                    RunObject = page "Approved Payment Voucher List";
-                }
-                action("Posted Payment Vouchers")
-                {
-                    ApplicationArea = Basic;
-                    Image = List;
-                    Promoted = true;
-                    RunObject = page "Posted Payment Voucher List";
-                }
+                // action("Payment Vouchers")
+                // {
+                //     ApplicationArea = Basic;
+                //     Image = List;
+                //     Promoted = true;
+                //     RunObject = page "Payment Voucher List";
+                // }
+                // action("Pending Payment Voucher")
+                // {
+                //     ApplicationArea = Basic;
+                //     Caption = 'Pending Payment Voucher';
+                //     RunObject = Page "Pending Payment Voucher List";
+                // }
+                // action("Approved Payment Vouchers")
+                // {
+                //     ApplicationArea = Basic;
+                //     Image = List;
+                //     Promoted = true;
+                //     RunObject = page "Approved Payment Voucher List";
+                // }
+                // action("Posted Payment Vouchers")
+                // {
+                //     ApplicationArea = Basic;
+                //     Image = List;
+                //     Promoted = true;
+                //     RunObject = page "Posted Payment Voucher List";
+                // }
                 action("Payment Requests")
                 {
                     ApplicationArea = Basic;

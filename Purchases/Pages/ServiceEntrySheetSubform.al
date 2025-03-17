@@ -1,4 +1,4 @@
-page 50086 "Service Entry Sheet Subform"
+page 50086 "Work Completion Cert. Subform"
 {
     AutoSplitKey = true;
     Caption = 'Lines';
@@ -1204,7 +1204,7 @@ page 50086 "Service Entry Sheet Subform"
                         Rec.ShowDimensions();
                     end;
                 }
-                
+
                 action("Co&mments")
                 {
                     ApplicationArea = Comments;

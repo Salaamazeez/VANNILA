@@ -51,14 +51,31 @@ table 50101 VATAndWHTEntry
         }
         field(9; Selected; Boolean)
         {
+            trigger OnValidate()
+            var
+                VATAndWHTPostingGrp: Record "VAT/WHT Posting Group";
+                VATAndWHT: Record VATAndWHTEntry;
+            begin
 
+                if  "Linked to VAT/WHT" = '' then 
+                    exit;
+
+                    VATAndWHT.SetRange("Document Type", "Document Type");
+                    VATAndWHT.SetRange("VAT/WHT Posting Group", "Linked to VAT/WHT");
+                    VATAndWHT.SetRange("Line No.", "Line No.");
+                    VATAndWHT.SetRange("Document No.", "Document No.");
+                    if VATAndWHT.FindFirst() then begin
+                        VATAndWHT.Selected := Selected;
+                        VATAndWHT.Modify();
+                    end;
+                end;
         }
         field(10; Description; Text[100])
         {
         }
         field(11; "Adjustment %"; Decimal) { }
         field(12; Credit; Boolean) { }
-         field(13; Type; Option)
+        field(13; Type; Option)
         {
             Editable = false;
             OptionMembers = " ",VAT,WHT;
@@ -67,11 +84,16 @@ table 50101 VATAndWHTEntry
         {
             OptionMembers = " ",Purchase,Sales;
         }
+        field(15; "Linked to VAT/WHT"; Code[20])
+        {
+            TableRelation = VATAndWHTEntry;
+
+        }
     }
 
     keys
     {
-        key(Key1; "Document Type", "Document No.", "Tax Account","Transaction Type","VAT/WHT Posting Group", "Line No.")
+        key(Key1; "Document Type", "Document No.", "Tax Account", "Transaction Type", "VAT/WHT Posting Group", "Line No.")
         {
             Clustered = true;
         }

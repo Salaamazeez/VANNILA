@@ -109,21 +109,7 @@ pageextension 50000 AccPayablesCoordinatorRCExt extends "Acc. Payables Coordinat
                     RunObject = Page "Approved Retirement List";
                 }
 
-                action("Payment Vouchers")
-                {
-                    ApplicationArea = Basic;
-                    Image = List;
-                    Promoted = true;
-                    RunObject = page "Payment Voucher List";
-                }
 
-                action("Approved Payment Vouchers")
-                {
-                    ApplicationArea = Basic;
-                    Image = List;
-                    Promoted = true;
-                    RunObject = page "Approved Payment Voucher List";
-                }
 
             }
 
@@ -147,7 +133,21 @@ pageextension 50000 AccPayablesCoordinatorRCExt extends "Acc. Payables Coordinat
                 Image = "Report";
                 //RunObject = report ;
             }
+            action("Payment Vouchers")
+            {
+                ApplicationArea = Basic;
+                Image = List;
+                Promoted = true;
+                RunObject = page "Payment Voucher List";
+            }
 
+            action("Approved Payment Vouchers")
+            {
+                ApplicationArea = Basic;
+                Image = List;
+                Promoted = true;
+                RunObject = page "Approved Payment Voucher List";
+            }
             action("Phys. Inventory Journals")
             {
                 ApplicationArea = Basic;

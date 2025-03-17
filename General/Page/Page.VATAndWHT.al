@@ -58,6 +58,9 @@ page 50029 VATAndWHTEntries
                 {
                     ApplicationArea = Basic;
                 }
+                field("Linked to VAT/WHT";Rec."Linked to VAT/WHT"){
+                    ApplicationArea = Basic;
+                }
             }
         }
     }

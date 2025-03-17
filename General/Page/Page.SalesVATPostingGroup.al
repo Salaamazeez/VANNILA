@@ -55,6 +55,9 @@ Page 50202 "Sales VAT/WHT Posting Group"
                 {
                     ApplicationArea = Basic;
                 }
+                field("Linked to VAT/WHT";Rec."Linked to VAT/WHT"){
+                    ApplicationArea = Basic;
+                }
             }
 
         }

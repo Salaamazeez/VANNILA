@@ -107,21 +107,21 @@ pageextension 50004 ITManagerRCExt extends "Administrator Role Center"
                     RunObject = Page "Approved Retirement List";
                 }
 
-                action("Payment Vouchers")
-                {
-                    ApplicationArea = Basic;
-                    Image = List;
-                    Promoted = true;
-                    RunObject = page "Payment Voucher List";
-                }
+                // action("Payment Vouchers")
+                // {
+                //     ApplicationArea = Basic;
+                //     Image = List;
+                //     Promoted = true;
+                //     RunObject = page "Payment Voucher List";
+                // }
 
-                action("Approved Payment Vouchers")
-                {
-                    ApplicationArea = Basic;
-                    Image = List;
-                    Promoted = true;
-                    RunObject = page "Approved Payment Voucher List";
-                }
+                // action("Approved Payment Vouchers")
+                // {
+                //     ApplicationArea = Basic;
+                //     Image = List;
+                //     Promoted = true;
+                //     RunObject = page "Approved Payment Voucher List";
+                // }
 
             }
 

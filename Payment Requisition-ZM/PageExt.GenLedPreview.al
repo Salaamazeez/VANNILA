@@ -1,10 +1,14 @@
-pageextension 50024 GLPostingPreviewExt extends "G/L Entries Preview"
+pageextension 50134 GLPostingPreviewExt extends "G/L Entries Preview"
 {
     layout
     {
         addafter(Description)
         {
             field("G/L Account Name ";Rec."G/L Account Name") { }
+        }
+        addafter(Amount){
+            field("Source Type";Rec."Source Type") { }
+            field("Source Code ";Rec."Source Code") { }
         }
     }
 

@@ -118,7 +118,7 @@ table 60009 "Payment Voucher Header"
             IF ("Bal Account Type" = CONST(Vendor)) Vendor else
             if ("Bal Account Type" = const(Staff)) Customer where(Type = const(Staff))
             else
-            if ("Bal Account Type" = const("Bank Account")) "Bank Account" where("Currency Code" = field("Currency Code"));
+            if ("Bal Account Type" = const("Bank Account")) "Bank Account" /* where("Currency Code" = field("Currency Code" ))*/;
 
             trigger OnValidate()
             var
@@ -142,7 +142,7 @@ table 60009 "Payment Voucher Header"
                                 exit;
                             Vend.GET("Bal Account No.");
                             "Bal Account Name" := Vend.Name;
-                            Validate("Currency Code", Vend."Currency Code");
+                            //Validate("Currency Code", Vend."Currency Code");
                             Validate("Shortcut Dimension 1 Code", Vend."Global Dimension 1 Code");
                             Validate("Shortcut Dimension 2 Code", Vend."Global Dimension 2 Code");
 
@@ -172,7 +172,7 @@ table 60009 "Payment Voucher Header"
                             //     exit;
                             BankAccount.GET("Bal Account No.");
                             "Bal Account Name" := BankAccount.Name;
-                            Validate("Currency Code", BankAccount."Currency Code");
+                            //Validate("Currency Code", BankAccount."Currency Code");
                             Validate("Shortcut Dimension 1 Code", EmpRec."Global Dimension 1 Code");
                             Validate("Shortcut Dimension 2 Code", EmpRec."Global Dimension 2 Code");
 
@@ -548,9 +548,9 @@ table 60009 "Payment Voucher Header"
                     GenJournalLine.Validate("Bal. Account Type", GenJournalLine."Bal. Account Type"::Customer);
                 IF "Bal Account Type" = "Bal Account Type"::"G/L Account" THEN
                     GenJournalLine."Bal. Account Type" := GenJournalLine."Bal. Account Type"::"G/L Account";
-                GenJournalLine.VALIDATE(Amount, SignRegulator * -PaymentVoucherLine.Amount);
+                GenJournalLine.VALIDATE(Amount, SignRegulator * PaymentVoucherLine.Amount);
                 GenJournalLine."Bal. Account No." := "Bal Account No.";
-                GenJournalLine.VALIDATE("Currency Code", PaymentVoucherLine."Currency Code");
+                //GenJournalLine.VALIDATE("Currency Code", PaymentVoucherLine."Currency Code");
                 GenJournalLine."Transaction type" := Rec."Transaction type";
                 GenJournalLine."Loan ID" := Rec."Loan ID";
                 GenJournalLine."Gen. Bus. Posting Group" := '';

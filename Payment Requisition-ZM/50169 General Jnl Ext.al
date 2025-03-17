@@ -8,10 +8,10 @@ tableextension 50169 "Gen Jnl Ext" extends "Gen. Journal Line"
         {
             Caption = 'Document Reference No.';
         }
-        field(50002; "Description 2"; Text[100])
-        {
+        // field(50002; "Description 2"; Text[100])
+        // {
 
-        }
+        // }
         field(50004; "Transaction type"; Option)
         {
             OptionMembers = " ",Loan,"Staff Adv";
@@ -36,6 +36,7 @@ tableextension 50169 "Gen Jnl Ext" extends "Gen. Journal Line"
             DataClassification = ToBeClassified;
         }
         field(50000; "1% NCDF Amount"; Decimal) { }
+        field(50002;"Description 2";Text[100]){}
         // field(50105; "WHT Amount"; Decimal)
         // {
 

@@ -51,7 +51,11 @@ Page 50203 "Purch VAT/WHT Posting Group"
                 {
                     ApplicationArea = Basic;
                 }
-                field("Transaction Type";Rec."Transaction Type")
+                field("Transaction Type"; Rec."Transaction Type")
+                {
+                    ApplicationArea = Basic;
+                }
+                field("Linked to VAT/WHT"; Rec."Linked to VAT/WHT")
                 {
                     ApplicationArea = Basic;
                 }
