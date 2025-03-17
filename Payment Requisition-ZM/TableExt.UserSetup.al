@@ -7,6 +7,16 @@ tableextension 50101 UserSetupExtension extends "User Setup"
         field(50003; "Master Record Admin"; Boolean) { }
         field(50004; "HR Admin"; Boolean) { }
         field(50005; "Procurement Admin"; Boolean) { }
+        field(50100; "Appraiser Line Manager"; Boolean)
+        {
+            Caption = 'Appraiser Line Manager';
+            DataClassification = ToBeClassified;
+        }
+        field(50101; "HR Administrator"; Boolean)
+        {
+            Caption = 'HR Administrator';
+            DataClassification = ToBeClassified;
+        }
     }
 
     keys

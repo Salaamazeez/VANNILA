@@ -3,7 +3,15 @@ tableextension 50004 EmployeeExt extends Employee
     fields
     {
         field(50002; "No. 2"; Text[50]) { }
+        field(50003; "Leave Setup Code"; code[20])
+        {
+            Caption = 'Leave Setup Code';
+            DataClassification = ToBeClassified;
+            TableRelation = LeaveSetup;
+        }
+
     }
+
 
     keys
     {
