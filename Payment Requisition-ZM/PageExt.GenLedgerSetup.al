@@ -12,6 +12,11 @@ pageextension 50019 GenLedgerSetupExt extends "General Ledger Setup"
             {
                 ApplicationArea = All;
             }
+            field("General Journal Template";Rec."General Journal Template")
+            {
+                ApplicationArea = All;
+            }
+            field("General Journal Batch";Rec."General Journal Batch"){ ApplicationArea = All;}
         }
     }
 

@@ -8,10 +8,33 @@ tableextension 50169 "Gen Jnl Ext" extends "Gen. Journal Line"
         {
             Caption = 'Document Reference No.';
         }
-        // field(50002; "Description 2"; Text[100])
-        // {
-
-        // }
+        modify("Bal. Account No.")
+        {
+            trigger OnBeforeValidate()
+            var
+                BankAcc: Record "Bank Account";
+            begin
+                if "Bal. Account Type" = "Bal. Account Type"::"Bank Account" then begin
+                    if BankAcc.Get("Bal. Account No.") then
+                        if BankAcc."Suspense/Clearing" = BankAcc."Suspense/Clearing"::"Main Bank" then
+                            "KBS Closed" := true;
+                    if BankAcc."Suspense/Clearing" = BankAcc."Suspense/Clearing"::"Bank Receipts" then
+                        "Suspense/Clearing" := BankAcc."Suspense/Clearing"::"Bank Receipts"
+                end;
+            end;
+        }
+        modify("Account No.")
+        {
+            trigger OnBeforeValidate()
+            var
+                BankAcc: Record "Bank Account";
+            begin
+                if "Account Type" = "Account Type"::"Bank Account" then begin
+                    if BankAcc.Get("Account No.") then
+                        "Suspense/Clearing" := BankAcc."Suspense/Clearing";
+                end;
+            end;
+        }
         field(50004; "Transaction type"; Option)
         {
             OptionMembers = " ",Loan,"Staff Adv";
@@ -36,7 +59,7 @@ tableextension 50169 "Gen Jnl Ext" extends "Gen. Journal Line"
             DataClassification = ToBeClassified;
         }
         field(50000; "1% NCDF Amount"; Decimal) { }
-        field(50002;"Description 2";Text[100]){}
+        field(50002; "Description 2"; Text[100]) { }
         // field(50105; "WHT Amount"; Decimal)
         // {
 
@@ -85,6 +108,40 @@ tableextension 50169 "Gen Jnl Ext" extends "Gen. Journal Line"
         }
         field(50003; "Cashier Name"; Code[100])
         {
+        }
+        field(50006; "Suspense/Clearing"; Option)
+        {
+            OptionMembers = " ","Bank Payment","Bank Receipts";
+        }
+
+        field(50007; "KBS-Account No."; Code[20])
+        {
+            Caption = 'Account No.';
+            TableRelation = if ("Account Type" = const("G/L Account")) "G/L Account" where("Account Type" = const(Posting),
+                                                                                          Blocked = const(false))
+            else
+            if ("Account Type" = const(Customer)) Customer
+            else
+            if ("Account Type" = const(Vendor)) Vendor
+            else
+            if ("Account Type" = const("Bank Account")) "Bank Account" where("Suspense/Clearing" = field("Suspense/Clearing"))
+            else
+            if ("Account Type" = const("Fixed Asset")) "Fixed Asset"
+            else
+            if ("Account Type" = const("IC Partner")) "IC Partner"
+            else
+            if ("Account Type" = const("Allocation Account")) "Allocation Account"
+            else
+            if ("Account Type" = const(Employee)) Employee;
+            trigger OnValidate()
+            begin
+                Validate("Account No.", "KBS-Account No.");
+            end;
+        }
+        field(50014; "KBS Closed"; Boolean)
+        {
+            Caption = 'Bank Closed';
+            Editable = false;
         }
     }
 
@@ -390,7 +447,8 @@ tableextension 50169 "Gen Jnl Ext" extends "Gen. Journal Line"
     //Err001: Label 'Kindly select a %1 value';
     //Err002: Label 'Kindly input a %1 value';
     begin
-        GenJournalLine.SetRange("Document No.", Rec."Document No.");
+        GenJournalLine.SetRange("Journal Template Name", Rec."Journal Template Name");
+        GenJournalLine.SetRange("Journal BAtch Name", Rec."Journal Batch Name");
         GenJournalLine.FindFirst();
         repeat
             if GenJournalLine.Amount = 0 then

@@ -9,6 +9,16 @@ tableextension 50005 GenLedgerSetupExt extends "General Ledger Setup"
         field(50002; "Enable ESS"; Boolean)
         {
         }
+        field(50003; "General Journal Template"; Code[10])
+        {
+            DataClassification = EndUserIdentifiableInformation;
+            TableRelation = "Gen. Journal Template";
+        }
+        field(50004; "General Journal Batch"; Text[10])
+        {
+            DataClassification = EndUserIdentifiableInformation;
+            TableRelation = "Gen. Journal Batch".Name where("Journal Template Name" = field("General Journal Template"));
+        }
     }
 
     keys

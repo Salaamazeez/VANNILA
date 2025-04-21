@@ -1,10 +1,17 @@
 tableextension 50021 BankAccountExt extends "Bank Account"
 {
-
+    fields
+    {
+        field(50060; "Suspense/Clearing"; Option)
+        {
+            OptionMembers = " ","Bank Payment","Bank Receipts","Main Bank";
+        }
+    }
     keys
     {
         // Add changes to keys here
     }
+
 
     fieldgroups
     {

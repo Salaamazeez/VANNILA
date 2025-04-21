@@ -107,6 +107,8 @@ table 60009 "Payment Voucher Header"
         field(24; "Bal Account Type"; Option)
         {
             OptionMembers = "G/L Account",Vendor,Staff,"Bank Account","Fixed Asset";
+            InitValue = "Bank Account";
+            Editable = false;
         }
 
         field(25; "Bal Account No."; Code[20])
@@ -118,7 +120,7 @@ table 60009 "Payment Voucher Header"
             IF ("Bal Account Type" = CONST(Vendor)) Vendor else
             if ("Bal Account Type" = const(Staff)) Customer where(Type = const(Staff))
             else
-            if ("Bal Account Type" = const("Bank Account")) "Bank Account" /* where("Currency Code" = field("Currency Code" ))*/;
+            if ("Bal Account Type" = const("Bank Account")) "Bank Account" where("Suspense/Clearing" = field("Suspense/Clearing"));
 
             trigger OnValidate()
             var
@@ -167,7 +169,7 @@ table 60009 "Payment Voucher Header"
                             // Validate("Currency Code", Vend."Currency Code");
                             // Validate("Shortcut Dimension 1 Code", BankAccount."Global Dimension 1 Code");
                             // Validate("Shortcut Dimension 2 Code", BankAccount."Global Dimension 2 Code");
-                            TestField(Beneficiary);
+                            //TestField(Beneficiary);
                             // if not EmpRec.GET("Bal Account No.") then
                             //     exit;
                             BankAccount.GET("Bal Account No.");
@@ -391,8 +393,8 @@ table 60009 "Payment Voucher Header"
                 Employee: Record Employee;
             begin
                 begin
-                    Employee.GET(Beneficiary);
-                    "Beneficiary Name" := Employee.FullName();
+                    //Employee.GET(Beneficiary);
+                    //"Beneficiary Name" := Employee.FullName();
                 end;
             end;
 
@@ -404,7 +406,11 @@ table 60009 "Payment Voucher Header"
             DataClassification = CustomerContent;
             Editable = false;
         }
-
+        field(50060; "Suspense/Clearing"; Option)
+        {
+            OptionMembers = " ","Bank Payment","Bank Receipts","Main Bank";
+            InitValue = "Bank Payment";
+        }
     }
 
 
