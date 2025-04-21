@@ -102,27 +102,7 @@ pageextension 50005 FinanceManagerRCExt extends "Finance Manager Role Center"
                     RunObject = Page "Approved Retirement List";
                 }
 
-                action("Payment Vouchers")
-                {
-                    ApplicationArea = Basic;
-                    Image = List;
-                    Promoted = true;
-                    RunObject = page "Payment Voucher List";
-                }
-                action("Pending Payment Voucher")
-                {
-                    ApplicationArea = Basic;
-                    Caption = 'Pending Payment Voucher';
-                    RunObject = Page "Pending Payment Voucher List";
-                }
-                action("Approved Payment Vouchers")
-                {
-                    ApplicationArea = Basic;
-                    Image = List;
-                    Promoted = true;
-                    RunObject = page "Approved Payment Voucher List";
-                }
-
+               
             }
 
 

@@ -42,11 +42,15 @@ Table 52130 "VAT/WHT Posting Group"
         {
             OptionMembers = " ",Purchase,Sales;
         }
+        field(15; "Linked to VAT/WHT"; Code[20])
+        {
+            TableRelation = "VAT/WHT Posting Group".Code where(Type = field(Type),"Transaction Type" = field("Transaction Type"));
+        }
     }
 
     keys
     {
-        key(Key1; "Code","Transaction Type")
+        key(Key1; "Code", "Transaction Type")
         {
             Clustered = true;
         }

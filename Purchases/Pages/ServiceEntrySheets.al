@@ -1,10 +1,10 @@
 
 
-page 50085 "Service Entry Sheets"
+page 50085 "Work Completion Certs (WCCs)"
 {
     ApplicationArea = Basic, Suite;
     Caption = 'Purchase Receipts';
-    CardPageID = "Service Entry Sheet";
+    CardPageID = "Work Completion Cert. (WCC)";
     DataCaptionFields = "Buy-from Vendor No.";
     Editable = false;
     PageType = List;

@@ -1,5 +1,5 @@
 
-page 50080 "Service Entry Sheet"
+page 50080 "Work Completion Cert. (WCC)"
 {
     Caption = 'Purchase Receipts';
     PageType = Document;
@@ -349,7 +349,7 @@ page 50080 "Service Entry Sheet"
                     Visible = false;
                 }
             }
-            part(PurchLines; "Service Entry Sheet Subform")
+            part(PurchLines; "Work Completion Cert. Subform")
             {
                 ApplicationArea = Suite;
                 Editable = IsPurchaseLinesEditable;
