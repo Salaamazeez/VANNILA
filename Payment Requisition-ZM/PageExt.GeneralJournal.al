@@ -15,6 +15,10 @@ pageextension 50016 GeneralJournalExt extends "General Journal"
             field("Credit Amount "; Rec."Credit Amount") { ApplicationArea = All; }
             field("Debit Amount "; Rec."Debit Amount") { ApplicationArea = All; }
         }
+        addbefore(Comment)
+        {
+            field("KBS Open"; Rec."KBS Closed") { ApplicationArea = All; }
+        }
     }
 
 

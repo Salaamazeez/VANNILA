@@ -67,18 +67,15 @@ page 60002 "Payment Voucher Card"
                 }
                 field("Bal Account No."; Rec."Bal Account No.")
                 {
-
-
                 }
                 field("Bal Account Name"; Rec."Bal Account Name")
                 {
 
                 }
-                // field("Purchase Requisition No.";Rec."Purchase Requisition No.")
-                // {
-                //     ApplicationArea = All;
-
-                // }
+                field("Suspense/Clearing";Rec."Suspense/Clearing")
+                {
+                    ApplicationArea = All;
+                }
                 // field("Purchase Requisition Amount";Rec."Purchase Requisition Amount")
                 // {
                 //     ApplicationArea = All;
@@ -486,7 +483,7 @@ page 60002 "Payment Voucher Card"
         if Rec."Transaction type" = Rec."Transaction type"::Loan then
             Rec.TestField("Loan ID");
         Rec.TestField("Request Description");
-        Rec.TestField(Beneficiary);
+       // Rec.TestField(Beneficiary);
         Rec.TestField("Bal Account No.");
         Rec.TestField("Shortcut Dimension 1 Code");
         Rec.TestField("Shortcut Dimension 2 Code");

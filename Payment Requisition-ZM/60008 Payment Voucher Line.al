@@ -186,6 +186,8 @@ table 60008 "Payment Voucher Line"
         {
             DataClassification = CustomerContent;
             OptionMembers = "G/L Account",Staff,Vendor,"Bank Account","Fixed Asset";
+            InitValue = Vendor;
+            Editable = false;
         }
         field(18; "VAT %"; Integer)
         {
@@ -452,6 +454,7 @@ table 60008 "Payment Voucher Line"
 
             end;
         }
+        
     }
 
     keys

@@ -122,9 +122,7 @@ page 60009 "Payment Voucher Subform"
                 {
                     ApplicationArea = All;
                 }
-                // field("VAT %"; "VAT %")
-                // {
-                //     ApplicationArea = All;
+                
 
                 // }
                 // field("VAT Amount"; "VAT Amount")

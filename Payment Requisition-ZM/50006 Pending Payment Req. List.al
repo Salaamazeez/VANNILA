@@ -11,7 +11,6 @@ page 50006 "Pending Payment Req. List"
     InsertAllowed = false;
     CardPageId = "Pending Payment Req. Card";
 
-
     layout
     {
         area(Content)

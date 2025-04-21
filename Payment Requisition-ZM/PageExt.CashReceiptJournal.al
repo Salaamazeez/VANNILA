@@ -10,11 +10,28 @@ pageextension 50018 CashRcptJournalExt extends "Cash Receipt Journal"
         {
             Editable = false;
         }
+        modify("Account No.")
+        {
+            Visible = false;
+    
+        }
+        addafter("Account Type")
+        {
+            field("Suspense/Clearing"; Rec."Suspense/Clearing")
+            {
+                ApplicationArea = All;
+            }
+            field("KBS-Account No."; Rec."KBS-Account No.")
+            {
+                ApplicationArea = All;
+            }
+        }
         addbefore(Amount)
         {
             field("Credit Amount "; Rec."Credit Amount") { ApplicationArea = All; }
             field("Debit Amount "; Rec."Debit Amount") { ApplicationArea = All; }
         }
+
     }
 
 
