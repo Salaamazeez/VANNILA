@@ -1,7 +1,7 @@
-page 50114 JourneyCalendar
+page 50114 LeaveCalendar
 {
     ApplicationArea = All;
-    Caption = 'Journey Calendar';
+    Caption = 'Leave Calendar';
     PageType = List;
     SourceTable = JourneyCalendar;
     UsageCategory = Tasks;

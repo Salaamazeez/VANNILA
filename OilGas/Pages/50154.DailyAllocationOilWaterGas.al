@@ -1,0 +1,113 @@
+page 50154 DailyAllocationOilWaterGas
+{
+    ApplicationArea = All;
+    Caption = 'Daily Allocation Oil, Water & Gas';
+    PageType = List;
+    SourceTable = DailyAllocationOilWaterGas;
+    UsageCategory = Tasks;
+    Editable = false;
+
+    layout
+    {
+        area(Content)
+        {
+            repeater(General)
+            {
+                field("Production Date"; Rec."Production Date")
+                {
+                    ToolTip = 'Specifies the value of the Production Date field.', Comment = '%';
+                }
+                field(Facility; Rec.Facility)
+                {
+                    ToolTip = 'Specifies the value of the Facility Code field.', Comment = '%';
+                }
+                field("Fields"; Rec."Fields")
+                {
+                    ToolTip = 'Specifies the value of the Field Code field.', Comment = '%';
+                }
+                field(OML; Rec.OML)
+                {
+                    ToolTip = 'Specifies the value of the Oil Mining Lease field.', Comment = '%';
+                }
+                field(Well; Rec.Well)
+                {
+                    ToolTip = 'Specifies the value of the Well Code field.', Comment = '%';
+                }
+                field("Well Type"; Rec."Well Type")
+                {
+                    ToolTip = 'Specifies the value of the Well Type field.', Comment = '%';
+                }
+                field("Daily Allocated Oil"; Rec."Daily Allocated Oil")
+                {
+                    ToolTip = 'Specifies the value of the Tot Net Oil & Condensate field.', Comment = '%';
+                }
+                field("Daily Allocated Water"; Rec."Daily Allocated Water")
+                {
+                    ToolTip = 'Specifies the value of the Allocated Water volume (bbl) field.', Comment = '%';
+                }
+                field("Daily Allocated Gas"; Rec."Daily Allocated Gas")
+                {
+                    ToolTip = 'Specifies the value of the Allocated Gas volume (Mscf) field.', Comment = '%';
+                }
+                field("Created By"; Rec."Created By")
+                {
+                    ToolTip = 'Specifies the value of the Created By field.', Comment = '%';
+                }
+                field("Created Date"; Rec."Created Date")
+                {
+                    ToolTip = 'Specifies the value of the Created Date field.', Comment = '%';
+                }
+            }
+        }
+    }
+    actions
+    {
+        area(Processing)
+        {
+            action(ImportFromExcel)
+            {
+                Caption = 'Import Daily Allocation Oil, Water & Gas';
+                Image = ImportExcel;
+                Promoted = true;
+                promotedIsBig = true;
+                PromotedCategory = Process;
+
+                trigger OnAction()
+                begin
+                    Report.Run(Report::ImportDailyAllocOilWaterGas);
+                end;
+            }
+            action(DeleteRecord)
+            {
+                Caption = 'Delete Data';
+                Image = DeleteRow;
+                Promoted = true;
+                promotedIsBig = true;
+                PromotedCategory = Process;
+
+                trigger OnAction()
+                begin
+                    DailyAllocOilWaterGas.RESET;
+                    DailyAllocOilWaterGas.SetCurrentKey(Well, "Well Type", "Production Date");
+                    IF DailyAllocOilWaterGas.FindSet() then
+                        DailyAllocOilWaterGas.DeleteAll();
+                end;
+            }
+            action(ViewReport)
+            {
+                Caption = 'Print Report';
+                Image = Report;
+                Promoted = true;
+                promotedIsBig = true;
+                PromotedCategory = Process;
+
+                trigger OnAction()
+                begin
+                    Report.Run(Report::DailyAllocationOilReport);
+                end;
+            }
+        }
+    }
+    var
+        DailyAllocOilWaterGas: record DailyAllocationOilWaterGas;
+}

@@ -4,7 +4,7 @@ pageextension 50024 GLPostingPreviewExt extends "G/L Entries Preview"
     {
         addafter(Description)
         {
-            field("G/L Account Name ";Rec."G/L Account Name") { }
+            field("G/L Account Name "; Rec."G/L Account Name") { }
         }
     }
 
@@ -21,6 +21,7 @@ pageextension 50024 GLPostingPreviewExt extends "G/L Entries Preview"
     begin
         if PurchInvHdr.Get(Rec."Document No.") then;
     end;
+
     var
         PurchInvHdr: Record "Purch. Inv. Header";
 }
