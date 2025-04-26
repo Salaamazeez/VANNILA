@@ -124,13 +124,13 @@ report 50111 LeaveSummary
                     field(LeaveYear; LeaveYear)
                     {
                         Caption = 'Leave Year';
-
+                        ApplicationArea = All;
                     }
                     field(LeaveType; LeaveType)
                     {
                         Caption = 'Leave Type';
                         TableRelation = LeaveSetupLine."Leave Code";
-
+                        ApplicationArea = All;
                     }
 
                 }

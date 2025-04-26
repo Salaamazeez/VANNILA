@@ -4,11 +4,11 @@ pageextension 50134 GLPostingPreviewExt extends "G/L Entries Preview"
     {
         addafter(Description)
         {
-            field("G/L Account Name ";Rec."G/L Account Name") { }
+            field("G/L Account Name ";Rec."G/L Account Name") { ApplicationArea = All;}
         }
         addafter(Amount){
-            field("Source Type";Rec."Source Type") { }
-            field("Source Code ";Rec."Source Code") { }
+            field("Source Type";Rec."Source Type") {ApplicationArea = All; }
+            field("Source Code ";Rec."Source Code") { ApplicationArea = All;}
         }
     }
 

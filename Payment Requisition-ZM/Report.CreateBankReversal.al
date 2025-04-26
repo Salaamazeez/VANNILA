@@ -46,49 +46,45 @@ report 50029 "Create Bank Reversal"
                     field(StartDate; StartDate)
                     {
                         Caption = 'Start Date';
+                        ApplicationArea = All;
                     }
                     field(EndDate; EndDate)
                     {
                         Caption = 'End Date';
+                        ApplicationArea = All;
                     }
                     field(ReversingBankNo; ReversingBankNo)
                     {
                         Caption = 'Reversing Bank No';
                         TableRelation = "Bank Account";
+                        ApplicationArea = All;
                     }
                     field(DestinationBankNo; DestinationBankNo)
                     {
                         Caption = 'Destination Bank No';
                         TableRelation = "Bank Account";
+                        ApplicationArea = All;
                     }
                     field(TemplateNo; TemplateNo)
                     {
                         Caption = 'Template No';
                         TableRelation = "Gen. Journal Template";
+                        ApplicationArea = All;
                     }
                     field(BatchNo; BatchNo)
                     {
                         Caption = 'Batch No';
                         TableRelation = "Gen. Journal Batch".Name;
+                        ApplicationArea = All;
                     }
                 }
             }
         }
 
-        actions
-        {
-            area(processing)
-            {
-                action(LayoutName)
-                {
-
-                }
-            }
-        }
+       
     }
     trigger OnInitReport()
     begin
-
         LineNo := 0;
         GenLedgerSetup.Get();
         TemplateNo := GenLedgerSetup."General Journal Template";

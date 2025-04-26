@@ -16,16 +16,19 @@ report 50102 PayrollPeriodSetup
                     field(FiscalYearStartDate; FiscalYearStartDate)
                     {
                         Caption = 'Fiscal Year Start Date';
+                        ApplicationArea = All;
                     }
                     field(NoOfPeriods; NoOfPeriods)
                     {
                         Caption = 'No. of Periods';
                         Editable = false;
+                        ApplicationArea = All;
                     }
                     field(PeriodLength; PeriodLength)
                     {
                         Caption = 'Period Lenght';
                         Editable = false;
+                        ApplicationArea = All;
                     }
                 }
             }

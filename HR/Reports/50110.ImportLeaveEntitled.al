@@ -54,7 +54,7 @@ report 50110 ImportLeaveEntitled
                         field(FileName; FileName)
                         {
                             Caption = 'Workbook Filename';
-
+                            ApplicationArea = All;
                             trigger OnAssistEdit()
                             begin
                                 RequestFile;
@@ -64,7 +64,7 @@ report 50110 ImportLeaveEntitled
                         field(SheetName; SheetName)
                         {
                             Caption = 'Sheet Name';
-
+                            ApplicationArea = All;
                             trigger OnAssistEdit()
                             begin
                                 IF ServerFileName = '' THEN BEGIN

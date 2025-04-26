@@ -9,13 +9,13 @@ pageextension 50023 GeneralLedgerEntries extends "General Ledger Entries"
                 ApplicationArea = All;
                 Caption = 'Currency Code';
             }
-            field("Source Type "; Rec."Source Type") { }
-            field("Source Code "; Rec."Source Code") { }
+            field("Source Type "; Rec."Source Type") { ApplicationArea = All; }
+            field("Source Code "; Rec."Source Code") {ApplicationArea = All; }
         }
 
         addafter(Description)
         {
-            field("G/L Account Name "; Rec."G/L Account Name") { }
+            field("G/L Account Name "; Rec."G/L Account Name") {ApplicationArea = All; }
         }
     }
 
