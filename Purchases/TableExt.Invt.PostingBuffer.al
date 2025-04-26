@@ -1,4 +1,4 @@
-TableExtension 52092358 "Invt. Posting Buffer Ext" extends "Invt. Posting Buffer"
+TableExtension 50000 "Invt. Posting Buffer Ext" extends "Invt. Posting Buffer"
 {
     fields
     {
