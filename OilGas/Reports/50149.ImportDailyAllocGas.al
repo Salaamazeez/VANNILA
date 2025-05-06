@@ -6,6 +6,7 @@ report 50149 ImportDailyAllocGas
     Caption = 'Import Daily Gas Allocation (Mscf)';
     UsageCategory = ReportsAndAnalysis;
     ProcessingOnly = true;
+    ApplicationArea = All;
     dataset
     {
         dataitem(Integer; "Integer")
@@ -65,6 +66,7 @@ report 50149 ImportDailyAllocGas
                         field(FileName; FileName)
                         {
                             Caption = 'Workbook Filename';
+                            ApplicationArea = All;
 
                             trigger OnAssistEdit()
                             begin
@@ -75,6 +77,7 @@ report 50149 ImportDailyAllocGas
                         field(SheetName; SheetName)
                         {
                             Caption = 'Sheet Name';
+                            ApplicationArea = All;
 
                             trigger OnAssistEdit()
                             begin

@@ -6,6 +6,7 @@ report 50151 ImportDailySalesGas
     Caption = 'Import Daily Sales Gas';
     UsageCategory = ReportsAndAnalysis;
     ProcessingOnly = true;
+    ApplicationArea = All;
     dataset
     {
         dataitem(Integer; "Integer")
@@ -64,6 +65,7 @@ report 50151 ImportDailySalesGas
                         field(FileName; FileName)
                         {
                             Caption = 'Workbook Filename';
+                            ApplicationArea = All;
 
                             trigger OnAssistEdit()
                             begin
@@ -74,6 +76,7 @@ report 50151 ImportDailySalesGas
                         field(SheetName; SheetName)
                         {
                             Caption = 'Sheet Name';
+                            ApplicationArea = All;
 
                             trigger OnAssistEdit()
                             begin

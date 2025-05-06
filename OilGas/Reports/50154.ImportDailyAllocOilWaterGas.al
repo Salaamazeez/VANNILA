@@ -6,6 +6,7 @@ report 50154 ImportDailyAllocOilWaterGas
     Caption = 'Import Daily Allocation Oil, Water & Gas)';
     UsageCategory = ReportsAndAnalysis;
     ProcessingOnly = true;
+    ApplicationArea = All;
     dataset
     {
         dataitem(Integer; "Integer")
@@ -72,6 +73,7 @@ report 50154 ImportDailyAllocOilWaterGas
                         field(FileName; FileName)
                         {
                             Caption = 'Workbook Filename';
+                            ApplicationArea = All;
 
                             trigger OnAssistEdit()
                             begin
@@ -82,6 +84,7 @@ report 50154 ImportDailyAllocOilWaterGas
                         field(SheetName; SheetName)
                         {
                             Caption = 'Sheet Name';
+                            ApplicationArea = All;
 
                             trigger OnAssistEdit()
                             begin

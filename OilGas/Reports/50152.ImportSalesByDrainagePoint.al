@@ -6,6 +6,7 @@ report 50152 ImportSalesByDrainagePoint
     Caption = 'Import Sales By Drainage point';
     UsageCategory = ReportsAndAnalysis;
     ProcessingOnly = true;
+    ApplicationArea = All;
     dataset
     {
         dataitem(Integer; "Integer")
@@ -77,6 +78,7 @@ report 50152 ImportSalesByDrainagePoint
                         field(FileName; FileName)
                         {
                             Caption = 'Workbook Filename';
+                            ApplicationArea = All;
 
                             trigger OnAssistEdit()
                             begin
@@ -87,6 +89,7 @@ report 50152 ImportSalesByDrainagePoint
                         field(SheetName; SheetName)
                         {
                             Caption = 'Sheet Name';
+                            ApplicationArea = All;
 
                             trigger OnAssistEdit()
                             begin
