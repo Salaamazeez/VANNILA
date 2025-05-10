@@ -8,6 +8,7 @@ page 50087 "My Purchase Order Subform"
     PageType = ListPart;
     SourceTable = "Purchase Line";
     SourceTableView = where("Document Type" = filter(Order));
+    ApplicationArea = All;
 
     layout
     {
@@ -1204,7 +1205,7 @@ page 50087 "My Purchase Order Subform"
                         Rec.ShowDimensions();
                     end;
                 }
-               
+
                 action("Co&mments")
                 {
                     ApplicationArea = Comments;

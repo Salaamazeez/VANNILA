@@ -6,6 +6,7 @@ page 50141 DailyAllocationGasList
     SourceTable = DailyAllocationGas;
     UsageCategory = Tasks;
     Editable = False;
+    //ApplicationArea = All;
 
 
     layout

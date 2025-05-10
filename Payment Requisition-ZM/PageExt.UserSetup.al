@@ -34,6 +34,15 @@ pageextension 50006 UserSetupExt extends "User Setup"
                 ApplicationArea = All;
             }
 
+            field("OilGas Data Admin"; Rec."OilGas Data Admin")
+            {
+                ApplicationArea = All;
+            }
+            field("OilGas Data Upload"; Rec."OilGas Data Upload")
+            {
+                ApplicationArea = All;
+            }
+
 
         }
     }

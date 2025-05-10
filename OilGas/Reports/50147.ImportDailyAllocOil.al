@@ -6,6 +6,7 @@ report 50147 ImportDailyAllocOil
     Caption = 'Import Daily Oil Allocation & Condensate (bbl)';
     UsageCategory = ReportsAndAnalysis;
     ProcessingOnly = true;
+    //ApplicationArea = All;
     dataset
     {
         dataitem(Integer; "Integer")
@@ -70,6 +71,7 @@ report 50147 ImportDailyAllocOil
                         field(FileName; FileName)
                         {
                             Caption = 'Workbook Filename';
+                            ApplicationArea = All;
 
                             trigger OnAssistEdit()
                             begin
@@ -80,6 +82,7 @@ report 50147 ImportDailyAllocOil
                         field(SheetName; SheetName)
                         {
                             Caption = 'Sheet Name';
+                            ApplicationArea = All;
 
                             trigger OnAssistEdit()
                             begin

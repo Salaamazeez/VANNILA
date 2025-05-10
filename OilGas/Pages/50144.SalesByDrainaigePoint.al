@@ -5,7 +5,7 @@ page 50144 SalesByDrainaigePoint
     PageType = List;
     SourceTable = SalesByDrainagePoint;
     UsageCategory = Tasks;
-    Editable = false;
+    Editable = true;
 
     layout
     {
@@ -94,8 +94,12 @@ page 50144 SalesByDrainaigePoint
                     ToolTip = 'Specifies the value of the Stream Name field.', Comment = '%';
                     Visible = false;
                 }
+
+
             }
+
         }
+
     }
     actions
     {
@@ -124,10 +128,15 @@ page 50144 SalesByDrainaigePoint
 
                 trigger OnAction()
                 begin
-                    SaleByDrainagePoint.RESET;
-                    SaleByDrainagePoint.SetCurrentKey("Well Code", "Well Type", "Period Code");
-                    IF SaleByDrainagePoint.FindSet() then
-                        SaleByDrainagePoint.DeleteAll();
+                    IF UserSetup.Get(UserId) then begin
+                        IF UserSetup."OilGas Data Admin" then begin
+                            SaleByDrainagePoint.RESET;
+                            SaleByDrainagePoint.SetCurrentKey("Well Code", "Well Type", "Period Code");
+                            IF SaleByDrainagePoint.FindSet() then
+                                SaleByDrainagePoint.DeleteAll();
+                        end;
+                    end else
+                        error(errorDeleteData);
                 end;
             }
             action(ViewReport)
@@ -147,4 +156,30 @@ page 50144 SalesByDrainaigePoint
     }
     var
         SaleByDrainagePoint: record SalesByDrainagePoint;
+        UserSetup: Record "User Setup";
+        ErrorDeleteData: Label 'You do not have the OilGas permission Admin to delete the data';
+        ErrormodifyData: label 'You do not have the OilGas permission Admin to modify the data';
+        ErrorOpenOilGas: label 'You do not have permmision to open this page';
+
+    trigger OnDeleteRecord(): Boolean
+    begin
+        if UserSetup.Get(UserId) then
+            if (not UserSetup."OilGas Data Admin") then
+                error(errorDeleteData);
+    end;
+
+    trigger OnModifyRecord(): Boolean
+    begin
+        if UserSetup.Get(UserId) then
+            if (not UserSetup."OilGas Data Admin") then
+                Error(ErrormodifyData);
+    end;
+
+    trigger OnOpenPage()
+    begin
+        if UserSetup.Get(UserId) then
+            if (not UserSetup."OilGas Data Admin") then
+                Error(ErrorOpenOilGas);
+    end;
 }
+

@@ -5,6 +5,7 @@ report 50148 DailyAllocationOilReport
     UsageCategory = ReportsAndAnalysis;
     DefaultLayout = RDLC;
     RDLCLayout = 'DailyAllocationOil.rdl';
+    //ApplicationArea = All;
 
     dataset
     {

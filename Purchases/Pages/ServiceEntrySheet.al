@@ -7,6 +7,7 @@ page 50080 "Work Completion Cert. (WCC)"
     SourceTable = "Purchase Header";
     SourceTableView = where("Document Type" = filter(Order));
     AdditionalSearchTerms = 'Procurement, Buy Order, Vendor Order, Order Purchase, Acquisition, Supplier Order, Buy List, Purchase, Supply Order, Goods Order';
+    ApplicationArea = All;
 
     layout
     {

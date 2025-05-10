@@ -6,6 +6,7 @@ report 50152 ImportSalesByDrainagePoint
     Caption = 'Import Sales By Drainage point';
     UsageCategory = ReportsAndAnalysis;
     ProcessingOnly = true;
+    //ApplicationArea = All;
     dataset
     {
         dataitem(Integer; "Integer")
@@ -16,7 +17,7 @@ report 50152 ImportSalesByDrainagePoint
                 ImportSheet(Number);
                 WindowDialog.Update(1, SalesByDrainagePoint."Well Code");
                 WindowDialog.Update(2, SalesByDrainagePoint."Period Code");
-
+                SalesByDrainagePoint2.Get(ColText[2], ColText[])
                 SalesByDrainagePoint.Init();
                 SalesByDrainagePoint."Period Code" := ColText[1];
                 SalesByDrainagePoint."Production Code" := ColText[2];
@@ -40,10 +41,15 @@ report 50152 ImportSalesByDrainagePoint
                 IF SalesByDrainagePoint.INSERT(True) then begin
                     RecordCount += 1;
                 end ELSE begin
-                    SalesByDrainagePoint.Modify();
-                    RecordModified += 1;
+                    //if confirmMgt.GetResponseOrDefault('Record with %1 %2 %3 already exit do you want to modify and continue the import?', true) then begin
+                    if Confirm(ConfirmDuplicate, true, SalesByDrainagePoint."Well Code", SalesByDrainagePoint."Well Type", SalesByDrainagePoint."Period Code") then begin
+                        if (DailyOliAllocation2."Daily Allocated Oil" <> DailyOliAllocation."Daily Allocated Oil") OR
+                        (DailyOliAllocation2."Daily Allocated Water" <> DailyOliAllocation."Daily Allocated Water") OR
+                          (DailyOliAllocation2."Daily Allocated Gas" <> DailyOliAllocation."Daily Allocated Gas") then
+                            SalesByDrainagePoint.Modify();
+                        RecordModified += 1;
+                    end;
                 end;
-
             end;
 
             trigger OnPreDataItem()
@@ -77,6 +83,7 @@ report 50152 ImportSalesByDrainagePoint
                         field(FileName; FileName)
                         {
                             Caption = 'Workbook Filename';
+                            ApplicationArea = All;
 
                             trigger OnAssistEdit()
                             begin
@@ -87,6 +94,7 @@ report 50152 ImportSalesByDrainagePoint
                         field(SheetName; SheetName)
                         {
                             Caption = 'Sheet Name';
+                            ApplicationArea = All;
 
                             trigger OnAssistEdit()
                             begin
@@ -141,6 +149,7 @@ report 50152 ImportSalesByDrainagePoint
         ColText: array[100] of Text[250];
         FileMgt: Codeunit "File Management";
         SalesByDrainagePoint: Record SalesByDrainagePoint;
+        SalesByDrainagePoint2: Record SalesByDrainagePoint;
 
         FileName: Text[250];
         ServerFileName: Text[250];
@@ -153,8 +162,10 @@ report 50152 ImportSalesByDrainagePoint
         WindowDialog: Dialog;
 
         TextDisplay: Label 'import Record ###########1 with transaction Date ##########2:';
+        ConfirmDuplicate: label 'Record with %1 %2 %3 already exit do you want to modify and continue the import?';
         RecordCount: Integer;
         RecordModified: Integer;
+        confirmMgt: Codeunit "Confirm Management";
 
     Procedure ImportSheet(RowNumber: Integer)
     var

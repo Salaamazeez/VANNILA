@@ -3,9 +3,10 @@ report 50154 ImportDailyAllocOilWaterGas
     //Excel to have the following columns
     //Facility(Code)  Filed(Code)   OML(Code) Well(Code)    Well Type(Code)   Transaction Date(Date)    Dailly Allocation(Decimal)
     //ApplicationArea = All;
-    Caption = 'Import Daily Allocation Oil, Water & Gas)';
+    Caption = 'Import Daily Allocation Oil, Water & Gas';
     UsageCategory = ReportsAndAnalysis;
     ProcessingOnly = true;
+    //ApplicationArea = All;
     dataset
     {
         dataitem(Integer; "Integer")
@@ -18,6 +19,8 @@ report 50154 ImportDailyAllocOilWaterGas
                 WindowDialog.Update(2, DailyOliAllocation."Production Date");
 
                 DailyOliAllocation.Init();
+                DailyOliAllocation2.get(Format(ColText[1]), ColText[2], ColText[3]);
+
                 Evaluate(DailyOliAllocation."Production Date", ColText[1]);
                 DailyOliAllocation.Facility := ColText[2];
                 DailyOliAllocation.Fields := ColText[3];
@@ -35,8 +38,14 @@ report 50154 ImportDailyAllocOilWaterGas
                 IF DailyOliAllocation.INSERT(True) then begin
                     RecordCount += 1;
                 end ELSE begin
-                    DailyOliAllocation.Modify();
-                    RecordModified += 1;
+                    //if confirmMgt.GetResponseOrDefault('Record with %1 %2 %3 already exit do you want to modify and continue the import?', true) then begin
+                    if (DailyOliAllocation2."Daily Allocated Oil" <> DailyOliAllocation."Daily Allocated Oil") OR
+                        (DailyOliAllocation2."Daily Allocated Water" <> DailyOliAllocation."Daily Allocated Water") OR
+                          (DailyOliAllocation2."Daily Allocated Gas" <> DailyOliAllocation."Daily Allocated Gas") then
+                        if Confirm(ConfirmDuplicate, true, DailyOliAllocation.Well, DailyOliAllocation."Well Type", DailyOliAllocation."Production Code") then begin
+                            DailyOliAllocation.Modify();
+                            RecordModified += 1;
+                        end;
                 end;
 
             end;
@@ -72,6 +81,7 @@ report 50154 ImportDailyAllocOilWaterGas
                         field(FileName; FileName)
                         {
                             Caption = 'Workbook Filename';
+                            ApplicationArea = All;
 
                             trigger OnAssistEdit()
                             begin
@@ -82,6 +92,7 @@ report 50154 ImportDailyAllocOilWaterGas
                         field(SheetName; SheetName)
                         {
                             Caption = 'Sheet Name';
+                            ApplicationArea = All;
 
                             trigger OnAssistEdit()
                             begin
@@ -136,6 +147,7 @@ report 50154 ImportDailyAllocOilWaterGas
         ColText: array[100] of Text[250];
         FileMgt: Codeunit "File Management";
         DailyOliAllocation: Record DailyAllocationOilWaterGas;
+        DailyOliAllocation2: Record DailyAllocationOilWaterGas;
 
         FileName: Text[250];
         ServerFileName: Text[250];
@@ -148,6 +160,7 @@ report 50154 ImportDailyAllocOilWaterGas
         WindowDialog: Dialog;
 
         TextDisplay: Label 'import Record ###########1 with transaction Date ##########2:';
+        ConfirmDuplicate: label 'Record with %1 %2 %3 already exit do you want to modify and continue the import?';
         RecordCount: Integer;
         RecordModified: Integer;
 

@@ -87,10 +87,15 @@ page 50154 DailyAllocationOilWaterGas
 
                 trigger OnAction()
                 begin
-                    DailyAllocOilWaterGas.RESET;
-                    DailyAllocOilWaterGas.SetCurrentKey(Well, "Well Type", "Production Date");
-                    IF DailyAllocOilWaterGas.FindSet() then
-                        DailyAllocOilWaterGas.DeleteAll();
+                    IF UserSetup.Get(UserId) then begin
+                        IF UserSetup."OilGas Data Admin" then begin
+                            DailyAllocOilWaterGas.RESET;
+                            DailyAllocOilWaterGas.SetCurrentKey(Well, "Well Type", "Production Date");
+                            IF DailyAllocOilWaterGas.FindSet() then
+                                DailyAllocOilWaterGas.DeleteAll();
+                        end else
+                            error(errorDeleteData);
+                    end
                 end;
             }
             action(ViewReport)
@@ -110,4 +115,30 @@ page 50154 DailyAllocationOilWaterGas
     }
     var
         DailyAllocOilWaterGas: record DailyAllocationOilWaterGas;
+        UserSetup: Record "User Setup";
+        ErrorDeleteData: Label 'You do not have the OilGas permission Admin to delete the data';
+        ErrormodifyData: label 'You do not have the OilGas permission Admin to modify the data';
+        ErrorOpenOilGas: label 'You do not have permmision to open this page';
+
+    trigger OnDeleteRecord(): Boolean
+    begin
+        if UserSetup.Get(UserId) then
+            if (not UserSetup."OilGas Data Admin") then
+                error(errorDeleteData);
+    end;
+
+    trigger OnModifyRecord(): Boolean
+    begin
+        if UserSetup.Get(UserId) then
+            if (not UserSetup."OilGas Data Admin") then
+                Error(ErrormodifyData);
+    end;
+
+    trigger OnOpenPage()
+    begin
+        if UserSetup.Get(UserId) then
+            if (not UserSetup."OilGas Data Admin") then
+                Error(ErrorOpenOilGas);
+    end;
+
 }

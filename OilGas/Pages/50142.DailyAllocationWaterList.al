@@ -6,6 +6,7 @@ page 50142 DailyAllocationWaterList
     SourceTable = DailyAllocationWater;
     UsageCategory = Tasks;
     Editable = false;
+    //ApplicationArea = All;
 
 
     layout

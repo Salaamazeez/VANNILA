@@ -7,6 +7,7 @@ report 50150 ImportDialyAllocWater
     UsageCategory = ReportsAndAnalysis;
     ;
     ProcessingOnly = true;
+    //ApplicationArea = All;
     dataset
     {
         dataitem(Integer; "Integer")
@@ -66,6 +67,7 @@ report 50150 ImportDialyAllocWater
                         field(FileName; FileName)
                         {
                             Caption = 'Workbook Filename';
+                            ApplicationArea = All;
 
                             trigger OnAssistEdit()
                             begin
@@ -76,6 +78,7 @@ report 50150 ImportDialyAllocWater
                         field(SheetName; SheetName)
                         {
                             Caption = 'Sheet Name';
+                            ApplicationArea = All;
 
                             trigger OnAssistEdit()
                             begin

@@ -8,6 +8,7 @@ page 50086 "Work Completion Cert. Subform"
     PageType = ListPart;
     SourceTable = "Purchase Line";
     SourceTableView = where("Document Type" = filter(Order));
+    ApplicationArea = All;
 
     layout
     {

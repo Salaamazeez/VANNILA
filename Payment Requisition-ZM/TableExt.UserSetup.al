@@ -7,6 +7,17 @@ tableextension 50101 UserSetupExtension extends "User Setup"
         field(50003; "Master Record Admin"; Boolean) { }
         field(50004; "HR Admin"; Boolean) { }
         field(50005; "Procurement Admin"; Boolean) { }
+
+        field(50006; "OilGas Data Admin"; Boolean)
+        {
+            Caption = 'Oil & Gas Data Administrator';
+            DataClassification = ToBeClassified;
+        }
+        field(50007; "OilGas Data Upload"; Boolean)
+        {
+            Caption = 'Oil & Gas Data Upload';
+            DataClassification = ToBeClassified;
+        }
         field(50100; "Appraiser Line Manager"; Boolean)
         {
             Caption = 'Appraiser Line Manager';
@@ -17,6 +28,7 @@ tableextension 50101 UserSetupExtension extends "User Setup"
             Caption = 'HR Administrator';
             DataClassification = ToBeClassified;
         }
+
     }
 
     keys
