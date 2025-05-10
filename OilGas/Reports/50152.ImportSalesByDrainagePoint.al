@@ -17,7 +17,8 @@ report 50152 ImportSalesByDrainagePoint
                 ImportSheet(Number);
                 WindowDialog.Update(1, SalesByDrainagePoint."Well Code");
                 WindowDialog.Update(2, SalesByDrainagePoint."Period Code");
-                SalesByDrainagePoint2.Get(ColText[2], ColText[])
+                //SalesByDrainagePoint2.Get(ColText[5], ColText[])
+
                 SalesByDrainagePoint.Init();
                 SalesByDrainagePoint."Period Code" := ColText[1];
                 SalesByDrainagePoint."Production Code" := ColText[2];
@@ -43,10 +44,10 @@ report 50152 ImportSalesByDrainagePoint
                 end ELSE begin
                     //if confirmMgt.GetResponseOrDefault('Record with %1 %2 %3 already exit do you want to modify and continue the import?', true) then begin
                     if Confirm(ConfirmDuplicate, true, SalesByDrainagePoint."Well Code", SalesByDrainagePoint."Well Type", SalesByDrainagePoint."Period Code") then begin
-                        if (DailyOliAllocation2."Daily Allocated Oil" <> DailyOliAllocation."Daily Allocated Oil") OR
-                        (DailyOliAllocation2."Daily Allocated Water" <> DailyOliAllocation."Daily Allocated Water") OR
-                          (DailyOliAllocation2."Daily Allocated Gas" <> DailyOliAllocation."Daily Allocated Gas") then
-                            SalesByDrainagePoint.Modify();
+                        // if (DailyOliAllocation2."Daily Allocated Oil" <> DailyOliAllocation."Daily Allocated Oil") OR
+                        //(DailyOliAllocation2."Daily Allocated Water" <> DailyOliAllocation."Daily Allocated Water") OR
+                        // (DailyOliAllocation2."Daily Allocated Gas" <> DailyOliAllocation."Daily Allocated Gas") then
+                        SalesByDrainagePoint.Modify();
                         RecordModified += 1;
                     end;
                 end;
