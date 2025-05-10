@@ -6,7 +6,8 @@ page 50142 DailyAllocationWaterList
     SourceTable = DailyAllocationWater;
     UsageCategory = Tasks;
     Editable = false;
-    //ApplicationArea = All;
+    ApplicationArea = All;
+
 
 
     layout
@@ -18,39 +19,48 @@ page 50142 DailyAllocationWaterList
                 field("Production Date"; Rec."Production Date")
                 {
                     ToolTip = 'Specifies the value of the Transaction Date field.', Comment = '%';
+                    ApplicationArea = All;
                 }
                 field(Facility; Rec.Facility)
                 {
                     ToolTip = 'Specifies the value of the Facility field.', Comment = '%';
+                    ApplicationArea = All;
                 }
                 field("Fields"; Rec."Fields")
                 {
                     ToolTip = 'Specifies the value of the Field field.', Comment = '%';
+                    ApplicationArea = All;
                 }
                 field(OML; Rec.OML)
                 {
                     ToolTip = 'Specifies the value of the OML field.', Comment = '%';
+                    ApplicationArea = All;
                 }
                 field(Well; Rec.Well)
                 {
                     ToolTip = 'Specifies the value of the Well field.', Comment = '%';
+                    ApplicationArea = All;
                 }
                 field("Well Type"; Rec."Well Type")
                 {
                     ToolTip = 'Specifies the value of the Well Type field.', Comment = '%';
+                    ApplicationArea = All;
                 }
 
                 field("Daily Allocated"; Rec."Daily Allocated")
                 {
                     ToolTip = 'Specifies the value of the Daily Allocated field.', Comment = '%';
+                    ApplicationArea = All;
                 }
                 field("Created By"; Rec."Created By")
                 {
                     ToolTip = 'Specifies the value of the Created By field.', Comment = '%';
+                    ApplicationArea = All;
                 }
                 field("Created Date"; Rec."Created Date")
                 {
                     ToolTip = 'Specifies the value of the Created Date field.', Comment = '%';
+                    ApplicationArea = All;
                 }
             }
         }

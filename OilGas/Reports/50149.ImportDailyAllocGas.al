@@ -6,7 +6,7 @@ report 50149 ImportDailyAllocGas
     Caption = 'Import Daily Gas Allocation (Mscf)';
     UsageCategory = ReportsAndAnalysis;
     ProcessingOnly = true;
-    //ApplicationArea = All;
+    ApplicationArea = All;
     dataset
     {
         dataitem(Integer; "Integer")

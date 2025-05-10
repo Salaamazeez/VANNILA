@@ -6,7 +6,7 @@ report 50154 ImportDailyAllocOilWaterGas
     Caption = 'Import Daily Allocation Oil, Water & Gas';
     UsageCategory = ReportsAndAnalysis;
     ProcessingOnly = true;
-    //ApplicationArea = All;
+    ApplicationArea = All;
     dataset
     {
         dataitem(Integer; "Integer")

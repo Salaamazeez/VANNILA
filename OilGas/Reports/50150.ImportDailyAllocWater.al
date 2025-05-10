@@ -7,7 +7,7 @@ report 50150 ImportDialyAllocWater
     UsageCategory = ReportsAndAnalysis;
     ;
     ProcessingOnly = true;
-    //ApplicationArea = All;
+    ApplicationArea = All;
     dataset
     {
         dataitem(Integer; "Integer")
