@@ -1,6 +1,6 @@
 report 50148 DailyAllocationOilReport
 {
-    //ApplicationArea = All;
+    ApplicationArea = All;
     Caption = 'Daily Allocation Oil & Cond (bbl)';
     UsageCategory = ReportsAndAnalysis;
     DefaultLayout = RDLC;

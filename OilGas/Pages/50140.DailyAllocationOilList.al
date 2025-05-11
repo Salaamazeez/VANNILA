@@ -1,6 +1,6 @@
 page 50140 DailyAllocationOilList
 {
-    //ApplicationArea = All;
+    ApplicationArea = All;
     Caption = 'Daily Allocation Oil & Condensate (bbl)';
     PageType = List;
     SourceTable = DailyAllocationOil;

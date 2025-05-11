@@ -1,6 +1,6 @@
 page 50141 DailyAllocationGasList
 {
-    //ApplicationArea = All;
+    ApplicationArea = All;
     Caption = 'Daily Allocation Gas (Mscf) List';
     PageType = List;
     SourceTable = DailyAllocationGas;

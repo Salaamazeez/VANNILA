@@ -1,6 +1,6 @@
 page 50142 DailyAllocationWaterList
 {
-    //ApplicationArea = All;
+    ApplicationArea = All;
     Caption = 'Daily Allocation Water (bbl) List';
     PageType = List;
     SourceTable = DailyAllocationWater;

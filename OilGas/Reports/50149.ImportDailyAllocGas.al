@@ -2,7 +2,7 @@ report 50149 ImportDailyAllocGas
 {
     //Excel to have the following columns
     //Facility(Code)  Filed(Code)   OML(Code) Well(Code)    Well Type(Code)   Transaction Date(Date)    Dailly Allocation(Decimal)
-    //ApplicationArea = All;
+    ApplicationArea = All;
     Caption = 'Import Daily Gas Allocation (Mscf)';
     UsageCategory = ReportsAndAnalysis;
     ProcessingOnly = true;

@@ -2,11 +2,11 @@ report 50152 ImportSalesByDrainagePoint
 {
     //Excel to have the following columns
     //Facility(Code)  Filed(Code)   OML(Code) Well(Code)    Well Type(Code)   Transaction Date(Date)    Dailly Allocation(Decimal)
-    //ApplicationArea = All;
+    ApplicationArea = All;
     Caption = 'Import Sales By Drainage point';
     UsageCategory = ReportsAndAnalysis;
     ProcessingOnly = true;
-    //ApplicationArea = All;
+    ApplicationArea = All;
     dataset
     {
         dataitem(Integer; "Integer")

@@ -1,6 +1,6 @@
 page 50143 DailySalesGasList
 {
-    //ApplicationArea = All;
+    ApplicationArea = All;
     Caption = 'Daily Sales Gas List';
     PageType = List;
     SourceTable = DailySalesGas;
