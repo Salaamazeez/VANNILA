@@ -17,7 +17,7 @@ report 50152 ImportSalesByDrainagePoint
                 ImportSheet(Number);
                 WindowDialog.Update(1, SalesByDrainagePoint."Well Code");
                 WindowDialog.Update(2, SalesByDrainagePoint."Period Code");
-                //SalesByDrainagePoint2.Get(ColText[5], ColText[])
+                SalesByDrainagePoint2.Get(ColText[5], ColText[8], ColText[1]);
 
                 SalesByDrainagePoint.Init();
                 SalesByDrainagePoint."Period Code" := ColText[1];
@@ -43,13 +43,15 @@ report 50152 ImportSalesByDrainagePoint
                     RecordCount += 1;
                 end ELSE begin
                     //if confirmMgt.GetResponseOrDefault('Record with %1 %2 %3 already exit do you want to modify and continue the import?', true) then begin
-                    if Confirm(ConfirmDuplicate, true, SalesByDrainagePoint."Well Code", SalesByDrainagePoint."Well Type", SalesByDrainagePoint."Period Code") then begin
-                        // if (DailyOliAllocation2."Daily Allocated Oil" <> DailyOliAllocation."Daily Allocated Oil") OR
-                        //(DailyOliAllocation2."Daily Allocated Water" <> DailyOliAllocation."Daily Allocated Water") OR
-                        // (DailyOliAllocation2."Daily Allocated Gas" <> DailyOliAllocation."Daily Allocated Gas") then
-                        SalesByDrainagePoint.Modify();
-                        RecordModified += 1;
-                    end;
+                    if GuiAllowed then
+                        if Confirm(ConfirmDuplicate, true, SalesByDrainagePoint."Well Code", SalesByDrainagePoint."Well Type", SalesByDrainagePoint."Period Code") then begin
+                            if (SalesByDrainagePoint."Allocated Gas Volume" <> SalesByDrainagePoint2."Allocated Gas Volume") OR
+                            (SalesByDrainagePoint."Allocated Production Net Oil" <> SalesByDrainagePoint2."Allocated Production Net Oil") OR
+                            (SalesByDrainagePoint."Allocated Water Volume" <> SalesByDrainagePoint2."Allocated Water Volume") then begin
+                                SalesByDrainagePoint.Modify();
+                                RecordModified += 1;
+                            end;
+                        end;
                 end;
             end;
 

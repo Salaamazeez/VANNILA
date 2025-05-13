@@ -41,11 +41,13 @@ report 50154 ImportDailyAllocOilWaterGas
                     //if confirmMgt.GetResponseOrDefault('Record with %1 %2 %3 already exit do you want to modify and continue the import?', true) then begin
                     if (DailyOliAllocation2."Daily Allocated Oil" <> DailyOliAllocation."Daily Allocated Oil") OR
                         (DailyOliAllocation2."Daily Allocated Water" <> DailyOliAllocation."Daily Allocated Water") OR
-                          (DailyOliAllocation2."Daily Allocated Gas" <> DailyOliAllocation."Daily Allocated Gas") then
-                        if Confirm(ConfirmDuplicate, true, DailyOliAllocation.Well, DailyOliAllocation."Well Type", DailyOliAllocation."Production Code") then begin
-                            DailyOliAllocation.Modify();
-                            RecordModified += 1;
-                        end;
+                          (DailyOliAllocation2."Daily Allocated Gas" <> DailyOliAllocation."Daily Allocated Gas") then begin
+                        if GuiAllowed then
+                            if Confirm(ConfirmDuplicate, true, DailyOliAllocation.Well, DailyOliAllocation."Well Type", DailyOliAllocation."Production Code") then begin
+                                DailyOliAllocation.Modify();
+                                RecordModified += 1;
+                            end;
+                    end;
                 end;
 
             end;
