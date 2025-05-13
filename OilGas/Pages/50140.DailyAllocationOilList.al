@@ -6,7 +6,7 @@ page 50140 DailyAllocationOilList
     SourceTable = DailyAllocationOil;
     UsageCategory = Tasks;
     Editable = False;
-    ApplicationArea = All;
+   // ApplicationArea = All;
 
 
     layout

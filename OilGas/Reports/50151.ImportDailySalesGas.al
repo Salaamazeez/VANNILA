@@ -6,7 +6,6 @@ report 50151 ImportDailySalesGas
     Caption = 'Import Daily Sales Gas';
     UsageCategory = ReportsAndAnalysis;
     ProcessingOnly = true;
-    ApplicationArea = All;
     dataset
     {
         dataitem(Integer; "Integer")

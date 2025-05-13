@@ -5,9 +5,7 @@ report 50150 ImportDialyAllocWater
     ApplicationArea = All;
     Caption = 'Import Daily Water Allocation(bbl';
     UsageCategory = ReportsAndAnalysis;
-    ;
     ProcessingOnly = true;
-    ApplicationArea = All;
     dataset
     {
         dataitem(Integer; "Integer")

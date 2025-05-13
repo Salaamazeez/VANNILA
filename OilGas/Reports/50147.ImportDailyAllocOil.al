@@ -6,7 +6,6 @@ report 50147 ImportDailyAllocOil
     Caption = 'Import Daily Oil Allocation & Condensate (bbl)';
     UsageCategory = ReportsAndAnalysis;
     ProcessingOnly = true;
-    ApplicationArea = All;
     dataset
     {
         dataitem(Integer; "Integer")

@@ -6,7 +6,6 @@ page 50022 "Purch. Requisition Card Dummy"
     ApplicationArea = All;
     //UsageCategory = Administration;
     SourceTable = "Purch. Requistion";
-    ApplicationArea = All;
     // SourceTableView = WHERE(Status = filter(Open | Rejected));
     layout
     {
