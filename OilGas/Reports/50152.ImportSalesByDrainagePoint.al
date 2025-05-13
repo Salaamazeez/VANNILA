@@ -16,7 +16,6 @@ report 50152 ImportSalesByDrainagePoint
                 ImportSheet(Number);
                 WindowDialog.Update(1, SalesByDrainagePoint."Well Code");
                 WindowDialog.Update(2, SalesByDrainagePoint."Period Code");
-                SalesByDrainagePoint2.Get(ColText[5], ColText[8], ColText[1]);
 
                 SalesByDrainagePoint.Init();
                 SalesByDrainagePoint."Period Code" := ColText[1];
@@ -37,6 +36,8 @@ report 50152 ImportSalesByDrainagePoint
                 SalesByDrainagePoint.OML := ColText[15];
                 SalesByDrainagePoint."Stream Code" := ColText[16];
                 SalesByDrainagePoint."Stream Name" := ColText[17];
+
+                if SalesByDrainagePoint2.Get(SalesByDrainagePoint."Well Code", SalesByDrainagePoint."Well Type", SalesByDrainagePoint."Period Code") then;
 
                 IF SalesByDrainagePoint.INSERT(True) then begin
                     RecordCount += 1;

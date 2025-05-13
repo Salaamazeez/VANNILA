@@ -149,7 +149,7 @@ page 50144 SalesByDrainaigePoint
 
                 trigger OnAction()
                 begin
-                    Report.Run(Report::DailyAllocationOilReport);
+                    //Report.Run(Report::DailyAllocationOilReport);
                 end;
             }
         }

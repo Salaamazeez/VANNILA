@@ -18,7 +18,6 @@ report 50154 ImportDailyAllocOilWaterGas
                 WindowDialog.Update(2, DailyOliAllocation."Production Date");
 
                 DailyOliAllocation.Init();
-                DailyOliAllocation2.get(Format(ColText[1]), ColText[2], ColText[3]);
 
                 Evaluate(DailyOliAllocation."Production Date", ColText[1]);
                 DailyOliAllocation.Facility := ColText[2];
@@ -30,6 +29,7 @@ report 50154 ImportDailyAllocOilWaterGas
                 Evaluate(DailyOliAllocation."Daily Allocated Water", ColText[8]);
                 Evaluate(DailyOliAllocation."Daily Allocated Gas", ColText[9]);
 
+                if DailyOliAllocation2.get(DailyOliAllocation.Well, DailyOliAllocation."Well Type", DailyOliAllocation."Production Date") then;
                 //DailyOliAllocation."Production Code" := ColText[8];
                 //DailyOliAllocation."Production Sub Unit Code" := ColText[9];
                 //DailyOliAllocation."Stream Code Code" := ColText[10];

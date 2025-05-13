@@ -108,7 +108,7 @@ page 50154 DailyAllocationOilWaterGas
 
                 trigger OnAction()
                 begin
-                    Report.Run(Report::DailyAllocationOilReport);
+                    // Report.Run(Report::DailyAllocationOilReport);
                 end;
             }
         }
