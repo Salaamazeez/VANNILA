@@ -3,10 +3,9 @@ page 50022 "Purch. Requisition Card Dummy"
     //Created by Salaam Azeez
 
     PageType = Card;
-    //ApplicationArea = All;
+    ApplicationArea = All;
     //UsageCategory = Administration;
     SourceTable = "Purch. Requistion";
-    ApplicationArea = All;
     // SourceTableView = WHERE(Status = filter(Open | Rejected));
     layout
     {

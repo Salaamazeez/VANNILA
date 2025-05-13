@@ -4,7 +4,7 @@ pageextension 50016 GeneralJournalExt extends "General Journal"
     {
         modify(Amount)
         {
-            Editable = false;
+            Editable = true;
         }
         modify("Amount (LCY)")
         {

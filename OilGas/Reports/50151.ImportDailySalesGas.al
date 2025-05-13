@@ -2,11 +2,10 @@ report 50151 ImportDailySalesGas
 {
     //Excel to have the following columns
     //Facility(Code)  Filed(Code)   OML(Code) Well(Code)    Well Type(Code)   Transaction Date(Date)    Dailly Allocation(Decimal)
-    //ApplicationArea = All;
+    ApplicationArea = All;
     Caption = 'Import Daily Sales Gas';
     UsageCategory = ReportsAndAnalysis;
     ProcessingOnly = true;
-    ApplicationArea = All;
     dataset
     {
         dataitem(Integer; "Integer")
