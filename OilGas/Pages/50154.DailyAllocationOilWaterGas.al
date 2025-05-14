@@ -137,7 +137,7 @@ page 50154 DailyAllocationOilWaterGas
     trigger OnOpenPage()
     begin
         if UserSetup.Get(UserId) then
-            if (not UserSetup."OilGas Data Admin") then
+            if (not UserSetup."OilGas Data Upload") then
                 Error(ErrorOpenOilGas);
     end;
 

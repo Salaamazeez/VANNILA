@@ -178,7 +178,7 @@ page 50144 SalesByDrainaigePoint
     trigger OnOpenPage()
     begin
         if UserSetup.Get(UserId) then
-            if (not UserSetup."OilGas Data Admin") then
+            if (not UserSetup."OilGas Data Upload") then
                 Error(ErrorOpenOilGas);
     end;
 }
