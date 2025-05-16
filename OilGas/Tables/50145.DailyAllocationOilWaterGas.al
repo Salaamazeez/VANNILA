@@ -78,6 +78,14 @@ table 50145 DailyAllocationOilWaterGas
         {
 
         }
+        field(19; "Potential Oil Cond"; Decimal)
+        {
+
+        }
+        field(20; "Potential Gas Rate"; Decimal)
+        {
+
+        }
 
 
     }

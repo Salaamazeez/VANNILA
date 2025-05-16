@@ -6,6 +6,8 @@ page 50154 DailyAllocationOilWaterGas
     SourceTable = DailyAllocationOilWaterGas;
     UsageCategory = Tasks;
     Editable = false;
+    ModifyAllowed = true;
+    InsertAllowed = false;
 
     layout
     {
@@ -37,17 +39,25 @@ page 50154 DailyAllocationOilWaterGas
                 {
                     ToolTip = 'Specifies the value of the Well Type field.', Comment = '%';
                 }
-                field("Daily Allocated Oil"; Rec."Daily Allocated Oil")
+                field("Tot Net Oil & Condensate"; Rec."Daily Allocated Oil")
                 {
                     ToolTip = 'Specifies the value of the Tot Net Oil & Condensate field.', Comment = '%';
                 }
-                field("Daily Allocated Water"; Rec."Daily Allocated Water")
+                field("Allocated Water volume (bbl)"; Rec."Daily Allocated Water")
                 {
                     ToolTip = 'Specifies the value of the Allocated Water volume (bbl) field.', Comment = '%';
                 }
-                field("Daily Allocated Gas"; Rec."Daily Allocated Gas")
+                field("Allocated Gas volume (Mscf)"; Rec."Daily Allocated Gas")
                 {
                     ToolTip = 'Specifies the value of the Allocated Gas volume (Mscf) field.', Comment = '%';
+                }
+                field("Potential Oil Cond"; Rec."Potential Oil Cond")
+                {
+                    ToolTip = 'Specifies the value for Potential Oil + Condensate';
+                }
+                field("Potential Gas Rate"; Rec."Potential Gas Rate")
+                {
+                    ToolTip = 'Specifies the value for Potential Gas Rate [Mscf]';
                 }
                 field("Created By"; Rec."Created By")
                 {
@@ -77,6 +87,7 @@ page 50154 DailyAllocationOilWaterGas
                     Report.Run(Report::ImportDailyAllocOilWaterGas);
                 end;
             }
+            /*
             action(DeleteRecord)
             {
                 Caption = 'Delete Data';
@@ -98,6 +109,7 @@ page 50154 DailyAllocationOilWaterGas
                     end
                 end;
             }
+            */
             action(ViewReport)
             {
                 Caption = 'Print Report';
