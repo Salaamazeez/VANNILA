@@ -46,14 +46,18 @@ report 50154 ImportDailyAllocOilWaterGas
                           (DailyOliAllocation2."Potential Oil Cond" <> DailyOliAllocation."Potential Oil Cond") OR
                           (DailyOliAllocation2."Potential Oil Cond" <> DailyOliAllocation."Potential Gas Rate") then begin
                         if GuiAllowed then
-                            if Confirm(ConfirmDuplicate, true, DailyOliAllocation.Well, DailyOliAllocation."Well Type", DailyOliAllocation."Production Code") then begin
-                                if UserSetup.Get(UserId) then
-                                    if (not UserSetup."OilGas Data Admin") then
-                                        Error(ErrormodifyData);
-                                DailyOliAllocation.Modify();
-                                RecordModified += 1;
-                            end;
+                            If (RecordModified = 0) then
+                                if Confirm(ConfirmDuplicate, true, DailyOliAllocation.Well, DailyOliAllocation."Well Type", DailyOliAllocation."Production Code") then begin
+                                    if UserSetup.Get(UserId) then
+                                        if (not UserSetup."OilGas Data Admin") then
+                                            Error(ErrormodifyData)
+                                        else begin
+                                            DailyOliAllocation.Modify();
+                                            //RecordModified += 1;
+                                        end;
+                                end;
                     end;
+                    RecordModified += 1;
                 end;
 
             end;

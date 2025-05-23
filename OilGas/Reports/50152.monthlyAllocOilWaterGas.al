@@ -38,19 +38,23 @@ report 50152 ImportMonthlyAllocWaterOilGas
                 end ELSE begin
                     //if confirmMgt.GetResponseOrDefault('Record with %1 %2 %3 already exit do you want to modify and continue the import?', true) then begin
                     if GuiAllowed then
-                        if Confirm(ConfirmDuplicate, true, monthlyAlloc.Well, monthlyAlloc."Well Type", monthlyAlloc."Production Date") then begin
-                            if (monthlyAlloc."Daily Allocated Gas" <> monthlyAlloc2."Daily Allocated Gas") OR
-                            (monthlyAlloc."Daily Allocated Oil" <> monthlyAlloc2."Daily Allocated Oil") OR
-                            (monthlyAlloc."Daily Allocated Water" <> monthlyAlloc2."Daily Allocated Water") OR
-                            (monthlyAlloc."Potential Oil Cond" <> monthlyAlloc2."Potential Oil Cond") OR
-                            (monthlyAlloc."Potential Gas Rate" <> monthlyAlloc2."Potential Gas Rate") then begin
-                                if UserSetup.Get(UserId) then
-                                    if (not UserSetup."OilGas Data Admin") then
-                                        Error(ErrormodifyData);
-                                monthlyAlloc.Modify();
-                                RecordModified += 1;
+                        if (RecordModified = 0) then
+                            if Confirm(ConfirmDuplicate, true, monthlyAlloc.Well, monthlyAlloc."Well Type", monthlyAlloc."Production Date") then begin
+                                if (monthlyAlloc."Daily Allocated Gas" <> monthlyAlloc2."Daily Allocated Gas") OR
+                                (monthlyAlloc."Daily Allocated Oil" <> monthlyAlloc2."Daily Allocated Oil") OR
+                                (monthlyAlloc."Daily Allocated Water" <> monthlyAlloc2."Daily Allocated Water") OR
+                                (monthlyAlloc."Potential Oil Cond" <> monthlyAlloc2."Potential Oil Cond") OR
+                                (monthlyAlloc."Potential Gas Rate" <> monthlyAlloc2."Potential Gas Rate") then begin
+                                    if UserSetup.Get(UserId) then
+                                        if (not UserSetup."OilGas Data Admin") then
+                                            Error(ErrormodifyData)
+                                        else begin
+                                            //monthlyAlloc.Modify();
+                                            RecordModified += 1;
+                                        end;
+                                end;
                             end;
-                        end;
+                    RecordModified += 1;
                 end;
             end;
 

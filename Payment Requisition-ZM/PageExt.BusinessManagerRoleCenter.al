@@ -36,32 +36,34 @@ pageextension 50001 BusinessManagerRCExt extends "Business Manager Role Center"
             group("Employee Self Service")
             {
                 Image = HumanResources;
+                Caption = 'Employee Self Service';
+                ToolTip = 'Enable employees to initiates some transaction';
                 separator(Action136)
                 {
                     Caption = 'Employee';
                 }
                 action("Payment Requests")
                 {
-                    ApplicationArea = Basic;
+                    ApplicationArea = All;
                     Caption = 'Payment Requests';
                     RunObject = Page "Payment Req. List";
                 }
                 action("Pending Payment Req. List")
                 {
-                    ApplicationArea = Basic;
+                    ApplicationArea = All;
                     Caption = 'Pending Payment Req. List';
                     RunObject = Page "Pending Payment Req. List";
                 }
                 action("Approved Payment Req. List")
                 {
                     Visible = false;
-                    ApplicationArea = Basic;
+                    ApplicationArea = All;
                     Caption = 'Approved Payment Req. List';
                     RunObject = Page "Approved Payment Req. List";
                 }
                 action("Cash Adv. Retirements")
                 {
-                    ApplicationArea = Basic;
+                    ApplicationArea = All;
                     Caption = 'Cash Adv. Retirements';
                     RunObject = Page "Retirement List";
                 }
@@ -74,24 +76,24 @@ pageextension 50001 BusinessManagerRCExt extends "Business Manager Role Center"
             }
 
         }
-        addafter("Payment Reconciliation Journals")
+        addafter(PaymentJournals)
         {
             action("Payment Vouchers")
             {
-                ApplicationArea = Basic;
+                ApplicationArea = All;
                 //Image = List;
                 //Promoted = true;
                 RunObject = page "Payment Voucher List";
             }
             action("Pending Payment Voucher")
             {
-                ApplicationArea = Basic;
+                ApplicationArea = All;
                 Caption = 'Pending Payment Voucher';
                 RunObject = Page "Pending Payment Voucher List";
             }
             action("Approved Payment Vouchers")
             {
-                ApplicationArea = Basic;
+                ApplicationArea = All;
                 //Image = List;
                 //Promoted = true;
                 RunObject = page "Approved Payment Voucher List";
