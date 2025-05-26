@@ -167,14 +167,14 @@ table 50118 LeaveApplication
                     LeaveApp.RESET;
                     LeaveApp.SETRANGE("Employee No.", "Employee No.");
                     LeaveApp.SETRANGE("Leave Type", "Leave Type");
-                    //LeaveApp.SETFILTER("Approval Status", '%1', LeaveApp."Approval Status"::Open);
-                    LeaveApp.SETFILTER("Approval Status", '%1|%2|%3', LeaveApp."Approval Status"::Open, LeaveApp."Approval Status"::"Pending Approval", LeaveApp."Approval Status"::Approved);
+                    //LeaveApp.SETFILTER("Approval Status", '%1', LeaveApp.Status::Open);
+                    LeaveApp.SETFILTER(Status, '%1|%2|%3', LeaveApp.Status::Open, LeaveApp.Status::"Pending Approval", LeaveApp.Status::Approved);
                     if LeaveApp.FINDFIRST then begin
-                        if (LeaveApp."Approval Status" = LeaveApp."Approval Status"::Open) then
+                        if (LeaveApp.Status = LeaveApp.Status::Open) then
                             ERROR(Text012, LeaveApp."Leave Type", LeaveApp."Leave Code");
-                        if (LeaveApp."Approval Status" = LeaveApp."Approval Status"::"Pending Approval") THEN
+                        if (LeaveApp.Status = LeaveApp.Status::"Pending Approval") THEN
                             ERROR(Text017, LeaveApp."Leave Type", LeaveApp."Leave Code");
-                        if (LeaveApp."Approval Status" = LeaveApp."Approval Status"::Approved) THEN
+                        if (LeaveApp.Status = LeaveApp.Status::Approved) THEN
                             ERROR(Text018, LeaveApp."Leave Type", LeaveApp."Leave Code");
                     end;
 
@@ -326,7 +326,7 @@ table 50118 LeaveApplication
             Caption = 'Leave Year';
             Editable = false;
         }
-        field(19; "Approval Status"; Option)
+        field(19; Status; Option)
         {
             Caption = 'Approval Status';
             OptionMembers = Open,"Pending Approval",Approved,Posted;
@@ -609,8 +609,7 @@ table 50118 LeaveApplication
         LeavAppRec.SETRANGE("Employee No.", "Employee No.");
         LeavAppRec.SETRANGE("Leave Type", CauseOfAbsence.Code);
         LeavAppRec.SETRANGE("Leave Year", "Leave Year");
-        LeavAppRec.SETFILTER(
-             "Approval Status", '%1|%2|%3', LeavAppRec."Approval Status"::"Pending Approval", LeavAppRec."Approval Status"::Approved, LeavAppRec."Approval Status"::Posted);
+        LeavAppRec.SETFILTER(Status, '%1|%2|%3', LeavAppRec.Status::"Pending Approval", LeavAppRec.Status::Approved, LeavAppRec.Status::Posted);
         if (LeavAppRec.findlast) then begin
             LeaveMonth := DATE2DMY(LeavAppRec."First Day of Vacation", 2); //For casual Leave
             StartDate := "First Day of Vacation";
@@ -641,7 +640,7 @@ table 50118 LeaveApplication
 
     procedure TestStatusOpen()
     begin
-        TestField("Approval Status", "Approval Status"::Open);
+        TestField(Status, Rec.Status::Open);
     end;
 
     procedure GetNoOfDays(): Integer
@@ -838,7 +837,7 @@ table 50118 LeaveApplication
         LeaveApp.RESET;
         LeaveApp.SETRANGE("Employee No.", "Employee No.");
         LeaveApp.SETRANGE("Leave Type", "Leave Type");
-        LeaveApp.SETFILTER("Approval Status", '%1', LeaveApp."Approval Status"::Approved);
+        LeaveApp.SETFILTER(Status, '%1', LeaveApp.Status::Approved);
         if (LeaveApp.FINDFIRST) then begin
             CauseAbsAppRec.INIT;
             CauseAbsAppRec.VALIDATE("Employee No.", "Employee No.");
@@ -857,7 +856,7 @@ table 50118 LeaveApplication
             CauseAbsAppRec.INSERT(TRUE);
             RecordInsert := TRUE;
             LeaveApp."Leave Posted" := TRUE;
-            LeaveApp."Approval Status" := LeaveApp."Approval Status"::Posted;
+            LeaveApp.Status := LeaveApp.Status::Posted;
             LeaveApp.MODIFY;
         end else
             ERROR(Text015, "Leave Code", "Employee Name");
@@ -868,7 +867,7 @@ table 50118 LeaveApplication
 
     procedure CheckMandatoryFileds()
     begin
-        TestField(Rec."Approval Status", Rec."Approval Status"::Open);
+        TestField(Rec.Status, Rec.Status::Open);
         TestField(Rec."Applying Type");
         TestField(Rec."First Day of Vacation");
         TestField(Rec."Leave End Date");
@@ -884,7 +883,7 @@ table 50118 LeaveApplication
     begin
         LeaveApp.SetRange("Employee No.", Rec."Employee No.");
         IF LeaveApp.FindFirst() then begin
-            LeaveApp."Approval Status" := LeaveApp."Approval Status"::Open;
+            LeaveApp.Status := LeaveApp.Status::Open;
             LeaveApp.Modify();
         end;
     end;
@@ -896,7 +895,7 @@ table 50118 LeaveApplication
         LeaveApp.SetRange("Employee No.", Rec."Employee No.");
         IF LeaveApp.FindFirst() then begin
             CheckMandatoryFileds();
-            LeaveApp."Approval Status" := LeaveApp."Approval Status"::Approved;
+            LeaveApp.Status := LeaveApp.Status::Approved;
             LeaveApp.Modify();
         end;
     end;

@@ -1,6 +1,6 @@
 page 50022 "Purch. Requisition Card Dummy"
 {
-    //Created by Salaam Azeez
+    //Created by Akande
 
     PageType = Card;
     ApplicationArea = All;

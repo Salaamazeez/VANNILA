@@ -1,6 +1,6 @@
 table 50137 "Purchase Requisition Line"
 {
-    //Created by Salaam Azeez
+    //Created by Akande
 
     DataClassification = ToBeClassified;
 

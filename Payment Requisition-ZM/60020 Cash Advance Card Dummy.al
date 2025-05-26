@@ -1,6 +1,6 @@
 page 50024 "Cash Advance Card Dummy"
 {
-    //Created by Salaam Azeez
+    //Created by Akande
     PageType = Card;
     ApplicationArea = All;
     UsageCategory = Administration;

@@ -1,6 +1,6 @@
 page 60001 "Payment Req. List Dummy"
 {
-    //Created by Salaam Azeez
+    //Created by Akande
     PageType = List;
     ApplicationArea = All;
     UsageCategory = Administration;

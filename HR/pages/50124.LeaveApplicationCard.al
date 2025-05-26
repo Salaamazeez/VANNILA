@@ -42,7 +42,7 @@ page 50124 LeaveApplicationCard
                     ToolTip = 'Specifies the value of the Global Dimension 2 Code.';
                 }
 
-                field("Approval Status"; Rec."Approval Status")
+                field("Approval Status"; Rec.Status)
                 {
                     ToolTip = 'Specifies the value of the Approval Status.';
                 }
@@ -177,48 +177,110 @@ page 50124 LeaveApplicationCard
     {
         area(Processing)
         {
-            action(SendApprovalReq)
+            group("Request Approval")
             {
-                Caption = 'Send Approval Request';
-                Image = SendApprovalRequest;
-                ApplicationArea = All;
-                Promoted = true;
-                PromotedOnly = true;
-                PromotedCategory = Process;
-                Visible = IsSendvisible;
-                trigger OnAction()
-                begin
+                action("Send &Approval Request")
+                {
+                    ApplicationArea = Basic;
+                    Enabled = not OpenApprovalEntriesExist;
+                    Image = SendApprovalRequest;
+                    Promoted = true;
+                    PromotedCategory = Process;
+                    trigger OnAction()
+                    var
+                        RecRef: RecordRef;
+                        ApprovalsMgmt: Codeunit "Approval Mgt";
+                    begin
+                        RecRef.GetTable(Rec);
+                        if ApprovalsMgmt.CheckGenericApprovalsWorkflowEnabled(RecRef) then
+                            ApprovalsMgmt.OnSendGenericDocForApproval(RecRef);
+                    end;
+                }
+                action("Cancel Approval Re&quest")
+                {
+                    ApplicationArea = Basic;
+                    Enabled = OpenApprovalEntriesExist;
+                    Image = Cancel;
+                    Promoted = true;
+                    PromotedCategory = Process;
+                    trigger OnAction()
+                    var
+                        RecRef: RecordRef;
+                        ApprovalsMgmt: Codeunit "Approval Mgt";
+                    begin
+                        RecRef.GetTable(Rec);
+                        ApprovalsMgmt.OnCancelGenericDocForApproval(RecRef);
+                    end;
+                }
 
-                end;
             }
-            action(CancelApprovalReq)
+
+            group(Approval)
             {
-                Caption = 'Cancel Approval Request';
-                Image = CancelApprovalRequest;
-                ApplicationArea = All;
-                Promoted = true;
-                PromotedOnly = true;
-                PromotedCategory = Process;
-                Visible = IsCancelVisible;
-                trigger OnAction()
-                begin
+                Caption = 'Approval';
+                action(Approve)
+                {
+                    ApplicationArea = Basic;
+                    Caption = 'Approve';
+                    Image = Approve;
+                    Promoted = true;
+                    PromotedCategory = Process;
+                    PromotedIsBig = true;
+                    Visible = OpenApprovalEntriesExistForCurrUser;
 
-                end;
-            }
-            action(Approval)
-            {
-                Caption = 'Approvals';
-                Image = Approvals;
-                ApplicationArea = All;
-                Promoted = true;
-                PromotedOnly = true;
-                PromotedCategory = Process;
-                trigger OnAction()
-                begin
+                    trigger OnAction()
+                    var
+                        ApprovalsMgmt: Codeunit "Approvals Mgmt.";
+                        ApprovalMgt: Codeunit "Approval Mgt";
 
-                end;
+                    begin
+                        ApprovalsMgmt.ApproveRecordApprovalRequest(Rec.RecordId);
+                        if ApprovalMgt.ApproveDoc(Rec."Leave Code") then begin
+                            Rec.Status := Rec.Status::Approved;
+                            Rec.Modify()
+                        end;
+                    end;
+                }
+                action(Reject)
+                {
+                    ApplicationArea = Basic;
+                    Caption = 'Reject';
+                    Image = Reject;
+                    Promoted = true;
+                    PromotedCategory = Process;
+                    PromotedIsBig = true;
+                    Visible = OpenApprovalEntriesExistForCurrUser;
+
+                    trigger OnAction()
+                    var
+                        ApprovalsMgmt: Codeunit "Approvals Mgmt.";
+                        MyApprovalMgt: Codeunit "Approval Mgt";
+                        RecRef: RecordRef;
+                    begin
+                        ApprovalsMgmt.RejectRecordApprovalRequest(Rec.RecordId);
+                        RecRef.GetTable(Rec);
+                        MyApprovalMgt.CheckAndRejectDoc(RecRef)
+                    end;
+                }
+                action(Delegate)
+                {
+                    ApplicationArea = Basic;
+                    Caption = 'Delegate';
+                    Image = Delegate;
+                    Promoted = true;
+                    PromotedCategory = Process;
+                    Visible = OpenApprovalEntriesExistForCurrUser;
+
+                    trigger OnAction()
+                    var
+                        ApprovalsMgmt: Codeunit "Approvals Mgmt.";
+                    begin
+                        ApprovalsMgmt.DelegateRecordApprovalRequest(Rec.RecordId);
+                    end;
+                }
+                
             }
-            action(manualRelease)
+               action(manualRelease)
             {
                 Caption = 'Release';
                 Image = ReleaseDoc;
@@ -292,7 +354,7 @@ page 50124 LeaveApplicationCard
     }
     trigger OnOpenPage()
     begin
-        iF (rec."Approval Status" <> Rec."Approval Status"::Open) then BEGIN
+        iF (Rec.Status <> Rec.Status::Open) then BEGIN
             CurrPage.Editable := false;
             IsReopenVisible := true;
         END else begin
@@ -306,7 +368,7 @@ page 50124 LeaveApplicationCard
 
         end;
 
-        if (Rec."Approval Status" = rec."Approval Status"::"Pending Approval") then begin
+        if (Rec.Status = Rec.Status::"Pending Approval") then begin
             IsLeavePostedVisible := false;
             IsLeaveReportVisible := false;
             IsLeaveRecallVisible := false;
@@ -316,7 +378,7 @@ page 50124 LeaveApplicationCard
             IsReleaseVisible := false;
         end;
 
-        if (Rec."Approval Status" = rec."Approval Status"::Approved) then begin
+        if (Rec.Status = Rec.Status::Approved) then begin
             IsLeavePostedVisible := true;
             IsLeaveReportVisible := true;
             IsLeaveRecallVisible := false;
@@ -326,7 +388,7 @@ page 50124 LeaveApplicationCard
             IsReleaseVisible := false;
         end;
 
-        if (Rec."Approval Status" = rec."Approval Status"::Posted) then begin
+        if (Rec.Status = Rec.Status::Posted) then begin
             //IsLeavePostedVisible := true;
             IsLeaveRecallVisible := true;
             IsLeavePostedVisible := false;
@@ -339,34 +401,22 @@ page 50124 LeaveApplicationCard
 
     trigger OnAfterGetRecord()
     begin
-        /*
-                IF UserSetup.GET(USERID) THEN BEGIN
-                    IF (NOT UserSetup."HR Leave Administrator") THEN BEGIN
-                        FILTERGROUP(2);
-                        SETFILTER("Approval Status", '%1', "Approval Status"::Open);
-                        SETRANGE("User Id", USERID);
-                        FILTERGROUP(0);
-                    END ELSE BEGIN
-                        FILTERGROUP(2);
-                        SETFILTER("Approval Status", '%1', "Approval Status"::Open);
-                        FILTERGROUP(0);
-                    END;
-                END;
-
-
-
-                IF ("Approval Status" <> "Approval Status"::Open) THEN
-                    CurrPage.EDITABLE := FALSE
-                ELSE
-                    CurrPage.EDITABLE := TRUE;
-        */
-
-        iF (rec."Approval Status" <> Rec."Approval Status"::Open) then
+       SetControlAppearance();
+        iF (Rec.Status <> Rec.Status::Open) then
             CurrPage.Editable := false
         else
             CurrPage.Editable := true;
 
     end;
+
+    local procedure SetControlAppearance()
+    var
+        ApprovalsMgmt: Codeunit "Approvals Mgmt.";
+    begin
+        OpenApprovalEntriesExistForCurrUser := ApprovalsMgmt.HasOpenApprovalEntriesForCurrentUser(Rec.RecordId);
+        OpenApprovalEntriesExist := ApprovalsMgmt.HasOpenApprovalEntries(Rec.RecordId);
+    end;
+
 
     var
         IsLeaveRecallVisible: Boolean;
@@ -378,4 +428,7 @@ page 50124 LeaveApplicationCard
         IsCancelVisible: Boolean;
         IsReleaseVisible: Boolean;
         IsReopenVisible: Boolean;
+        OpenApprovalEntriesExistForCurrUser: Boolean;
+        OpenApprovalEntriesExist: Boolean;
+        EnableControl: Boolean;
 }

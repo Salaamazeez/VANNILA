@@ -1,6 +1,6 @@
 page 60021 "Cash Advance List"
 {
-    //Created by Salaam Azeez
+    //Created by Akande
     PageType = List;
     ApplicationArea = All;
     UsageCategory = Lists;

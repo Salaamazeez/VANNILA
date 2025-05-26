@@ -1,6 +1,6 @@
 table 50155 Retirement
 {
-    //Created by Salaam Azeez
+    //Created by Akande
     DataClassification = CustomerContent;
     LookupPageId = "Retirement List";
 

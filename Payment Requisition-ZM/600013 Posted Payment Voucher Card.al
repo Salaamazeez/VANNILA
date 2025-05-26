@@ -1,5 +1,5 @@
 page 60013 "Posted Payment Voucher Card"
-{//Created by Salaam Azeez
+{//Created by Akande
     PageType = Card;
     ApplicationArea = All;
     UsageCategory = Administration;

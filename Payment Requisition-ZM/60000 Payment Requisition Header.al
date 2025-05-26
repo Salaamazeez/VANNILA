@@ -1,6 +1,6 @@
 table 60000 "Payment Requisition"
 {
-    //Created by Salaam Azeez
+    //Created by Akande
     DataClassification = ToBeClassified;
     LookupPageId = "Payment Req. List Dummy";
 

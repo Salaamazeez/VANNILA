@@ -28,6 +28,8 @@ Codeunit 50002 "Approval Mgt"
         Retirement: Record Retirement;
         CashReceipt: Record "Cash Receipt";
         PaymentVoucherHeader: Record "Payment Voucher Header";
+        LeaveApplication: Record LeaveApplication;
+        PerformanceAppraisal: Record PerformanceAppraisalHeader;
         WorkflowEvent: Codeunit "Workflow Event";
     begin
         case RecRef.Number of
@@ -66,6 +68,20 @@ Codeunit 50002 "Approval Mgt"
                     exit(WorkflowManagement.CanExecuteWorkflow(PaymentVoucherHeader, WorkflowEvent.RunWorkflowOnSendGenericDocForApprovalCode(
                       DocName)));
                 end;
+            Database::LeaveApplication:
+                begin
+                    RecRef.SetTable(LeaveApplication);
+                    DocName := 'LEAVEAPPLICATION';
+                    exit(WorkflowManagement.CanExecuteWorkflow(LeaveApplication, WorkflowEvent.RunWorkflowOnSendGenericDocForApprovalCode(
+                      DocName)));
+                end;
+            Database::PerformanceAppraisalHeader:
+                begin
+                    RecRef.SetTable(PerformanceAppraisal);
+                    DocName := 'PERFORMANCEAPPRAISAL';
+                    exit(WorkflowManagement.CanExecuteWorkflow(PerformanceAppraisal, WorkflowEvent.RunWorkflowOnSendGenericDocForApprovalCode(
+                      DocName)));
+                end;
         end;
     end;
 
@@ -76,6 +92,8 @@ Codeunit 50002 "Approval Mgt"
         Retirement: Record Retirement;
         CashReceipt: Record "Cash Receipt";
         PaymentVoucherHeader: Record "Payment Voucher Header";
+        LeaveApplication: Record LeaveApplication;
+        PerformanceAppraisal: Record PerformanceAppraisalHeader;
         WorkflowEvent: Codeunit "Workflow Event";
     begin
         case RecRef.Number of
@@ -119,6 +137,22 @@ Codeunit 50002 "Approval Mgt"
                     PaymentVoucherHeader.Validate(Status, PaymentVoucherHeader.Status::Approved);
                     PaymentVoucherHeader.Modify(true);
                 end;
+            Database::LeaveApplication:
+                begin
+                    RecRef.SetTable(LeaveApplication);
+                    if not ApproveDoc(LeaveApplication."Leave Code") then
+                        exit;
+                    LeaveApplication.Validate(Status, LeaveApplication.Status::Approved);
+                    LeaveApplication.Modify(true);
+                end;
+            Database::PerformanceAppraisalHeader:
+                begin
+                    RecRef.SetTable(PerformanceAppraisal);
+                    if not ApproveDoc(Format(PerformanceAppraisal."Appraisal Year")) then
+                        exit;
+                    LeaveApplication.Validate(Status, LeaveApplication.Status::Approved);
+                    LeaveApplication.Modify(true);
+                end;
         end;
     end;
 
@@ -138,10 +172,7 @@ Codeunit 50002 "Approval Mgt"
         end;
     end;
 
-
-
     [IntegrationEvent(false, false)]
-
     procedure OnCancelGenericDocForApproval(var RecRef: RecordRef)
     begin
     end;
@@ -167,6 +198,8 @@ Codeunit 50002 "Approval Mgt"
         Retirement: Record Retirement;
         CashReceipt: Record "Cash Receipt";
         PaymentVoucherHeader: Record "Payment Voucher Header";
+        LeaveApplication: Record LeaveApplication;
+        PerformanceAppraisal: Record PerformanceAppraisalHeader;
     Begin
         if WorkflowStepArgument.Get(WorkflowStepInstance.Argument) then
             ApprovalEntryArgument."Workflow User Group" := WorkflowStepArgument."Workflow User Group Code";
@@ -228,7 +261,21 @@ Codeunit 50002 "Approval Mgt"
                     ApprovalEntryArgument."Currency Code" := PaymentVoucherHeader."Currency Code";
                     ApprovalEntryArgument.Description := PaymentVoucherHeader."Request Description";
                 end;
-
+            Database::LeaveApplication:
+                begin
+                    RecRef.SetTable(LeaveApplication);
+                    //LeaveApplication.CalcFields("Request Amount", "Request Amount (LCY)");
+                    ApprovalEntryArgument."Document No." := LeaveApplication."Leave Code";
+                    ApprovalEntryArgument."Salespers./Purch. Code" := '';
+                    ApprovalEntryArgument.Description := LeaveApplication.Description;
+                end;
+            Database::PerformanceAppraisalHeader:
+                begin
+                    RecRef.SetTable(PerformanceAppraisal);
+                    ApprovalEntryArgument."Document No." := Format(PerformanceAppraisal."Appraisal Year");
+                    ApprovalEntryArgument."Salespers./Purch. Code" := '';
+                    ApprovalEntryArgument.Description := LeaveApplication.Description;
+                end;
         end;
 
     end;
@@ -243,6 +290,8 @@ Codeunit 50002 "Approval Mgt"
         Retirement: Record Retirement;
         CashReceipt: Record "Cash Receipt";
         PaymentVoucherHeader: Record "Payment Voucher Header";
+        LeaveApplication: Record LeaveApplication;
+        PerformanceAppraisal: Record PerformanceAppraisalHeader;
     begin
         case RecRef.Number of
             Database::"Payment Requisition":
@@ -283,6 +332,22 @@ Codeunit 50002 "Approval Mgt"
                     PaymentVoucherHeader.Validate(Status, PaymentVoucherHeader.Status::"Pending Approval");
                     PaymentVoucherHeader.Modify(true);
                     Variant := PaymentVoucherHeader;
+                    IsHandled := true;
+                end;
+            Database::LeaveApplication:
+                begin
+                    RecRef.SetTable(LeaveApplication);
+                    LeaveApplication.Validate(Status, LeaveApplication.Status::"Pending Approval");
+                    LeaveApplication.Modify(true);
+                    Variant := LeaveApplication;
+                    IsHandled := true;
+                end;
+            Database::PerformanceAppraisalHeader:
+                begin
+                    RecRef.SetTable(PerformanceAppraisal);
+                    PerformanceAppraisal.Validate(Status, PerformanceAppraisal.Status::"Pending Approval");
+                    PerformanceAppraisal.Modify(true);
+                    Variant := PerformanceAppraisal;
                     IsHandled := true;
                 end;
         end;
@@ -394,7 +459,7 @@ Codeunit 50002 "Approval Mgt"
     begin
         //GenJnlLine."Description 2" := PurchHeader
     end;
-    
+
     procedure GetTableIDForApproval(TableID: Integer): Integer
     begin
         case TableID of
@@ -409,6 +474,10 @@ Codeunit 50002 "Approval Mgt"
                 exit(Database::"Cash Receipt");
             Database::Retirement:
                 exit(Database::Retirement);
+            Database::LeaveApplication:
+                exit(Database::LeaveApplication);
+            Database::PerformanceAppraisalHeader:
+                exit(Database::PerformanceAppraisalHeader);
         end;
     end;
 
@@ -422,6 +491,8 @@ Codeunit 50002 "Approval Mgt"
         WorkflowEvent: Codeunit "Workflow Event";
         ApprovalCommentList: Page "Sales Comment Sheet";
         ApprovalComment: Record "Sales Comment Line";
+        LeaveApplication: Record LeaveApplication;
+        PerformanceAppraisal: Record PerformanceAppraisalHeader;
         DocNo: Code[20];
     begin
         case RecRef.Number of
@@ -461,8 +532,6 @@ Codeunit 50002 "Approval Mgt"
                     CashReceipt.Modify();
                     DocNo := CashReceipt."No.";
                 end;
-
-
             Database::"Payment Voucher Header":
                 begin
                     RecRef.SetTable(PaymentVoucherHeader);
@@ -470,7 +539,25 @@ Codeunit 50002 "Approval Mgt"
                         exit;
                     PaymentVoucherHeader.Status := PaymentVoucherHeader.Status::Open;
                     PaymentVoucherHeader.Modify();
-                    DocNo := CashReceipt."No.";
+                    DocNo := PaymentVoucherHeader."No.";
+                end;
+            Database::LeaveApplication:
+                begin
+                    RecRef.SetTable(LeaveApplication);
+                    if not ApproveDoc(LeaveApplication."Leave Code") then
+                        exit;
+                    LeaveApplication.Status := LeaveApplication.Status::Open;
+                    LeaveApplication.Modify();
+                    DocNo := LeaveApplication."Leave Code";
+                end;
+            Database::PerformanceAppraisalHeader:
+                begin
+                    RecRef.SetTable(PerformanceAppraisal);
+                    if not ApproveDoc(Format(PerformanceAppraisal."Appraisal Year")) then
+                        exit;
+                    PerformanceAppraisal.Status := PerformanceAppraisal.Status::Open;
+                    PerformanceAppraisal.Modify();
+                    DocNo := Format(PerformanceAppraisal."Appraisal Year");
                 end;
         end;
         if DocNo = '' then

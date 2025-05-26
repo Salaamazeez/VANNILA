@@ -1,7 +1,7 @@
 table 60011 "Pay Mode"
 {
 
-    //Created by Salaam Azeez
+    //Created by Akande
     DataClassification = ToBeClassified;
     LookupPageId = "Pay Mode";
     DrillDownPageId = "Pay Mode";

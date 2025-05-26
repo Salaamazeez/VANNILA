@@ -1,6 +1,6 @@
 page 50158 "Retirement Line Subform"
 {
-    //Created by Salaam Azeez
+    //Created by Akande
     PageType = ListPart;
     ApplicationArea = All;
     UsageCategory = Lists;

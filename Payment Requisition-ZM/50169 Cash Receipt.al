@@ -1,6 +1,6 @@
 table 50169 "Cash Receipt"
 {
-    //Created by Salaam Azeez
+    //Created by Akande
     Caption = 'Cash Receipt (Retirement)';
     DataClassification = CustomerContent;
     LookupPageId = "Cash Receipt List";

@@ -36,6 +36,14 @@ Codeunit 50003 "Workflow Event"
           Database::"Payment Voucher Header", 'Approval of a payment voucher is requested', 0, false);
         WorkflowEventHandling.AddEventToLibrary('RunWorkflowOnCancelPaymentVoucherForApprovalCode',
           Database::"Payment Voucher Header", 'An approval request for a payment voucher is cancelled', 0, false);
+        WorkflowEventHandling.AddEventToLibrary('RunWorkflowOnSendLeaveApplicationForApprovalCode',
+                 Database::"Payment Voucher Header", 'Approval of a leave application is requested', 0, false);
+        WorkflowEventHandling.AddEventToLibrary('RunWorkflowOnCancelLeaveApplicationForApprovalCode',
+          Database::"Payment Voucher Header", 'An approval request for a leave application is cancelled', 0, false);
+        WorkflowEventHandling.AddEventToLibrary('RunWorkflowOnSendPerformanceAppraisalForApprovalCode',
+                        Database::"Payment Voucher Header", 'Approval of a performance appraisal is requested', 0, false);
+        WorkflowEventHandling.AddEventToLibrary('RunWorkflowOnCancelPerformanceAppraisalForApprovalCode',
+          Database::"Payment Voucher Header", 'An approval request for a performance appraisal is cancelled', 0, false);
 
     end;
 
@@ -48,6 +56,8 @@ Codeunit 50003 "Workflow Event"
         Retirement: Record Retirement;
         CashReceipt: Record "Cash Receipt";
         PaymentVoucherHeader: Record "Payment Voucher Header";
+        LeaveApplication: Record LeaveApplication;
+        PerformanceAppraisal: Record PerformanceAppraisalHeader;
     begin
         //WorkflowManagement.SetMobileUserID(GlobalUserSetup."User ID");
         case RecRef.Number of
@@ -81,6 +91,18 @@ Codeunit 50003 "Workflow Event"
                     DocName := 'PAYMENTVOUCHER';
                     WorkflowManagement.HandleEvent(RunWorkflowOnSendGenericDocForApprovalCode(DocName), PaymentVoucherHeader);
                 end;
+            Database::LeaveApplication:
+                begin
+                    RecRef.SetTable(LeaveApplication);
+                    DocName := 'LEAVEAPPLICATION';
+                    WorkflowManagement.HandleEvent(RunWorkflowOnSendGenericDocForApprovalCode(DocName), LeaveApplication);
+                end;
+            Database::PerformanceAppraisalHeader:
+                begin
+                    RecRef.SetTable(PerformanceAppraisal);
+                    DocName := 'PERFORMANCEAPPRAISAL';
+                    WorkflowManagement.HandleEvent(RunWorkflowOnSendGenericDocForApprovalCode(DocName), PerformanceAppraisal);
+                end;
         end;
     end;
 
@@ -92,6 +114,8 @@ Codeunit 50003 "Workflow Event"
         Retirement: Record Retirement;
         CashReceipt: Record "Cash Receipt";
         PaymentVoucherHeader: Record "Payment Voucher Header";
+        LeaveApplication: Record LeaveApplication;
+        PerformanceAppraisal: Record PerformanceAppraisalHeader;
     begin
 
         //WorkflowManagement.SetMobileUserID(GlobalUserSetup."User ID");
@@ -125,6 +149,18 @@ Codeunit 50003 "Workflow Event"
                     RecRef.SetTable(PaymentVoucherHeader);
                     DocName := 'PAYMENTVOUCHER';
                     WorkflowManagement.HandleEvent(RunWorkflowOnCancelGenericDocForApprovalCode(DocName), PaymentVoucherHeader);
+                end;
+            Database::LeaveApplication:
+                begin
+                    RecRef.SetTable(LeaveApplication);
+                    DocName := 'LEAVEAPPLICATION';
+                    WorkflowManagement.HandleEvent(RunWorkflowOnCancelGenericDocForApprovalCode(DocName), LeaveApplication);
+                end;
+            Database::PerformanceAppraisalHeader:
+                begin
+                    RecRef.SetTable(PerformanceAppraisal);
+                    DocName := 'PERFORMANCEAPPRAISAL';
+                    WorkflowManagement.HandleEvent(RunWorkflowOnCancelGenericDocForApprovalCode(DocName), PerformanceAppraisal);
                 end;
         end;
 

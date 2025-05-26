@@ -1,7 +1,7 @@
 table 50170 "Cash Receipt Line"
 {
 
-    //Created by Salaam Azeez
+    //Created by Akande
     DataClassification = CustomerContent;
 
     fields

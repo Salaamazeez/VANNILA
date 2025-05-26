@@ -1,7 +1,8 @@
 
 page 50080 "Work Completion Cert. (WCC)"
 {
-    Caption = 'Purchase Receipts';
+    //Caption = 'Purchase Receipts';
+    Caption = 'Work Completion Cert. (WCC)';
     PageType = Document;
     RefreshOnActivate = true;
     SourceTable = "Purchase Header";

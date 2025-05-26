@@ -1,6 +1,6 @@
 page 60009 "Payment Voucher Subform"
 {
-    //Created by Salaam Azeez
+    //Created by Akande
     PageType = ListPart;
     ApplicationArea = All;
     UsageCategory = Administration;
@@ -122,7 +122,7 @@ page 60009 "Payment Voucher Subform"
                 {
                     ApplicationArea = All;
                 }
-                
+
 
                 // }
                 // field("VAT Amount"; "VAT Amount")

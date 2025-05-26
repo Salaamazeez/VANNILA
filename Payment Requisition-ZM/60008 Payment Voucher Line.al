@@ -1,6 +1,6 @@
 table 60008 "Payment Voucher Line"
 {
-    //Created by Salaam Azeez
+    //Created by Akande
     DataClassification = CustomerContent;
 
     fields
@@ -454,7 +454,7 @@ table 60008 "Payment Voucher Line"
 
             end;
         }
-        
+
     }
 
     keys

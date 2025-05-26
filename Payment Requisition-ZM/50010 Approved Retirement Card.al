@@ -1,5 +1,5 @@
 page 50010 "Approved Retirement Card"
-{//Created by Salaam Azeez
+{//Created by Akande
     PageType = Card;
     ApplicationArea = All;
     UsageCategory = Administration;

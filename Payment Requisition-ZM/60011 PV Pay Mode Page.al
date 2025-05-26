@@ -1,5 +1,5 @@
 
-//Created by Salaam Azeez
+//Created by Akande
 page 60015 "Pay Mode"
 {
     PageType = List;

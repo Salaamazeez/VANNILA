@@ -1,6 +1,6 @@
 table 60002 "Payment Mgt Setup"
 {
-    //Created by Salaam Azeez
+    //Created by Akande
     DataClassification = ToBeClassified;
 
 

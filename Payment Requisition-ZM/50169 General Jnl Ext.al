@@ -1,7 +1,7 @@
 tableextension 50169 "Gen Jnl Ext" extends "Gen. Journal Line"
 {
 
-    //Created by Salaam Azeez
+    //Created by Akande
     fields
     {
         modify("External Document No.")

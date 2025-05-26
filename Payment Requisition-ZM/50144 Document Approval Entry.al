@@ -1,6 +1,6 @@
 table 50144 "Document Approval Entry"
 {
-    //Created by Salaam Azeez
+    //Created by Akande
 
     DataClassification = ToBeClassified;
 

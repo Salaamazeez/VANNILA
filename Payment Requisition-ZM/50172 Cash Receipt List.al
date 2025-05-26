@@ -1,6 +1,6 @@
 page 50172 "Cash Receipt List"
 {
-    //Created by Salaam Azeez
+    //Created by Akande
     PageType = List;
     ApplicationArea = All;
     UsageCategory = Lists;

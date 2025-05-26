@@ -1,6 +1,6 @@
 page 50018 "Payment Req. Card Dummy"
 {
-    //Created by Salaam Azeez
+    //Created by Akande
     PageType = Card;
     ApplicationArea = All;
     UsageCategory = Administration;

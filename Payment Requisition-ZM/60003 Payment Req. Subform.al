@@ -1,6 +1,6 @@
 page 60003 "Payment Req. Subform"
 {
-    //Created by Salaam Azeez
+    //Created by Akande
     PageType = ListPart;
     ApplicationArea = All;
     UsageCategory = Administration;

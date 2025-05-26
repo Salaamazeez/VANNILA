@@ -1,6 +1,6 @@
 table 60021 "Cash Advance"
 {
-    //Created by Salaam Azeez
+    //Created by Akande
     DataClassification = CustomerContent;
     LookupPageId = "Cash Advance List Dummy";
     DrillDownPageId = "Approved Cash Advance List";
