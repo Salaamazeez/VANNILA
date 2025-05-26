@@ -28,6 +28,8 @@ report 50154 ImportDailyAllocOilWaterGas
                 Evaluate(DailyOliAllocation."Daily Allocated Oil", ColText[7]);
                 Evaluate(DailyOliAllocation."Daily Allocated Water", ColText[8]);
                 Evaluate(DailyOliAllocation."Daily Allocated Gas", ColText[9]);
+                Evaluate(DailyOliAllocation."Potential Oil Cond", ColText[10]);
+                Evaluate(DailyOliAllocation."Potential Gas Rate", ColText[11]);
 
                 if DailyOliAllocation2.get(DailyOliAllocation.Well, DailyOliAllocation."Well Type", DailyOliAllocation."Production Date") then;
                 //DailyOliAllocation."Production Code" := ColText[8];
@@ -40,13 +42,22 @@ report 50154 ImportDailyAllocOilWaterGas
                     //if confirmMgt.GetResponseOrDefault('Record with %1 %2 %3 already exit do you want to modify and continue the import?', true) then begin
                     if (DailyOliAllocation2."Daily Allocated Oil" <> DailyOliAllocation."Daily Allocated Oil") OR
                         (DailyOliAllocation2."Daily Allocated Water" <> DailyOliAllocation."Daily Allocated Water") OR
-                          (DailyOliAllocation2."Daily Allocated Gas" <> DailyOliAllocation."Daily Allocated Gas") then begin
+                          (DailyOliAllocation2."Daily Allocated Gas" <> DailyOliAllocation."Daily Allocated Gas") OR
+                          (DailyOliAllocation2."Potential Oil Cond" <> DailyOliAllocation."Potential Oil Cond") OR
+                          (DailyOliAllocation2."Potential Oil Cond" <> DailyOliAllocation."Potential Gas Rate") then begin
                         if GuiAllowed then
-                            if Confirm(ConfirmDuplicate, true, DailyOliAllocation.Well, DailyOliAllocation."Well Type", DailyOliAllocation."Production Code") then begin
-                                DailyOliAllocation.Modify();
-                                RecordModified += 1;
-                            end;
+                            If (RecordModified = 0) then
+                                if Confirm(ConfirmDuplicate, true, DailyOliAllocation.Well, DailyOliAllocation."Well Type", DailyOliAllocation."Production Code") then begin
+                                    if UserSetup.Get(UserId) then
+                                        if (not UserSetup."OilGas Data Admin") then
+                                            Error(ErrormodifyData)
+                                        else begin
+                                            DailyOliAllocation.Modify();
+                                            //RecordModified += 1;
+                                        end;
+                                end;
                     end;
+                    RecordModified += 1;
                 end;
 
             end;
@@ -164,6 +175,8 @@ report 50154 ImportDailyAllocOilWaterGas
         ConfirmDuplicate: label 'Record with %1 %2 %3 already exit do you want to modify and continue the import?';
         RecordCount: Integer;
         RecordModified: Integer;
+        ErrormodifyData: label 'You do not have the OilGas Permission Admin to modify the data';
+        UserSetup: record "User Setup";
 
     Procedure ImportSheet(RowNumber: Integer)
     var

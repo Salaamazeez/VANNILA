@@ -33,6 +33,27 @@ pageextension 50002 ProjectManagerRCExt extends "Job Project Manager RC"
                     ToolTip = 'Accept or reject other users'' requests to create or change certain documents, cards, or journal lines that you must approve before they can proceed. The list is filtered to requests where you are set up as the approver.';
                 }
             }
+            group(OilWaterGas)
+            {
+                Caption = 'Oil, Water & Gas Data';
+                ToolTip = 'Import, modifify, & delete oil, water and Gas daily and monthly data';
+                action("ImportOilWaterGas")
+                {
+                    ApplicationArea = Advanced;
+                    Caption = 'Import Oil, Water & Gas';
+                    Image = ImportLog;
+                    RunObject = Page DailyAllocationOilWaterGas;
+                    ToolTip = 'Import and View Daily Allocation Oil, Water & Gas.';
+                }
+                action(ImportSalesByDrainage)
+                {
+                    ApplicationArea = Advanced;
+                    Caption = 'Import Sales By Drainage Point';
+                    Image = Approvals;
+                    RunObject = Page SalesByDrainaigePoint;
+                    ToolTip = 'Import and View Monthly Sales By Drainage Point for Oil, water & Gas';
+                }
+            }
             group("Employee Self Service")
             {
                 Caption = 'Employee Self Service';
