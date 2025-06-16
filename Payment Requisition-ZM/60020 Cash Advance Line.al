@@ -1,6 +1,6 @@
 table 60020 "Cash Advance Line"
 {
-    //Created by Salaam Azeez
+    //Created by Akande
     LookupPageId = "Cash Advance List";
     DrillDownPageId = "Cash Advance List";
     DataClassification = CustomerContent;

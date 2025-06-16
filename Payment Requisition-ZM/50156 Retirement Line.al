@@ -1,6 +1,6 @@
 table 50156 "Retirement Line"
 {
-    //Created by Salaam Azeez
+    //Created by Akande
     DataClassification = CustomerContent;
 
     fields

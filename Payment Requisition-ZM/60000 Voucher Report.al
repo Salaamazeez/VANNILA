@@ -1,6 +1,6 @@
 report 60000 "Voucher Report"
 {
-    //Created by Salaam Azeez
+    //Created by Akande
     UsageCategory = Administration;
     ApplicationArea = All;
     DefaultLayout = RDLC;

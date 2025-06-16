@@ -1,5 +1,5 @@
 page 50011 "Approved Retirement List"
-{//Created by Salaam Azeez
+{//Created by Akande
     PageType = List;
     ApplicationArea = All;
     UsageCategory = Lists;

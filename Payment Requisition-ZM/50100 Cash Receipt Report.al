@@ -1,6 +1,6 @@
 report 50100 "Cash Receipt Report"
 {
-    //Created by Salaam Azeez
+    //Created by Akande
     UsageCategory = Administration;
     ApplicationArea = All;
     DefaultLayout = RDLC;

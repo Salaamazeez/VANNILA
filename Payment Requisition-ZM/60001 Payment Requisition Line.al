@@ -1,6 +1,6 @@
 table 60001 "Payment Requisition Line"
 {
-    //Created by Salaam Azeez
+    //Created by Akande
     DataClassification = CustomerContent;
 
     fields

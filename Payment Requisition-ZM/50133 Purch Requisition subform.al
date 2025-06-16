@@ -1,6 +1,6 @@
 page 50133 "Purchase Requisition Subform"
 {
-    //Created by Salaam Azeez
+    //Created by Akande
 
     AutoSplitKey = true;
     Caption = 'Lines';

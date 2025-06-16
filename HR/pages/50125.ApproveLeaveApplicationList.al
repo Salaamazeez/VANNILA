@@ -6,7 +6,7 @@ page 50125 ApproveLeaveApplicationList
     SourceTable = LeaveApplication;
     UsageCategory = Lists;
     CardPageId = LeaveApplicationCard;
-    SourceTableView = where("Approval Status" = const(Approved));
+    SourceTableView = where(Status = const(Approved));
     Editable = false;
     InsertAllowed = false;
     ModifyAllowed = false;
@@ -41,7 +41,7 @@ page 50125 ApproveLeaveApplicationList
                 {
                     ToolTip = 'Specifies the value of the Leave Year';
                 }
-                field("Approval Status"; Rec."Approval Status")
+                field("Approval Status"; Rec.Status)
                 {
                     ToolTip = 'Specifies the value of the Leave Approval Status.';
                 }

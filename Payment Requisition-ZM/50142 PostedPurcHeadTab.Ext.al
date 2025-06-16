@@ -1,6 +1,6 @@
 tableextension 50142 "Posted Purch. Header" extends "Purch. Inv. Header"
 {
-    //Created by Salaam Azeez
+    //Created by Akande
 
     fields
     {

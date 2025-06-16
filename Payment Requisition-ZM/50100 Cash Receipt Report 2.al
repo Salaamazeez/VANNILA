@@ -1,6 +1,6 @@
 report 50004 "Cash Receipt Report 2"
 {
-    //Created by Salaam Azeez
+    //Created by Akande
     UsageCategory = Administration;
     ApplicationArea = All;
     DefaultLayout = RDLC;

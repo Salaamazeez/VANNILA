@@ -1,7 +1,7 @@
 
 page 60016 "Expense Code"
 {
-    //Created by Salaam Azeez
+    //Created by Akande
     PageType = List;
     ApplicationArea = All;
     UsageCategory = Administration;

@@ -1,6 +1,6 @@
 table 60012 "Expense Code"
 {
-    //Created by Salaam Azeez
+    //Created by Akande
     DataClassification = ToBeClassified;
     LookupPageId = "Expense Code";
     DrillDownPageId = "Expense Code";

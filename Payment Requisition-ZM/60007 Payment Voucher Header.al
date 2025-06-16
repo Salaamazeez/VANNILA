@@ -1,6 +1,6 @@
 table 60009 "Payment Voucher Header"
 {
-    //Created by Salaam Azeez
+    //Created by Akande
     DataClassification = CustomerContent;
     LookupPageId = "Payment Voucher List";
     fields
@@ -487,6 +487,7 @@ table 60009 "Payment Voucher Header"
         //IF ("Approved Purch. Requisition" = '') AND ("System-Generated" = FALSE) THEN
         //  ERROR('Approved Requisition is required')
         // ELSE BEGIN
+        SignRegulator := 1;
         if Posted then
             Error('This Voucher has been posted already');
         GenJournalLine2.SETRANGE("Journal Template Name", 'GENERAL');
@@ -498,7 +499,7 @@ table 60009 "Payment Voucher Header"
         PaymentVoucherLine.SETRANGE("Document No.", "No.");
         IF PaymentVoucherLine.FINDFIRST THEN
             REPEAT
-                SignRegulator := 1;
+
                 GenJournalLine.INIT;
                 GenJournalLine."Journal Template Name" := 'GENERAL';
                 GenJournalLine."Journal Batch Name" := 'DEFAULT';
@@ -535,7 +536,8 @@ table 60009 "Payment Voucher Header"
                         GenJournalLine."Posting Date" := Date;
                         GenJournalLine."Due Date" := "Due Date";
                         GenJournalLine.validate("Applies-to Doc. Type", GenJournalLine."Applies-to Doc. Type"::Invoice);
-                        GenJournalLine.Validate("Applies-to Doc. No.", PaymentVoucherLine."Applies-to Invoice No.")
+                        GenJournalLine.Validate("Applies-to Doc. No.", PaymentVoucherLine."Applies-to Invoice No.");
+                        SignRegulator := 1;
                     end;
                 end;
 
@@ -546,7 +548,7 @@ table 60009 "Payment Voucher Header"
 
                 IF "Bal Account Type" = "Bal Account Type"::"Bank Account" THEN begin
                     GenJournalLine."Bal. Account Type" := GenJournalLine."Bal. Account Type"::"Bank Account";
-                    SignRegulator := -1;
+
                 end;
                 IF "Bal Account Type" = "Bal Account Type"::Vendor THEN
                     GenJournalLine."Bal. Account Type" := GenJournalLine."Bal. Account Type"::Vendor;
@@ -554,6 +556,8 @@ table 60009 "Payment Voucher Header"
                     GenJournalLine.Validate("Bal. Account Type", GenJournalLine."Bal. Account Type"::Customer);
                 IF "Bal Account Type" = "Bal Account Type"::"G/L Account" THEN
                     GenJournalLine."Bal. Account Type" := GenJournalLine."Bal. Account Type"::"G/L Account";
+                IF "Bal Account Type" = "Bal Account Type"::"Fixed Asset" THEN
+                    GenJournalLine."Bal. Account Type" := GenJournalLine."Bal. Account Type"::"Fixed Asset";
                 GenJournalLine.VALIDATE(Amount, SignRegulator * PaymentVoucherLine.Amount);
                 GenJournalLine."Bal. Account No." := "Bal Account No.";
                 //GenJournalLine.VALIDATE("Currency Code", PaymentVoucherLine."Currency Code");
@@ -574,8 +578,6 @@ table 60009 "Payment Voucher Header"
                 IF PaymentVoucherLine.Amount <> 0 THEN begin
                     GenJournalLine.INSERT;
                 end;
-
-
 
             // PaymentReqRec.SetRange("No.", "Former PR No.");
             // if PaymentReqRec.FindFirst() then begin
@@ -598,6 +600,7 @@ table 60009 "Payment Voucher Header"
         GenJournalLine: Record "Gen. Journal Line";
         GenJournalLine2: Record "Gen. Journal Line";
         SignRegulator: Decimal;
+        VendLedgerEntryRec: Record "Vendor Ledger Entry";
     begin
         SignRegulator := 1;
         if Posted then
@@ -633,21 +636,44 @@ table 60009 "Payment Voucher Header"
                 if PaymentVoucherLine."Account Type" = PaymentVoucherLine."Account Type"::"Bank Account" then begin
                     GenJournalLine."Account Type" := GenJournalLine."Account Type"::"Bank Account";
                 end;
+                // if PaymentVoucherLine."Account Type" = PaymentVoucherLine."Account Type"::"Fixed Asset" then begin
+                //     GenJournalLine."Account Type" := GenJournalLine."Account Type"::"Fixed Asset";
+                // end;
                 if PaymentVoucherLine."Account Type" = PaymentVoucherLine."Account Type"::"Fixed Asset" then begin
                     GenJournalLine."Account Type" := GenJournalLine."Account Type"::"Fixed Asset";
+                    GenJournalLine."FA Posting Date" := PaymentVoucherLine."FA Posting Date";
+                    GenJournalLine."FA Posting Type" := PaymentVoucherLine."FA Posting Type";
+                    GenJournalLine."Depreciation Book Code" := PaymentVoucherLine."Depreciation Book Code";
+                    GenJournalLine."Maintenance Code" := PaymentVoucherLine."Maintenance Code";
                 end;
+                //apply invoice no.
+                if PaymentVoucherLine."Applies-to Invoice No." <> '' then begin
+                    VendLedgerEntryRec.Reset();
+                    vendLedgerEntryRec.SetRange("Vendor No.", PaymentVoucherLine."Account No.");
+                    vendLedgerEntryRec.SetRange(Open, true);
+                    vendLedgerEntryRec.SetRange("Document Type", vendLedgerEntryRec."Document Type"::Invoice);
+                    vendLedgerEntryRec.SetRange("Document No.", PaymentVoucherLine."Applies-to Invoice No.");
+                    if vendLedgerEntryRec.FindFirst() then begin
+                        GenJournalLine."Posting Date" := Date;
+                        GenJournalLine."Due Date" := "Due Date";
+                        GenJournalLine.validate("Applies-to Doc. Type", GenJournalLine."Applies-to Doc. Type"::Invoice);
+                        GenJournalLine.Validate("Applies-to Doc. No.", PaymentVoucherLine."Applies-to Invoice No.");
+                        SignRegulator := 1;
+                    end;
+                end;
+
                 // Message('%1', GenJournalLine."Account Type");
                 GenJournalLine.VALIDATE("Account No.", PaymentVoucherLine."Account No.");
                 GenJournalLine.Description := PaymentVoucherLine."Payment Details";
                 GenJournalLine."External Document No." := "Retirement No";
                 GenJournalLine."Balance Posted" := "Balance Posted";
-                GenJournalLine."FA Posting Type" := PaymentVoucherLine."FA Posting Type";
-                GenJournalLine."Depreciation Book Code" := PaymentVoucherLine."Depreciation Book Code";
-                GenJournalLine."Maintenance Code" := PaymentVoucherLine."Maintenance Code";
-                GenJournalLine.VALIDATE(Amount, -PaymentVoucherLine.Amount);
+                // GenJournalLine."FA Posting Type" := PaymentVoucherLine."FA Posting Type";
+                // GenJournalLine."Depreciation Book Code" := PaymentVoucherLine."Depreciation Book Code";
+                // GenJournalLine."Maintenance Code" := PaymentVoucherLine."Maintenance Code";
+                // GenJournalLine.VALIDATE(Amount, -PaymentVoucherLine.Amount);
                 IF "Bal Account Type" = "Bal Account Type"::"Bank Account" THEN begin
                     GenJournalLine."Bal. Account Type" := GenJournalLine."Bal. Account Type"::"Bank Account";
-                    SignRegulator := -1;
+
                 end;
                 IF "Bal Account Type" = "Bal Account Type"::Vendor THEN
                     GenJournalLine."Bal. Account Type" := GenJournalLine."Bal. Account Type"::Vendor;
@@ -657,7 +683,7 @@ table 60009 "Payment Voucher Header"
                     GenJournalLine."Bal. Account Type" := GenJournalLine."Bal. Account Type"::"G/L Account";
                 IF "Bal Account Type" = "Bal Account Type"::"Fixed Asset" THEN
                     GenJournalLine."Bal. Account Type" := GenJournalLine."Bal. Account Type"::"Fixed Asset";
-                GenJournalLine.VALIDATE(Amount, SignRegulator * -PaymentVoucherLine.Amount);
+                GenJournalLine.VALIDATE(Amount, SignRegulator * PaymentVoucherLine.Amount);
                 GenJournalLine."Bal. Account No." := "Bal Account No.";
                 GenJournalLine.VALIDATE("Currency Code", PaymentVoucherLine."Currency Code");
                 GenJournalLine."Transaction type" := Rec."Transaction type";

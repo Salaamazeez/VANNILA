@@ -1,6 +1,6 @@
 page 50023 "Cash Advance List Dummy"
 {
-    //Created by Salaam Azeez
+    //Created by Akande
     PageType = List;
     ApplicationArea = All;
     UsageCategory = Lists;

@@ -1,9 +1,8 @@
 page 50003 "Approved Payment Voucher List"
 {
-    //Created by Salaam Azeez
     PageType = List;
     ApplicationArea = All;
-    UsageCategory = Administration;
+    UsageCategory = Lists;
     SourceTable = "Payment Voucher Header";
     SourceTableView = WHERE(Posted = filter(false), Status = FILTER(= Approved));
     Editable = false;

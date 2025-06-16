@@ -1,6 +1,6 @@
 report 60022 "Payment Requisition Report"
 {
-    //Created by Salaam Azeez
+    //Created by Akande
     UsageCategory = Administration;
     ApplicationArea = All;
     DefaultLayout = RDLC;

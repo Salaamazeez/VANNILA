@@ -1,6 +1,6 @@
 page 60012 "Posted Payment Voucher List"
 {
-    //Created by Salaam Azeez
+    //Created by Akande
     PageType = List;
     ApplicationArea = All;
     UsageCategory = Administration;

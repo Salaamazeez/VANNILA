@@ -1,6 +1,6 @@
 page 50027 "Pending Payment Voucher List"
 {
-    //Created by Salaam Azeez
+    //Created by Akande
     PageType = List;
     ApplicationArea = All;
     UsageCategory = Administration;

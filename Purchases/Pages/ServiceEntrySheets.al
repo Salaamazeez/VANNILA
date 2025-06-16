@@ -3,7 +3,8 @@
 page 50085 "Work Completion Certs (WCCs)"
 {
     ApplicationArea = Basic, Suite;
-    Caption = 'Purchase Receipts';
+    //Caption = 'Purchase Receipts';
+    Caption = 'Work Completion Certs (WCCs)';
     CardPageID = "Work Completion Cert. (WCC)";
     DataCaptionFields = "Buy-from Vendor No.";
     Editable = false;

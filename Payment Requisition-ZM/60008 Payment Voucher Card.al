@@ -1,6 +1,6 @@
 page 60002 "Payment Voucher Card"
 {
-    //Created by Salaam Azeez
+    //Created by Akande
     PageType = Card;
     ApplicationArea = All;
     UsageCategory = Administration;
@@ -72,7 +72,7 @@ page 60002 "Payment Voucher Card"
                 {
 
                 }
-                field("Suspense/Clearing";Rec."Suspense/Clearing")
+                field("Suspense/Clearing"; Rec."Suspense/Clearing")
                 {
                     ApplicationArea = All;
                 }
@@ -483,7 +483,7 @@ page 60002 "Payment Voucher Card"
         if Rec."Transaction type" = Rec."Transaction type"::Loan then
             Rec.TestField("Loan ID");
         Rec.TestField("Request Description");
-       // Rec.TestField(Beneficiary);
+        // Rec.TestField(Beneficiary);
         Rec.TestField("Bal Account No.");
         Rec.TestField("Shortcut Dimension 1 Code");
         Rec.TestField("Shortcut Dimension 2 Code");

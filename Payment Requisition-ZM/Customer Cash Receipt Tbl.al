@@ -1,6 +1,6 @@
 // table 50002 "Customer Cash Receipt"
 // {
-//     //Created by Salaam Azeez
+//     //Created by Akande
 //     DataClassification = ToBeClassified;
 
 //     fields

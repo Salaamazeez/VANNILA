@@ -1,7 +1,7 @@
 table 50130 "Purch. Requistion"
 //table 50000 PurcRequistion
 {
-    //Created by Salaam Azeez
+    //Created by Akande
 
     DataClassification = ToBeClassified;
     LookupPageId = "Purchase Req. List Dummy";

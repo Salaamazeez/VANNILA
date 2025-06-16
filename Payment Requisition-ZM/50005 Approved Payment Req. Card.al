@@ -1,6 +1,6 @@
 page 50007 "Approved Payment Req. Card"
 {
-    //Created by Salaam Azeez
+    //Created by Akande
     PageType = Card;
     ApplicationArea = All;
     UsageCategory = Administration;

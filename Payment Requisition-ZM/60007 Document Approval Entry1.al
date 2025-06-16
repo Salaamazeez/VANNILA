@@ -1,6 +1,6 @@
 table 60007 "Document Approval Entry1"
 {
-    //Created by Salaam Azeez
+    //Created by Akande
     DataClassification = CustomerContent;
 
     fields

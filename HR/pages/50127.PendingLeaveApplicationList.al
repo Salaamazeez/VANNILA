@@ -6,7 +6,7 @@ page 50127 PendingLeaveApplicationList
     SourceTable = LeaveApplication;
     UsageCategory = Lists;
     CardPageId = LeaveApplicationCard;
-    SourceTableView = where("Approval Status" = const("Pending Approval"));
+    SourceTableView = where(Status = const("Pending Approval"));
     Editable = false;
     InsertAllowed = false;
     ModifyAllowed = false;
@@ -41,7 +41,7 @@ page 50127 PendingLeaveApplicationList
                 {
                     ToolTip = 'Specifies the value of the Leave Year';
                 }
-                field("Approval Status"; Rec."Approval Status")
+                field("Approval Status"; Rec.Status)
                 {
                     ToolTip = 'Specifies the value of the Leave Approval Status.';
                 }

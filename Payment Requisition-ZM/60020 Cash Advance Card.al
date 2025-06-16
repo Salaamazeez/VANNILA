@@ -1,6 +1,6 @@
 page 60020 "Cash Advance Card"
 {
-    //Created by Salaam Azeez
+    //Created by Akande
     PageType = Card;
     ApplicationArea = All;
     UsageCategory = Administration;

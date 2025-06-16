@@ -1,6 +1,6 @@
 page 50021 "Purchase Req. List Dummy"
 {
-    //Created by Salaam Azeez
+    //Created by Akande
 
     PageType = List;
     ApplicationArea = All;

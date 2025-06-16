@@ -1,6 +1,6 @@
 page 50006 "Pending Payment Req. List"
 {
-    //Created by Salaam Azeez
+    //Created by Akande
     PageType = List;
     ApplicationArea = All;
     UsageCategory = Administration;

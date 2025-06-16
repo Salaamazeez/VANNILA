@@ -168,46 +168,158 @@ page 50131 PerfoamceAppraiser
     {
         area(Processing)
         {
-            action(SendApprovalReq)
+            group(Action13)
             {
-                Caption = 'Send Approval Request';
-                Image = SendApprovalRequest;
-                ApplicationArea = All;
-                Promoted = true;
-                PromotedOnly = true;
-                PromotedCategory = Process;
-                //Visible = IsSendvisible;
-                trigger OnAction()
-                begin
+                Caption = 'Release';
+                Image = ReleaseDoc;
+                group(Release)
+                {
+                    action("Re&lease")
+                    {
+                        ApplicationArea = Basic;
+                        Image = ReleaseDoc;
+                        Promoted = true;
+                        PromotedCategory = Process;
+                        ShortCutKey = 'Ctrl+F9';
 
-                end;
+                        trigger OnAction()
+                        var
+                            RecRef: RecordRef;
+                            ReleaseDocument: Codeunit "Release Documents";
+                        begin
+                            Rec.CheckMandatoryFileds();
+                            RecRef.GetTable(Rec);
+                            ReleaseDocument.PerformanualManualDocRelease(RecRef);
+                            CurrPage.Update;
+                        end;
+                    }
+                    action("Re&open")
+                    {
+                        ApplicationArea = Basic;
+                        Image = ReOpen;
+                        Promoted = true;
+                        PromotedCategory = Process;
+
+                        trigger OnAction()
+                        var
+                            RecRef: RecordRef;
+                            ReleaseDocument: Codeunit "Release Documents";
+                        begin
+
+                            RecRef.GetTable(Rec);
+                            ReleaseDocument.PerformManualReopen(RecRef);
+                            CurrPage.Update;
+                        end;
+                    }
+                }
             }
-            action(CancelApprovalReq)
-            {
-                Caption = 'Cancel Approval Request';
-                Image = CancelApprovalRequest;
-                ApplicationArea = All;
-                Promoted = true;
-                PromotedOnly = true;
-                PromotedCategory = Process;
-                //Visible = IsCancelVisible;
-                trigger OnAction()
-                begin
 
-                end;
+            group("Request Approval")
+            {
+                action("Send &Approval Request")
+                {
+                    ApplicationArea = Basic;
+                    Enabled = not OpenApprovalEntriesExist;
+                    Image = SendApprovalRequest;
+                    Promoted = true;
+                    PromotedCategory = Process;
+
+                    trigger OnAction()
+                    var
+                        RecRef: RecordRef;
+                        ApprovalsMgmt: Codeunit "Approval Mgt";
+                    begin
+                        Rec.CheckMandatoryFileds();
+                        ;
+                        RecRef.GetTable(Rec);
+                        if ApprovalsMgmt.CheckGenericApprovalsWorkflowEnabled(RecRef) then
+                            ApprovalsMgmt.OnSendGenericDocForApproval(RecRef);
+                    end;
+                }
+
+                action("Cancel Approval Re&quest")
+                {
+                    ApplicationArea = Basic;
+                    Enabled = OpenApprovalEntriesExist;
+                    Image = Cancel;
+                    Promoted = true;
+                    PromotedCategory = Process;
+
+                    trigger OnAction()
+                    var
+                        RecRef: RecordRef;
+                        ApprovalsMgmt: Codeunit "Approval Mgt";
+                    begin
+                        RecRef.GetTable(Rec);
+                        ApprovalsMgmt.OnCancelGenericDocForApproval(RecRef);
+                    end;
+                }
+
             }
-            action(Approval)
-            {
-                Caption = 'Approvals';
-                Image = Approvals;
-                ApplicationArea = All;
-                Promoted = true;
-                PromotedOnly = true;
-                PromotedCategory = Process;
-                trigger OnAction()
-                begin
 
-                end;
+            group(Approval)
+            {
+                Caption = 'Approval';
+                action(Approve)
+                {
+                    ApplicationArea = Basic;
+                    Caption = 'Approve';
+                    Image = Approve;
+                    Promoted = true;
+                    PromotedCategory = Process;
+                    PromotedIsBig = true;
+                    Visible = OpenApprovalEntriesExistForCurrUser;
+
+                    trigger OnAction()
+                    var
+                        ApprovalsMgmt: Codeunit "Approvals Mgmt.";
+                        ApprovalMgt: Codeunit "Approval Mgt";
+
+                    begin
+                        ApprovalsMgmt.ApproveRecordApprovalRequest(Rec.RecordId);
+                        if ApprovalMgt.ApproveDoc(Format(Rec."Appraisal Year")) then begin
+                            Rec.Status := Rec.Status::Approved;
+                            Rec.Modify()
+                        end;
+                    end;
+                }
+                action(Reject)
+                {
+                    ApplicationArea = Basic;
+                    Caption = 'Reject';
+                    Image = Reject;
+                    Promoted = true;
+                    PromotedCategory = Process;
+                    PromotedIsBig = true;
+                    Visible = OpenApprovalEntriesExistForCurrUser;
+
+                    trigger OnAction()
+                    var
+                        ApprovalsMgmt: Codeunit "Approvals Mgmt.";
+                        MyApprovalMgt: Codeunit "Approval Mgt";
+                        RecRef: RecordRef;
+                    begin
+                        ApprovalsMgmt.RejectRecordApprovalRequest(Rec.RecordId);
+                        RecRef.GetTable(Rec);
+                        MyApprovalMgt.CheckAndRejectDoc(RecRef)
+                    end;
+                }
+                action(Delegate)
+                {
+                    ApplicationArea = Basic;
+                    Caption = 'Delegate';
+                    Image = Delegate;
+                    Promoted = true;
+                    PromotedCategory = Process;
+                    Visible = OpenApprovalEntriesExistForCurrUser;
+
+                    trigger OnAction()
+                    var
+                        ApprovalsMgmt: Codeunit "Approvals Mgmt.";
+                    begin
+                        ApprovalsMgmt.DelegateRecordApprovalRequest(Rec.RecordId);
+                    end;
+                }
             }
             action(manualRelease)
             {
@@ -314,8 +426,9 @@ page 50131 PerfoamceAppraiser
 
         IsSendvisible: Boolean;
         IsCloseVisible: Boolean;
-
         ErrorAppraiserYear: Label 'The Appraiser Year in the Human Resource Setup %1 is not same as the current year %2. contact the system Administrator to update the Appraiser year in the Human Resource Setup.';
-
+        OpenApprovalEntriesExistForCurrUser: Boolean;
+        OpenApprovalEntriesExist: Boolean;
+        EnableControl: Boolean;
 
 }

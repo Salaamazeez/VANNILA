@@ -1,6 +1,6 @@
 tableextension 50140 PurchHeader extends "Purchase Header"
 {
-    //Created by Salaam Azeez
+    //Created by Akande
 
     fields
     {

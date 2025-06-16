@@ -1,6 +1,6 @@
 page 50020 "Payment Req. List"
 {
-    //Created by Salaam Azeez
+    //Created by Akande
     PageType = List;
     ApplicationArea = All;
     UsageCategory = Administration;
