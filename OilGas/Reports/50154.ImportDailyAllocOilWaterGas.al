@@ -172,7 +172,7 @@ report 50154 ImportDailyAllocOilWaterGas
         WindowDialog: Dialog;
 
         TextDisplay: Label 'import Record ###########1 with transaction Date ##########2:';
-        ConfirmDuplicate: label 'Record with %1 %2 %3 already exit do you want to modify and continue the import?';
+        ConfirmDuplicate: label 'Record with %1 %2 %3 already exist do you want to modify and continue the import?';
         RecordCount: Integer;
         RecordModified: Integer;
         ErrormodifyData: label 'You do not have the OilGas Permission Admin to modify the data';

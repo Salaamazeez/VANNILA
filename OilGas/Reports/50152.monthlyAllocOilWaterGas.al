@@ -168,7 +168,7 @@ report 50152 ImportMonthlyAllocWaterOilGas
         WindowDialog: Dialog;
 
         TextDisplay: Label 'import Record ###########1 with transaction Date ##########2:';
-        ConfirmDuplicate: label 'Record with %1 %2 %3 already exit do you want to modify and continue the import?';
+        ConfirmDuplicate: label 'Record with %1 %2 %3 already exist do you want to modify and continue the import?';
         RecordCount: Integer;
         RecordModified: Integer;
         confirmMgt: Codeunit "Confirm Management";
