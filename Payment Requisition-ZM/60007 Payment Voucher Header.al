@@ -411,6 +411,22 @@ table 60009 "Payment Voucher Header"
             OptionMembers = " ","Bank Payment","Bank Receipts","Main Bank";
             InitValue = "Bank Payment";
         }
+        field(50061; "Journal Template Name"; Code[10])
+        {
+            Caption = 'Journal Template Name';
+            NotBlank = true;
+            TableRelation = "Gen. Journal Template";
+        }
+        field(50062; "Journal Batch Name"; Code[10])
+        {
+            Caption = 'Journal Batch Name';
+            TableRelation = "Gen. Journal Batch".Name where("Journal Template Name" = field("Journal Template Name"));
+
+            trigger OnValidate()
+            begin
+               // UpdateJournalBatchID();
+            end;
+        }
     }
 
 

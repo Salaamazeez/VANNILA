@@ -1996,8 +1996,9 @@ page 50080 "Work Completion Cert. (WCC)"
                         PurchaseHeader: Record "Purchase Header";
                     begin
                         PurchaseHeader := Rec;
-                        CurrPage.SetSelectionFilter(PurchaseHeader);
-                        PurchaseHeader.PrintRecords(true);
+                        PurchaseHeader.SetRecFilter();
+                        Report.Run(Report::"Work Completion Certificate", true, false, PurchaseHeader);
+                        // DocPrint.PrintPurchaseHeaderToDocumentAttachment(PurchaseHeader);
                     end;
                 }
                 action(SendCustom)
@@ -2027,11 +2028,11 @@ page 50080 "Work Completion Cert. (WCC)"
                     trigger OnAction()
                     var
                         PurchaseHeader: Record "Purchase Header";
-                        DocPrint: Codeunit "Document-Print";
                     begin
                         PurchaseHeader := Rec;
                         PurchaseHeader.SetRecFilter();
-                        DocPrint.PrintPurchaseHeaderToDocumentAttachment(PurchaseHeader);
+                        Report.Run(Report::"Work Completion Certificate", true, false, PurchaseHeader);
+                        // DocPrint.PrintPurchaseHeaderToDocumentAttachment(PurchaseHeader);
                     end;
                 }
             }

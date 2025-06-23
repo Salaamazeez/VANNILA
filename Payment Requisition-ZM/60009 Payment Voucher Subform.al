@@ -122,8 +122,10 @@ page 60009 "Payment Voucher Subform"
                 {
                     ApplicationArea = All;
                 }
-
-
+                field("Preferred Bank Account Code"; Rec."Preferred Bank Account Code")
+                {
+                    ApplicationArea = All;
+                }
                 // }
                 // field("VAT Amount"; "VAT Amount")
                 // {

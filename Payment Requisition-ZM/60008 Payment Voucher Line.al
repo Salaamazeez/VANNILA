@@ -454,7 +454,11 @@ table 60008 "Payment Voucher Line"
 
             end;
         }
-
+        field(50060; "Preferred Bank Account Code"; Code[20])
+        {
+            Caption = 'Preferred Bank Account Code';
+            TableRelation = "Vendor Bank Account".Code where("Vendor No." = field("Account No."));
+        }
     }
 
     keys
