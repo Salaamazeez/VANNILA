@@ -143,7 +143,7 @@ page 50162 MonthlyReconData
                     Report.Run(Report::ImportMonthlyReconData);
                 end;
             }
-
+            /*
             action(DeleteRecord)
             {
                 Caption = 'Delete Data';
@@ -165,6 +165,7 @@ page 50162 MonthlyReconData
                     end
                 end;
             }
+            */
 
         }
     }
@@ -191,6 +192,7 @@ page 50162 MonthlyReconData
 
     trigger OnOpenPage()
     begin
+        Error('Page under development');
         if UserSetup.Get(UserId) then
             if (not UserSetup."OilGas Data Upload") then
                 Error(ErrorOpenOilGas);
