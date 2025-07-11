@@ -58,35 +58,38 @@ PageExtension 50202 TeamMemberRoleCenterExt extends "Team Member Role Center"
                     ToolTip = 'View the Monthly Reconciliation data';
                 }
             }
-            group("Employee Self Service")
+            group(EmployeeSelfService)
             {
+                Caption = 'Employee Self Service';
+                /*
                 Image = HumanResources;
                 separator(Action136)
                 {
                     Caption = 'Employee';
                 }
+                */
                 action("Payment Requests")
                 {
-                    ApplicationArea = Basic;
+                    ApplicationArea = All;
                     Caption = 'Payment Requests';
                     RunObject = Page "Payment Req. List";
                 }
                 action("Pending Payment Req. List")
                 {
-                    ApplicationArea = Basic;
+                    ApplicationArea = All;
                     Caption = 'Pending Payment Req. List';
                     RunObject = Page "Pending Payment Req. List";
                 }
                 action("Approved Payment Req. List")
                 {
                     Visible = false;
-                    ApplicationArea = Basic;
+                    ApplicationArea = All;
                     Caption = 'Approved Payment Req. List';
                     RunObject = Page "Approved Payment Req. List";
                 }
                 action("Cash Adv. Retirements")
                 {
-                    ApplicationArea = Basic;
+                    ApplicationArea = All;
                     Caption = 'Cash Adv. Retirements';
                     RunObject = Page "Retirement List";
                 }
