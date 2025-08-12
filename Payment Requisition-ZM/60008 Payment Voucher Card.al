@@ -26,11 +26,13 @@ page 60002 "Payment Voucher Card"
                 {
                     ApplicationArea = All;
                     Editable = Rec."Former PR No." = '';
+                    Visible = false;
                 }
                 field("Loan ID"; Rec."Loan ID")
                 {
                     ApplicationArea = All;
                     Editable = Rec."Former PR No." = '';
+                    Visible = false;
                 }
                 field("Applies-to Invoice No."; Rec."Applies-to Invoice No.")
                 {
@@ -55,10 +57,12 @@ page 60002 "Payment Voucher Card"
                 field(Beneficiary; Rec.Beneficiary)
                 {
                     ApplicationArea = All;
+                    Visible = false;
                 }
                 field("Beneficiary Name"; Rec."Beneficiary Name")
                 {
                     ApplicationArea = All;
+                    Visible = false;
                 }
                 field("Bal Account Type"; Rec."Bal Account Type")
                 {
@@ -88,7 +92,7 @@ page 60002 "Payment Voucher Card"
                 }
                 field("Former PR No."; Rec."Former PR No.")
                 {
-
+                    Visible = false;
                 }
                 field(Status; Rec.Status)
                 {

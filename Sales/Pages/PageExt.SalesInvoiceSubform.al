@@ -30,6 +30,10 @@ pageextension 50052 SalesInvoiceSubform extends "Sales Invoice Subform"
                 ApplicationArea = All;
             }
         }
+        modify("Qty. to Assign")
+        {
+            Visible = false;
+        }
     }
 
     actions

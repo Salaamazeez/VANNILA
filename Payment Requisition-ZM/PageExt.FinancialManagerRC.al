@@ -37,6 +37,7 @@ pageextension 50005 FinanceManagerRCExt extends "Finance Manager Role Center"
             {
                 Caption = 'Employee Self Service';
                 Image = HumanResources;
+                Visible = false;
                 separator(Action1000000052)
                 {
                     Caption = 'Employee';

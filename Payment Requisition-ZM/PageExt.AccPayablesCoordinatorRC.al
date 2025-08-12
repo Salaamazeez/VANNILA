@@ -34,6 +34,7 @@ pageextension 50000 AccPayablesCoordinatorRCExt extends "Acc. Payables Coordinat
             {
                 Caption = 'Employee Self Service';
                 Image = HumanResources;
+                Visible = false;
                 separator(Action1000000052)
                 {
                     Caption = 'Employee';

@@ -38,6 +38,7 @@ pageextension 50001 BusinessManagerRCExt extends "Business Manager Role Center"
                 Image = HumanResources;
                 Caption = 'Employee Self Service';
                 ToolTip = 'Enable employees to initiates some transaction';
+                Visible = false;
                 separator(Action136)
                 {
                     Caption = 'Employee';

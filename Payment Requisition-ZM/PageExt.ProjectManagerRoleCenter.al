@@ -58,6 +58,7 @@ pageextension 50002 ProjectManagerRCExt extends "Job Project Manager RC"
             {
                 Caption = 'Employee Self Service';
                 Image = HumanResources;
+                Visible = false;
                 separator(Action1000000052)
                 {
                     Caption = 'Employee';

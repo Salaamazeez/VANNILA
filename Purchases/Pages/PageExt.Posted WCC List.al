@@ -1,8 +1,14 @@
-pageextension 50242 PostedWCCs extends "Posted Purchase Receipts"
+pageextension 50242 WorkCompletionEXT extends "Work Completion Cert. (WCC)"
 {
     Caption = 'Posted Work Completion Certificate';
     layout
     {
+        modify("Location Code")
+        {
+            Visible = false;
+        }
+
+
         // Add changes to page layout here
     }
     

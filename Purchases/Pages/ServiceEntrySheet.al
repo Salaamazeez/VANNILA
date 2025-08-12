@@ -563,6 +563,7 @@ page 50080 "Work Completion Cert. (WCC)"
                                     ApplicationArea = Location;
                                     Importance = Promoted;
                                     Editable = ShipToOptions = ShipToOptions::Location;
+                                    Visible = false;
                                     ToolTip = 'Specifies the location where the items are to be placed when they are received. This field acts as the default location for new lines. You can update the location code for individual lines as needed.';
                                 }
                             }

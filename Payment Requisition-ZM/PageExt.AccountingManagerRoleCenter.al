@@ -131,6 +131,7 @@ PageExtension 50200 AccountingManagerRoleCenterExt extends "Accounting Manager R
             }
             group("Employee Self Service")
             {
+                Visible = false;
                 Image = HumanResources;
                 separator(Action136)
                 {
