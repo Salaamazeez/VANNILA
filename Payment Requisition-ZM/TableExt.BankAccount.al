@@ -6,6 +6,16 @@ tableextension 50021 BankAccountExt extends "Bank Account"
         {
             OptionMembers = " ","Bank Payment","Bank Receipts","Main Bank";
         }
+        field(60002; "Bank Code"; Code[20])
+        {
+            DataClassification = EndUserIdentifiableInformation;
+            TableRelation = Bank.Code;
+        }
+        field(60003; "Bank Name"; Text[100])
+        {
+            Editable = false;
+            DataClassification = EndUserIdentifiableInformation;
+        }
     }
     keys
     {

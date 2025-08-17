@@ -459,6 +459,11 @@ table 60008 "Payment Voucher Line"
             Caption = 'Preferred Bank Account Code';
             TableRelation = "Vendor Bank Account".Code where("Vendor No." = field("Account No."));
         }
+        field(50066; "Schedule Amount"; Decimal)
+        {
+            FieldClass = FlowField;
+            CalcFormula = sum("Payment Schedule".Amount);
+        }
     }
 
     keys

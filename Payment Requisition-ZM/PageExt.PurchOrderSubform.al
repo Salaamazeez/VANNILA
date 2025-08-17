@@ -10,11 +10,14 @@ pageextension 50050 PurchOrderSubform extends "Purchase Order Subform"
         {
             field("Gen. Bus. Posting Group "; Rec."Gen. Bus. Posting Group") { ApplicationArea = All; }
             field("Gen. Prod. Posting Group  "; Rec."Gen. Prod. Posting Group") { ApplicationArea = All; }
-            field("VAT Bus. Posting Group "; Rec."VAT Bus. Posting Group") { ApplicationArea = All; Visible = false;}
+            field("VAT Bus. Posting Group "; Rec."VAT Bus. Posting Group") { ApplicationArea = All; Visible = false; }
             field("VAT Prod. Posting Group "; Rec."VAT Prod. Posting Group") { ApplicationArea = All; Visible = false; }
             field("FA Posting Type "; Rec."FA Posting Type") { ApplicationArea = All; Visible = false; }
-            field("Maintenance Code"; Rec."Maintenance Code") { Visible = false;
-                ApplicationArea = All; }
+            field("Maintenance Code"; Rec."Maintenance Code")
+            {
+                Visible = false;
+                ApplicationArea = All;
+            }
         }
         addafter("Line Amount")
         {
@@ -23,7 +26,7 @@ pageextension 50050 PurchOrderSubform extends "Purchase Order Subform"
                 ApplicationArea = All;
                 Visible = false;
             }
-            field("Unit Cost b/f Adjusted";Rec."Unit Cost b/f Adjusted")
+            field("Unit Cost b/f Adjusted"; Rec."Unit Cost b/f Adjusted")
             {
                 ApplicationArea = All;
                 Visible = false;
@@ -134,7 +137,7 @@ pageextension 50050 PurchOrderSubform extends "Purchase Order Subform"
 
     //     VATAndWHTEntries.SETTABLEVIEW(VATAndWHTEntry);
 
-    //     //VATAndWHTEntries.SetPaymentHeader(CashLiteTransHeader);
+    //     //VATAndWHTEntries.SetPaymentHeader(PaymentTransHeader);
     //     VATAndWHTEntries.RUNMODAL;
     // end;
 

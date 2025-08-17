@@ -54,11 +54,12 @@ page 50029 VATAndWHTEntries
                     Visible = false;
                     ApplicationArea = All;
                 }
-                field(Type;Rec.Type)
+                field(Type; Rec.Type)
                 {
                     ApplicationArea = Basic;
                 }
-                field("Linked to VAT/WHT";Rec."Linked to VAT/WHT"){
+                field("Linked to VAT/WHT"; Rec."Linked to VAT/WHT")
+                {
                     ApplicationArea = Basic;
                 }
             }
@@ -73,7 +74,7 @@ page 50029 VATAndWHTEntries
     local procedure CreateLines()
     begin
         CurrPage.SETSELECTIONFILTER(Rec);
-        //GetPaymentVoucher.SetCashLiteTranHeader(CashLiteHeader);
+        //GetPaymentVoucher.SetPaymentTranHeader(PaymentHeader);
         //GetPaymentVoucher.CreatePaymentLines(Rec);
 
         if Rec."Document Type" in ['PURCH ' + Format(PDocType::Order), 'PURCH ' + Format(PDocType::Invoice)] then
