@@ -147,6 +147,7 @@ page 50085 "Work Completion Certs (WCCs)"
                 }
                 field("Location Code"; Rec."Location Code")
                 {
+                    Visible = false;
                     ApplicationArea = Location;
                     ToolTip = 'Specifies the location where the items are to be placed when they are received. This field acts as the default location for new lines. You can update the location code for individual lines as needed.';
                 }
