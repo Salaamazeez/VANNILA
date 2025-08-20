@@ -101,7 +101,7 @@ Page 90233 "Payment-DebitAccounts"
                     var
                         PaymentIntgrHook: Codeunit "Payment-Integr. Hook";
                     begin
-                        PaymentIntgrHook.GetDebitAccount();
+                       // PaymentIntgrHook.GetDebitAccount();
                     end;
                 }
             }

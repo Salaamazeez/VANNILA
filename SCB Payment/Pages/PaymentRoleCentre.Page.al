@@ -72,7 +72,7 @@ page 90239 "Payment Role Centre"
                 {
                     ApplicationArea = All;
                     Caption = 'Archived Transactions';
-                    RunObject = Page "Archived Payment List";
+                    RunObject = Page "Archived Payment Trans List";
                 }
             }
             group(Administration)
@@ -96,7 +96,7 @@ page 90239 "Payment Role Centre"
                 {
                     ApplicationArea = All;
                     Caption = 'Payment Banks';
-                    RunObject = Page "Payment Banks";
+                    RunObject = Page "Payment Window Banks";
                 }
             }
         }

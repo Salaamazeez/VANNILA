@@ -1,6 +1,6 @@
 Page 90238 "Payment List"
 {
-    CardPageID = "Payment Card";
+    CardPageID = "Payment Window Card";
     Editable = false;
     PageType = List;
     SourceTable = "Payment Window Header";

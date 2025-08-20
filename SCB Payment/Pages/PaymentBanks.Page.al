@@ -1,4 +1,4 @@
-Page 90236 "Payment Banks"
+Page 90236 "Payment Window Banks"
 {
     CardPageID = "Payment Bank Mapping";
     DeleteAllowed = false;
