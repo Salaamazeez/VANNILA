@@ -28,7 +28,11 @@ tableextension 50101 UserSetupExtension extends "User Setup"
             Caption = 'HR Administrator';
             DataClassification = ToBeClassified;
         }
-
+field(50102; "Send Payment Batch"; Boolean)
+        {
+            DataClassification = CustomerContent;
+            InitValue = true;
+        }
     }
 
     keys

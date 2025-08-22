@@ -37,6 +37,7 @@ pageextension 50004 ITManagerRCExt extends "Administrator Role Center"
             {
                 Caption = 'Employee Self Service';
                 Image = HumanResources;
+                Visible = false;
                 separator(Action1000000052)
                 {
                     Caption = 'Employee';

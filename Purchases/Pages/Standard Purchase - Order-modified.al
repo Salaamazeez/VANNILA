@@ -1038,7 +1038,7 @@ report 50020 "Work Completion Certificate"
         OnInitReportForGlobalVariable(IsHandled, LegalOfficeTxt, LegalOfficeLbl, CustomGiroTxt, CustomGiroLbl);
 #if not CLEAN23
         if not IsHandled then begin
-            // LegalOfficeTxt := CompanyInfo. GetLegalOffice();
+            // LegalOfficeTxt := CompanyInfo.GetLegalOffice();
             // LegalOfficeLbl := CompanyInfo.GetLegalOfficeLbl();
             // CustomGiroTxt := CompanyInfo.GetCustomGiro();
             // CustomGiroLbl := CompanyInfo.GetCustomGiroLbl();

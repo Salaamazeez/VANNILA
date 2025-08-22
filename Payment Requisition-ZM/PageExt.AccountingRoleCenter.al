@@ -132,6 +132,7 @@ PageExtension 50201 AccountingRoleCenterExt extends "Accountant Role Center"
             group("Employee Self Service")
             {
                 Image = HumanResources;
+                Visible = false;
                 separator(Action136)
                 {
                     Caption = 'Employee';

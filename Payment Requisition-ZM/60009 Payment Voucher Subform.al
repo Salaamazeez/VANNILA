@@ -113,17 +113,22 @@ page 60009 "Payment Voucher Subform"
                 field("FA Posting Type"; Rec."FA Posting Type")
                 {
                     ApplicationArea = All;
+                    Visible = false;
                 }
                 field("Depreciation Book Code"; Rec."Depreciation Book Code")
                 {
                     ApplicationArea = All;
+                    Visible = false;
                 }
                 field("Maintenance Code"; Rec."Maintenance Code")
                 {
                     ApplicationArea = All;
+                    Visible = false;
                 }
-
-
+                field("Preferred Bank Account Code"; Rec."Preferred Bank Account Code")
+                {
+                    ApplicationArea = All;
+                }
                 // }
                 // field("VAT Amount"; "VAT Amount")
                 // {

@@ -411,6 +411,51 @@ table 60009 "Payment Voucher Header"
             OptionMembers = " ","Bank Payment","Bank Receipts","Main Bank";
             InitValue = "Bank Payment";
         }
+        field(50061; "Journal Template Name"; Code[10])
+        {
+            Caption = 'Journal Template Name';
+            NotBlank = true;
+            TableRelation = "Gen. Journal Template";
+        }
+        field(50062; "Journal Batch Name"; Code[10])
+        {
+            Caption = 'Journal Batch Name';
+            TableRelation = "Gen. Journal Batch".Name where("Journal Template Name" = field("Journal Template Name"));
+
+            trigger OnValidate()
+            begin
+                // UpdateJournalBatchID();
+            end;
+        }
+        field(50063; "Payment Method"; Option)
+        {
+            OptionMembers = " ","Manual Payment","E-Payment";
+        }
+        field(50064; "Payee No."; Code[30])
+        {
+            DataClassification = EndUserIdentifiableInformation;
+            //TableRelation = if ("Source Type" = filter(Staff)) Employee
+            //else
+            TableRelation = Vendor;
+            // else
+            // if ("Source Type" = filter(Customer)) Customer
+            // else
+            //if ("Source Type" = filter("Bank Account")) "Bank Account";
+            // else
+            // if ("Source Type" = filter("Pension Fund Administrator")) "Pension Administrator";
+        }
+        field(50065; "Payment ID"; Code[20]) { }
+        field(50066; "Schedule Amount"; Decimal)
+        {
+            FieldClass = FlowField;
+            CalcFormula = sum("Payment Schedule".Amount where("Source Document No." = field("No.")));
+        }
+        field(50067; "Voucher Amount"; Decimal)
+        {
+            FieldClass = FlowField;
+            CalcFormula = sum("Payment Voucher Line".Amount where("Document No." = field("No.")));
+        }
+        
     }
 
 

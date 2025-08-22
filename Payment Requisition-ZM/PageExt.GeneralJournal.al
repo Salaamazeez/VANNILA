@@ -2,6 +2,36 @@ pageextension 50016 GeneralJournalExt extends "General Journal"
 {
     layout
     {
+        modify("Gen. Posting Type")
+        {
+            Visible = false;
+        }
+        modify("Gen. Bus. Posting Group")
+        {
+            Visible = false;
+        }
+        modify("Bal. Gen. Posting Type")
+        {
+            Visible = false;
+        }
+        modify("Bal. Gen. Bus. Posting Group")
+        {
+            Visible = false;
+        }
+        modify("Bal. Gen. Prod. Posting Group")
+        {
+            Visible = false;
+        }
+        modify("Deferral Code")
+        {
+            Visible = false;
+        }
+        modify(Correction)
+        {
+            Visible = false;
+        }
+
+
         modify(Amount)
         {
             Editable = true;

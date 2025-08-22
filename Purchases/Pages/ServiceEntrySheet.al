@@ -563,6 +563,7 @@ page 50080 "Work Completion Cert. (WCC)"
                                     ApplicationArea = Location;
                                     Importance = Promoted;
                                     Editable = ShipToOptions = ShipToOptions::Location;
+                                    Visible = false;
                                     ToolTip = 'Specifies the location where the items are to be placed when they are received. This field acts as the default location for new lines. You can update the location code for individual lines as needed.';
                                 }
                             }
@@ -1996,8 +1997,9 @@ page 50080 "Work Completion Cert. (WCC)"
                         PurchaseHeader: Record "Purchase Header";
                     begin
                         PurchaseHeader := Rec;
-                        CurrPage.SetSelectionFilter(PurchaseHeader);
-                        PurchaseHeader.PrintRecords(true);
+                        PurchaseHeader.SetRecFilter();
+                        Report.Run(Report::"Work Completion Certificate", true, false, PurchaseHeader);
+                        // DocPrint.PrintPurchaseHeaderToDocumentAttachment(PurchaseHeader);
                     end;
                 }
                 action(SendCustom)
@@ -2027,11 +2029,11 @@ page 50080 "Work Completion Cert. (WCC)"
                     trigger OnAction()
                     var
                         PurchaseHeader: Record "Purchase Header";
-                        DocPrint: Codeunit "Document-Print";
                     begin
                         PurchaseHeader := Rec;
                         PurchaseHeader.SetRecFilter();
-                        DocPrint.PrintPurchaseHeaderToDocumentAttachment(PurchaseHeader);
+                        Report.Run(Report::"Work Completion Certificate", true, false, PurchaseHeader);
+                        // DocPrint.PrintPurchaseHeaderToDocumentAttachment(PurchaseHeader);
                     end;
                 }
             }

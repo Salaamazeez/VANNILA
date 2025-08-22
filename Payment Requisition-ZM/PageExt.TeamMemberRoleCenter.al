@@ -61,6 +61,7 @@ PageExtension 50202 TeamMemberRoleCenterExt extends "Team Member Role Center"
             group(EmployeeSelfService)
             {
                 Caption = 'Employee Self Service';
+                Visible = false;
                 /*
                 Image = HumanResources;
                 separator(Action136)

@@ -18,11 +18,14 @@ pageextension 50102 PurchaseInvoiceExt extends "Purchase Invoice"
                 ApplicationArea = All;
 
             }
+
+            
+            
         }
     }
 
     actions
-    {
+    {  
         modify(Post)
         {
             trigger OnBeforeAction()

@@ -30,6 +30,39 @@ pageextension 50051 SalesOrderSubform extends "Sales Order Subform"
                 ApplicationArea = All;
             }
         }
+        modify("Qty. to Assemble to Order")
+        {
+            Visible = false;
+        }
+        modify("Location Code")
+        {
+            Visible = false;
+        }
+        modify("Planned Shipment Date")
+        {
+            Visible = false;
+        }
+        modify("Qty. Assigned")
+        {
+            Visible = false;
+        }
+        modify("Qty. to Assign")
+        {
+            Visible = false;
+        }
+        modify("Planned Delivery Date")
+        {
+            Visible = false;
+        }
+        modify("Shipment Date")
+        {
+            Visible = false;
+        }
+        modify("Item Charge Qty. to Handle")
+        {
+            Visible = false;
+        }
+
     }
     actions
     {

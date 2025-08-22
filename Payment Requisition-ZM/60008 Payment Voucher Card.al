@@ -26,11 +26,13 @@ page 60002 "Payment Voucher Card"
                 {
                     ApplicationArea = All;
                     Editable = Rec."Former PR No." = '';
+                    Visible = false;
                 }
                 field("Loan ID"; Rec."Loan ID")
                 {
                     ApplicationArea = All;
                     Editable = Rec."Former PR No." = '';
+                    Visible = false;
                 }
                 field("Applies-to Invoice No."; Rec."Applies-to Invoice No.")
                 {
@@ -55,10 +57,12 @@ page 60002 "Payment Voucher Card"
                 field(Beneficiary; Rec.Beneficiary)
                 {
                     ApplicationArea = All;
+                    Visible = false;
                 }
                 field("Beneficiary Name"; Rec."Beneficiary Name")
                 {
                     ApplicationArea = All;
+                    Visible = false;
                 }
                 field("Bal Account Type"; Rec."Bal Account Type")
                 {
@@ -88,7 +92,7 @@ page 60002 "Payment Voucher Card"
                 }
                 field("Former PR No."; Rec."Former PR No.")
                 {
-
+                    Visible = false;
                 }
                 field(Status; Rec.Status)
                 {
@@ -98,6 +102,14 @@ page 60002 "Payment Voucher Card"
                 field(Posted; Rec.Posted)
                 {
 
+                }
+                field("Journal Template Name"; Rec."Journal Template Name")
+                {
+                    ApplicationArea = All;
+                }
+                field("Journal Batch Name"; Rec."Journal Batch Name")
+                {
+                    ApplicationArea = All;
                 }
                 field("Shortcut Dimension 1 Code"; Rec."Shortcut Dimension 1 Code")
                 {
@@ -177,6 +189,41 @@ page 60002 "Payment Voucher Card"
                     Rec.PostPayment();
                 end;
             }
+
+            group("&Payments")
+            {
+                Caption = '&Payments';
+                Image = Payment;
+                action(SuggestVendorPayments)
+                {
+                    ApplicationArea = Basic, Suite;
+                    Caption = 'Suggest Vendor Payments';
+                    Ellipsis = true;
+                    Image = SuggestVendorPayments;
+                    ToolTip = 'Create payment suggestions as lines in the payment journal.';
+
+                    trigger OnAction()
+                    var
+                        SuggestVendorPayments: Report "KBS Suggest Vendor Payments";
+                        IsHandled: Boolean;
+                        PaymentVoucherLine: Record "Payment Voucher Line";
+                        PaymentVoucherHeader: Record "Payment Voucher Header";
+                    begin
+                        IsHandled := false;
+                        if IsHandled then
+                            exit;
+                        //PaymentVoucherLine.SetRange("Document No.", Rec."No.");
+                        Clear(SuggestVendorPayments);
+                        CreateJnlLine();
+                        SuggestVendorPayments.SetGenJnlLine(GenJournalLine);
+                        SuggestVendorPayments.SetPaymentHdr(Rec);
+                        SuggestVendorPayments.RunModal();
+                    end;
+                }
+
+            }
+
+
             // action(Print){
             //     ApplicationArea = All;
 
@@ -505,7 +552,12 @@ page 60002 "Payment Voucher Card"
 
     end;
 
-
+local procedure CreateJnlLine()
+begin
+    GenJournalLine.Init();
+    GenJournalLine."Journal Template Name" := Rec."Journal Template Name";
+    GenJournalLine."Journal Batch Name" := Rec."Journal Batch Name";
+end;
 
     var
         PaymentVoucherHeader: Record "Payment Voucher Header";
@@ -514,4 +566,5 @@ page 60002 "Payment Voucher Card"
         OpenApprovalEntriesExistForCurrUser: Boolean;
         OpenApprovalEntriesExist: Boolean;
         EnableControl: Boolean;
+        GenJournalLine: Record "Gen. Journal Line";
 }
