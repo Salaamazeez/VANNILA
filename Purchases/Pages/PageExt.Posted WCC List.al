@@ -1,6 +1,6 @@
-// pageextension 50242 PostedWorkCompletionEXT extends "Work Completion Cert. (WCC)"
+// pageextension 50242 PostedWorkCompletionEEXT extends "Work Completion Cert. (WCC)"
 // {
-//     Caption = 'Posted Work Completion Certificate';
+//     Caption = 'Work Completion Certificate';
 //     layout
 //     {
 //         modify("Location Code")

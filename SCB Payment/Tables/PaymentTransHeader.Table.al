@@ -1,7 +1,7 @@
 Table 90219 "Payment Window Header"
 {
-    DrillDownPageID = "Payment List";
-    LookupPageID = "Payment List";
+    DrillDownPageID = "Payment Window List";
+    LookupPageID = "Payment Window List";
 
     fields
     {

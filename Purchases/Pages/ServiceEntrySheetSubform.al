@@ -228,6 +228,7 @@ page 50086 "Work Completion Cert. Subform"
                 {
                     ApplicationArea = Location;
                     Editable = not IsBlankNumber;
+                    Visible = false;
                     Enabled = not IsBlankNumber;
                     ToolTip = 'Specifies a code for the location where you want the items to be placed when they are received.';
 
@@ -241,7 +242,7 @@ page 50086 "Work Completion Cert. Subform"
                 {
                     ApplicationArea = Warehouse;
                     ToolTip = 'Specifies the bin where the items are picked or put away.';
-                    Visible = true;
+                    Visible = false;
                 }
                 field(Quantity; Rec.Quantity)
                 {
@@ -263,6 +264,7 @@ page 50086 "Work Completion Cert. Subform"
                 field("Reserved Quantity"; Rec."Reserved Quantity")
                 {
                     Editable = false;
+                    Visible = false;
                     ApplicationArea = Reservation;
                     BlankZero = true;
                     ToolTip = 'Specifies how many item units on this line have been reserved.';
@@ -531,6 +533,7 @@ page 50086 "Work Completion Cert. Subform"
                 {
                     ApplicationArea = ItemCharges;
                     StyleExpr = ItemChargeStyleExpression;
+                    Visible = false;
                     ToolTip = 'Specifies how many units of the item charge will be assigned to the line.';
 
                     trigger OnDrillDown()
@@ -558,6 +561,7 @@ page 50086 "Work Completion Cert. Subform"
                 {
                     ApplicationArea = ItemCharges;
                     BlankZero = true;
+                    Visible = false;
                     ToolTip = 'Specifies how much of the item charge that has been assigned.';
 
                     trigger OnDrillDown()
@@ -910,7 +914,7 @@ page 50086 "Work Completion Cert. Subform"
                 field("Over-Receipt Quantity"; Rec."Over-Receipt Quantity")
                 {
                     ApplicationArea = All;
-                    Visible = OverReceiptAllowed;
+                    Visible = false;
                     ToolTip = 'Specifies over-receipt quantity.';
 
                     trigger OnValidate()
@@ -921,7 +925,7 @@ page 50086 "Work Completion Cert. Subform"
                 field("Over-Receipt Code"; Rec."Over-Receipt Code")
                 {
                     ApplicationArea = All;
-                    Visible = OverReceiptAllowed;
+                    Visible = false;
                     ToolTip = 'Specifies over-receipt code.';
                 }
                 field("Gross Weight"; Rec."Gross Weight")

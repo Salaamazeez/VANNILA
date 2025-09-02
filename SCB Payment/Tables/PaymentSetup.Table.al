@@ -83,7 +83,7 @@ Table 90218 "Payment Trans Setup"
         field(52132428; "Secret Key"; Text[2048])
         {
             DataClassification = CustomerContent;
-            ExtendedDatatype = Masked;
+            //ExtendedDatatype = Masked;
         }
         field(52132429; "Payment Auto Post"; Boolean)
         {

@@ -18,9 +18,15 @@ pageextension 50102 PurchaseInvoiceExt extends "Purchase Invoice"
                 ApplicationArea = All;
 
             }
+        }
 
-            
-            
+        modify("Location Code")
+        {
+            Visible = false;
+        }
+        modify("VAT Bus. Posting Group")
+        {
+            Visible = false;
         }
     }
 
