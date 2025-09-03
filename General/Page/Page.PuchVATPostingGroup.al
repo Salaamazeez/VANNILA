@@ -47,6 +47,7 @@ Page 50203 "Purch VAT/WHT Posting Group"
                 {
                     ApplicationArea = Basic;
                     Editable = EditableField;
+                    Visible = false;
                 }
                 field(Type; Rec.Type)
                 {
@@ -70,7 +71,10 @@ Page 50203 "Purch VAT/WHT Posting Group"
     actions
     {
     }
-
+trigger OnAfterGetCurrRecord()
+begin
+    EditableFields()
+end;
     trigger OnOpenPage()
     begin
         if CurrPage.LookupMode then

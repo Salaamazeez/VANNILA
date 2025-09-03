@@ -47,6 +47,7 @@ Page 50202 "Sales VAT/WHT Posting Group"
                 {
                     Editable = EditableField;
                     ApplicationArea = Basic;
+                    Visible = false;
                 }
                 field(Type; Rec.Type)
                 {
@@ -70,7 +71,10 @@ Page 50202 "Sales VAT/WHT Posting Group"
     actions
     {
     }
-
+trigger OnAfterGetRecord()
+begin
+    EditableFields()
+end;
     trigger OnOpenPage()
     begin
         if CurrPage.LookupMode then
