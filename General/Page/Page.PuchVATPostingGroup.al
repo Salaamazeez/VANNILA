@@ -46,6 +46,7 @@ Page 50203 "Purch VAT/WHT Posting Group"
                 field(Credit; Rec.Credit)
                 {
                     ApplicationArea = Basic;
+                    Editable = EditableField;
                 }
                 field(Type; Rec.Type)
                 {
@@ -58,6 +59,7 @@ Page 50203 "Purch VAT/WHT Posting Group"
                 field("Linked to VAT/WHT"; Rec."Linked to VAT/WHT")
                 {
                     ApplicationArea = Basic;
+                    Visible = false;
                 }
             }
 
@@ -74,5 +76,18 @@ Page 50203 "Purch VAT/WHT Posting Group"
         if CurrPage.LookupMode then
             CurrPage.Editable := false;
     end;
+
+    procedure EditableFields()
+    var
+        userSetup: Record "User Setup";
+    begin
+        if userSetup.get(UserId) then
+            if userSetup."Edit VAT/WHT Credit" then
+                EditableField := true;
+    end;
+
+    var
+        EditableField: Boolean;
+
 }
 

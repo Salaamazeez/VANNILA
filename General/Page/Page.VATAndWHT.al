@@ -35,10 +35,12 @@ page 50029 VATAndWHTEntries
                 field("VAT/WHT Percent"; Rec."VAT/WHT Percent")
                 {
                     ToolTip = 'Specifies the value of the Amount field.', Comment = '%';
+                     Visible = false;
                 }
                 field("VAT/WHT Posting Group"; Rec."VAT/WHT Posting Group")
                 {
                     ToolTip = 'Specifies the value of the VAT/WHT Posting Group field.', Comment = '%';
+                     Visible = false;
                 }
                 field(Selected; Rec.Selected)
                 {
@@ -61,6 +63,7 @@ page 50029 VATAndWHTEntries
                 field("Linked to VAT/WHT"; Rec."Linked to VAT/WHT")
                 {
                     ApplicationArea = Basic;
+                     Visible = false;
                 }
             }
         }
