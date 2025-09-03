@@ -45,9 +45,7 @@ Page 50202 "Sales VAT/WHT Posting Group"
                 }
                 field(Credit; Rec.Credit)
                 {
-                    Editable = EditableField;
                     ApplicationArea = Basic;
-                    Visible = false;
                 }
                 field(Type; Rec.Type)
                 {

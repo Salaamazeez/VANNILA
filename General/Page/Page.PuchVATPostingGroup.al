@@ -46,8 +46,6 @@ Page 50203 "Purch VAT/WHT Posting Group"
                 field(Credit; Rec.Credit)
                 {
                     ApplicationArea = Basic;
-                    Editable = EditableField;
-                    Visible = false;
                 }
                 field(Type; Rec.Type)
                 {

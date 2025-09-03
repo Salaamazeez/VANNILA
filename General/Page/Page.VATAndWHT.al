@@ -49,6 +49,8 @@ page 50029 VATAndWHTEntries
                 field(Credit; Rec.Credit)
                 {
                     ApplicationArea = All;
+                    Visible= false;
+
                 }
 
                 field("Adjustment %"; Rec."Adjustment %")

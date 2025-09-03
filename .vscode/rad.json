@@ -1,1 +1,1 @@
-﻿{"Added":[],"Modified":[{"Id":50203,"Kind":12,"Name":"Purch VAT/WHT Posting Group","Namespace":""},{"Id":50202,"Kind":12,"Name":"Sales VAT/WHT Posting Group","Namespace":""}],"Removed":[]}
+﻿{"Added":[],"Modified":[{"Id":50029,"Kind":12,"Name":"VATAndWHTEntries","Namespace":""},{"Id":50203,"Kind":12,"Name":"Purch VAT/WHT Posting Group","Namespace":""},{"Id":50202,"Kind":12,"Name":"Sales VAT/WHT Posting Group","Namespace":""}],"Removed":[]}
