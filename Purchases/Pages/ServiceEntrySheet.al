@@ -1411,6 +1411,7 @@ page 50080 "Work Completion Cert. (WCC)"
 
                     trigger OnAction()
                     begin
+                        Rec.CheckPurchaseAmount();
                         Rec.PerformManualRelease();
                         CurrPage.PurchLines.PAGE.ClearTotalPurchaseHeader();
                     end;
@@ -1704,6 +1705,7 @@ page 50080 "Work Completion Cert. (WCC)"
                     var
                         ApprovalsMgmt: Codeunit "Approvals Mgmt.";
                     begin
+                        Rec.CheckPurchaseAmount();
                         if ApprovalsMgmt.CheckPurchaseApprovalPossible(Rec) then
                             ApprovalsMgmt.OnSendPurchaseDocForApproval(Rec);
                     end;

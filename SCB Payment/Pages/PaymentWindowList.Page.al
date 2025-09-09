@@ -4,8 +4,8 @@ Page 90238 "Payment Window List"
     Editable = false;
     PageType = List;
     SourceTable = "Payment Window Header";
-ApplicationArea= All;
-UsageCategory = Lists;
+    ApplicationArea = All;
+    UsageCategory = Lists;
     layout
     {
         area(content)
@@ -69,6 +69,32 @@ UsageCategory = Lists;
                     EnableErr: Label 'Kindly enable %1 on %2', Comment = '%1 is Use , %2 is Payment Setup';
                     PmtTranSetup: Record "Payment Trans Setup";
                     PaymentIntegrHook: Codeunit "Payment-Integr. Hook";
+                begin
+                    // UserSetup.Get(UserId);
+                    // if not (UserSetup."Send Payment Batch") then
+                    //     Error(AdmTxt);
+                    // UserSetup.TestField("Send Payment Batch");
+                    // Rec.TestField(Status, Rec.Status::Approved);
+                    PaymentIntegrHook.CreateSchedule(Rec)
+                end;
+
+            }
+
+            action(SendBatch2)
+            {
+                ApplicationArea = All;
+                Caption = 'Send Batch js';
+                Image = SendElectronicDocument;
+                Promoted = true;
+                PromotedCategory = Process;
+                ShortCutKey = 'F9';
+                ToolTip = 'Send the approved Payment batch to oktopus payment platform';
+                trigger OnAction()
+                var
+                    UserSetup: Record "User Setup";
+                    EnableErr: Label 'Kindly enable %1 on %2', Comment = '%1 is Use , %2 is Payment Setup';
+                    PmtTranSetup: Record "Payment Trans Setup";
+                    PaymentIntegrHook: Codeunit CreateSchedule;
                 begin
                     // UserSetup.Get(UserId);
                     // if not (UserSetup."Send Payment Batch") then

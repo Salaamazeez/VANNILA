@@ -31,7 +31,7 @@ pageextension 50102 PurchaseInvoiceExt extends "Purchase Invoice"
     }
 
     actions
-    {  
+    {
         modify(Post)
         {
             trigger OnBeforeAction()
@@ -50,6 +50,7 @@ pageextension 50102 PurchaseInvoiceExt extends "Purchase Invoice"
         {
             trigger OnBeforeAction()
             begin
+                Rec.CheckPurchaseAmount();
                 Rec.TestField()
             end;
         }
@@ -57,6 +58,7 @@ pageextension 50102 PurchaseInvoiceExt extends "Purchase Invoice"
         {
             trigger OnBeforeAction()
             begin
+                Rec.CheckPurchaseAmount();
                 Rec.TestField()
             end;
         }

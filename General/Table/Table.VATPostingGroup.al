@@ -33,7 +33,9 @@ Table 52130 "VAT/WHT Posting Group"
         }
         field(11; "Adjustment %"; Decimal) { }
         field(12; Credit; Boolean)
-        { }
+        { 
+            
+        }
         field(13; Type; Option)
         {
             OptionMembers = " ",VAT,WHT;

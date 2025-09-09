@@ -4,6 +4,7 @@ pageextension 50050 PurchOrderSubform extends "Purchase Order Subform"
     {
         modify("Description 2")
         {
+            Caption = 'Narration';
             Visible = true;
         }
         addbefore("Shortcut Dimension 1 Code")

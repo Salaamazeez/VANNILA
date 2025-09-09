@@ -14,7 +14,8 @@ pageextension 50431 SalesOrderExt extends "Sales Order"
 
     actions
     {
-        addafter("Archive Document")
+        
+        addafter("&Print")
         {
             action("Archive & Discontinue")
             {

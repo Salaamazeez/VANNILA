@@ -25,7 +25,7 @@ begin
         HelperPage.DoSendRequest(
             PmtTranSetup."Create Schedule URL",
             'POST',
-            '{{assertionToken}}', // or use Json if API expects full JSON
+            Json, // or use Json if API expects full JSON
             'IN'
         );
     end;

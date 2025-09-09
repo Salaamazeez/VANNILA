@@ -12,8 +12,8 @@ pageextension 50015 PurchInvoiceSubform extends "Purch. Invoice Subform"
             field("Gen. Bus. Posting Group "; Rec."Gen. Bus. Posting Group") { ApplicationArea = All; }
             field("Gen. Prod. Posting Group  "; Rec."Gen. Prod. Posting Group") { ApplicationArea = All; }
             field("VAT Bus. Posting Group "; Rec."VAT Bus. Posting Group") { ApplicationArea = All; Visible = false; }
-            field("VAT Prod. Posting Group "; Rec."VAT Prod. Posting Group") { ApplicationArea = All; Visible = false;}
-            field("FA Posting Type "; Rec."FA Posting Type") { ApplicationArea = All; Visible = false;}
+            field("VAT Prod. Posting Group "; Rec."VAT Prod. Posting Group") { ApplicationArea = All; Visible = false; }
+            field("FA Posting Type "; Rec."FA Posting Type") { ApplicationArea = All; Visible = false; }
             field("Maintenance Code"; Rec."Maintenance Code") { ApplicationArea = All; Visible = false; }
         }
         addafter("Line Amount")
@@ -34,6 +34,7 @@ pageextension 50015 PurchInvoiceSubform extends "Purch. Invoice Subform"
         {
             Editable = false;
         }
+       
         addbefore("Direct Unit Cost")
         {
             field("Base Unit Cost"; Rec."Base Unit Cost")
@@ -55,7 +56,7 @@ pageextension 50015 PurchInvoiceSubform extends "Purch. Invoice Subform"
         {
             Visible = false;
         }
-        
+
     }
     actions
     {

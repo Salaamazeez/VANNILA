@@ -1410,6 +1410,7 @@ page 50082 "My Purchase Order"
 
                     trigger OnAction()
                     begin
+                        Rec.CheckPurchaseAmount();
                         Rec.PerformManualRelease();
                         CurrPage.PurchLines.PAGE.ClearTotalPurchaseHeader();
                     end;

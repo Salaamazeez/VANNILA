@@ -2,7 +2,7 @@ codeunit 50102 GeneralCodeunit
 {
 
 
-    
+
     procedure CreatePurchaseLine(Rec: Record VATAndWHTEntry)
     var
         LastNo: Integer;
@@ -114,7 +114,7 @@ codeunit 50102 GeneralCodeunit
             //SalesLine.Modify();
             until Rec.Next() = 0;
 
-        SalesLine.Validate("Base Unit Price" );
+        SalesLine.Validate("Base Unit Price");
         SalesLine.Modify();
         TempVATWHT.Reset();
         TempVATWHT.SetRange("Document No.", SalesLine."Document No.");
@@ -165,7 +165,7 @@ codeunit 50102 GeneralCodeunit
                 VATAndWHTEntry."Adjustment %" := VATAndWHTEntry."Adjustment %";
                 VATAndWHTEntry.Credit := VATWHTPostingGrp.Credit;
                 VATAndWHTEntry.Type := VATWHTPostingGrp.Type;
-                VATAndWHTEntry."Linked to VAT/WHT":=VATWHTPostingGrp."Linked to VAT/WHT";
+                VATAndWHTEntry."Linked to VAT/WHT" := VATWHTPostingGrp."Linked to VAT/WHT";
                 VATAndWHTEntry."Transaction Type" := VATWHTPostingGrp."Transaction Type"::Purchase;
                 VATAndWHTEntry.Insert();
             until VATWHTPostingGrp.Next() = 0;
@@ -213,7 +213,7 @@ codeunit 50102 GeneralCodeunit
                 VATAndWHTEntry.Type := VATWHTPostingGrp.Type;
                 VATAndWHTEntry.Credit := VATWHTPostingGrp.Credit;
                 VATAndWHTEntry."Transaction Type" := VATWHTPostingGrp."Transaction Type"::Sales;
-                VATAndWHTEntry."Linked to VAT/WHT":=VATWHTPostingGrp."Linked to VAT/WHT";
+                VATAndWHTEntry."Linked to VAT/WHT" := VATWHTPostingGrp."Linked to VAT/WHT";
                 VATAndWHTEntry.Insert();
             until VATWHTPostingGrp.Next() = 0;
             Commit();
@@ -224,5 +224,30 @@ codeunit 50102 GeneralCodeunit
         VATAndWHTEntries.RUNMODAL;
     end;
 
-    
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Sales-Post", 'OnBeforePostInvPostBuffer', '', false, false)]
+local procedure "Sales-Post_OnBeforePostInvPostBuffer"(var GenJnlLine: Record "Gen. Journal Line"; var InvoicePostBuffer: Record "Invoice Post. Buffer"; var SalesHeader: Record "Sales Header"; CommitIsSuppressed: Boolean; var GenJnlPostLine: Codeunit "Gen. Jnl.-Post Line"; PreviewMode: Boolean)
+begin
+end;
+
+[EventSubscriber(ObjectType::Codeunit, Codeunit::"Sales Post Invoice Events", OnPostLinesOnBeforeGenJnlLinePost, '', false, false)]
+local procedure "Sales Post Invoice Events_OnPostLinesOnBeforeGenJnlLinePost"(var GenJnlLine: Record "Gen. Journal Line"; SalesHeader: Record "Sales Header"; TempInvoicePostingBuffer: Record "Invoice Posting Buffer" temporary; var GenJnlPostLine: Codeunit "Gen. Jnl.-Post Line"; PreviewMode: Boolean; SuppressCommit: Boolean)
+begin
+   GenJnlLine."Description 2" := TempInvoicePostingBuffer."Description 2"
+end;
+
+// [EventSubscriber(ObjectType::Codeunit, Codeunit::"Sales-Post", OnAfterFillInvoicePostBuffer, '', false, false)]
+// local procedure "Sales-Post_OnAfterFillInvoicePostBuffer"(var InvoicePostBuffer: Record "Invoice Post. Buffer" temporary; SalesLine: Record "Sales Line"; var TempInvoicePostBuffer: Record "Invoice Post. Buffer" temporary; CommitIsSuppressed: Boolean)
+// begin
+// end;
+[EventSubscriber(ObjectType::Codeunit, Codeunit::"Sales Post Invoice Events", OnPrepareLineOnAfterFillInvoicePostingBuffer, '', false, false)]
+local procedure "Sales Post Invoice Events_OnPrepareLineOnAfterFillInvoicePostingBuffer"(var InvoicePostingBuffer: Record "Invoice Posting Buffer" temporary; SalesLine: Record "Sales Line")
+begin
+    InvoicePostingBuffer."Description 2" := SaleLine."Description 2"
+end;
+[EventSubscriber(ObjectType::Table, Database::"G/L Entry", OnAfterCopyGLEntryFromGenJnlLine, '', false, false)]
+local procedure "G/L Entry_OnAfterCopyGLEntryFromGenJnlLine"(var GLEntry: Record "G/L Entry"; var GenJournalLine: Record "Gen. Journal Line")
+begin
+    GLEntry."Description 2" := GenJournalLine."Description 2"
+end;
+
 }
