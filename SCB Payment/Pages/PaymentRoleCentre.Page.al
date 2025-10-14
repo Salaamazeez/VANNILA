@@ -33,27 +33,27 @@ page 90239 "Payment Role Centre"
             {
                 ApplicationArea = All;
                 Caption = 'Payment Transactions';
-                RunObject = Page "Payment List";
+                RunObject = Page "Payment Window List";
             }
             action(Open)
             {
                 ApplicationArea = All;
                 Caption = 'Open';
-                RunObject = Page "Payment List";
+                RunObject = Page "Payment Window List";
                 RunPageView = where(Status = const(Open));
             }
             action(PendingApproval)
             {
                 ApplicationArea = All;
                 Caption = 'Pending Approval';
-                RunObject = Page "Payment List";
+                RunObject = Page "Payment Window List";
                 RunPageView = where(Status = const("Pending Approval"));
             }
             action(Approved)
             {
                 ApplicationArea = All;
                 Caption = 'Approved';
-                RunObject = Page "Payment List";
+                RunObject = Page "Payment Window List";
                 RunPageView = where(Status = const(Approved));
             }
             action("Payment Vouchers")

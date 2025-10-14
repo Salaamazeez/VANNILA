@@ -203,6 +203,7 @@ tableextension 50140 PurchHeader extends "Purchase Header"
             until PurchLine.Next() = 0
     end;
 
+
     procedure CalculateNewQtytoInvoice()
     var
         PurchLine: Record "Purchase Line";
@@ -218,6 +219,14 @@ tableextension 50140 PurchHeader extends "Purchase Header"
 
     end;
 
+    procedure CheckPurchaseAmount()
+    var
+        PurchaseHdr: Record "Purchase Header";
+    begin
+        Rec.CalcFields("Amount Including VAT");
+        if not (Rec."Amount Including VAT" > 0) then
+            Error('Amount must be greater than zero');
+    end;
 
     var
 

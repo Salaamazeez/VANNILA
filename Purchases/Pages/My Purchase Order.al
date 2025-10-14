@@ -1410,6 +1410,7 @@ page 50082 "My Purchase Order"
 
                     trigger OnAction()
                     begin
+                        Rec.CheckPurchaseAmount();
                         Rec.PerformManualRelease();
                         CurrPage.PurchLines.PAGE.ClearTotalPurchaseHeader();
                     end;
@@ -1549,10 +1550,10 @@ page 50082 "My Purchase Order"
                 }
                 action("Archive Document")
                 {
-                    ApplicationArea = Suite;
+                    ApplicationArea = All;
                     Caption = 'Archi&ve Document';
                     Image = Archive;
-                    ToolTip = 'Send the document to the archive, for example because it is too soon to delete it. Later, you delete or reprocess the archived document.';
+                    //ToolTip = 'Send the document to the archive, for example because it is too soon to delete it. Later, you delete or reprocess the archived document.';
 
                     trigger OnAction()
                     begin
@@ -1560,6 +1561,23 @@ page 50082 "My Purchase Order"
                         CurrPage.Update(false);
                     end;
                 }
+            
+                action("Archive & Discontinue")
+                {
+                    ApplicationArea = All;
+                    Caption = 'Archive & Discontinue';
+                    Image = Archive;
+                    //ToolTip = 'Send the document to the archive, for example because it is too soon to delete it. Later, you delete or reprocess the archived document.';
+
+                    trigger OnAction()
+                    var
+
+                    begin
+                        Rec.Delete(true)
+                    end;
+
+                }
+
                 action("Send Intercompany Purchase Order")
                 {
                     AccessByPermission = TableData "IC G/L Account" = R;

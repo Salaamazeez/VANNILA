@@ -15,7 +15,6 @@ pageextension 50090 "VendorLedgerEntriesExt" extends "Vendor Ledger Entries"
         modify("Original Pmt. Disc. Possible"){Visible = false;}
         modify("Pmt. Disc. Tolerance Date"){Visible = false;}
         modify("Pmt. Discount Date"){Visible = false;}
-
     }
     
     actions

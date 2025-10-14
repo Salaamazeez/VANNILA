@@ -4,6 +4,8 @@ Page 90240 "Payment Trans Setup"
     //InsertAllowed = false;
     PageType = Card;
     SourceTable = "Payment Trans Setup";
+    ApplicationArea = All; 
+    UsageCategory = Administration;
 
     layout
     {

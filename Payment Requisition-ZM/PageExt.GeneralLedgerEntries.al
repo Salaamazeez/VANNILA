@@ -11,6 +11,7 @@ pageextension 50023 GeneralLedgerEntries extends "General Ledger Entries"
             }
             field("Source Type "; Rec."Source Type") { ApplicationArea = All; }
             field("Source Code "; Rec."Source Code") {ApplicationArea = All; }
+            field("Description 2";Rec."Description 2") {ApplicationArea = All; }
         }
 
         addafter(Description)

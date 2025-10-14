@@ -64,6 +64,23 @@ Table 90218 "Payment Trans Setup"
             DataClassification = EndUserIdentifiableInformation;
             TableRelation = "Payment Method";
         }
+        field(50061; "Journal Template Name"; Code[10])
+        {
+            Caption = 'Journal Template Name';
+            NotBlank = true;
+            TableRelation = "Gen. Journal Template";
+        }
+        field(50062; "Journal Batch Name"; Code[10])
+        {
+            Caption = 'Journal Batch Name';
+            TableRelation = "Gen. Journal Batch".Name where("Journal Template Name" = field("Journal Template Name"));
+
+            trigger OnValidate()
+            begin
+                // UpdateJournalBatchID();
+            end;
+        }
+       
         field(52132418; "Nibss Schedule Size"; Text[50])
         {
             DataClassification = EndUserIdentifiableInformation;
@@ -83,7 +100,7 @@ Table 90218 "Payment Trans Setup"
         field(52132428; "Secret Key"; Text[2048])
         {
             DataClassification = CustomerContent;
-            ExtendedDatatype = Masked;
+            //ExtendedDatatype = Masked;
         }
         field(52132429; "Payment Auto Post"; Boolean)
         {

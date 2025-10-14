@@ -434,7 +434,6 @@ table 60008 "Payment Voucher Line"
                         GetVATPostingSetup("VAT Bus. Posting Group", "VAT Prod. Posting Group");
                     end;
                 Validate("VAT %");
-
             end;
         }
         field(50059; "Gen. Posting Type"; Enum "General Posting Type")

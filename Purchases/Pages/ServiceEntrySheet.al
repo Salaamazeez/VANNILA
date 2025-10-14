@@ -1411,6 +1411,7 @@ page 50080 "Work Completion Cert. (WCC)"
 
                     trigger OnAction()
                     begin
+                        Rec.CheckPurchaseAmount();
                         Rec.PerformManualRelease();
                         CurrPage.PurchLines.PAGE.ClearTotalPurchaseHeader();
                     end;
@@ -1548,6 +1549,7 @@ page 50080 "Work Completion Cert. (WCC)"
                         end;
                     }
                 }
+
                 action("Archive Document")
                 {
                     ApplicationArea = Suite;
@@ -1561,6 +1563,24 @@ page 50080 "Work Completion Cert. (WCC)"
                         CurrPage.Update(false);
                     end;
                 }
+
+
+                action("Archive & Discontinue")
+                {
+                    ApplicationArea = All;
+                    Caption = 'Archive & Discontinue';
+                    Image = Archive;
+                    //ToolTip = 'Send the document to the archive, for example because it is too soon to delete it. Later, you delete or reprocess the archived document.';
+
+                    trigger OnAction()
+                    var
+
+                    begin
+                        Rec.Delete(true)
+                    end;
+
+                }
+
                 action("Send Intercompany Purchase Order")
                 {
                     AccessByPermission = TableData "IC G/L Account" = R;
@@ -1685,6 +1705,7 @@ page 50080 "Work Completion Cert. (WCC)"
                     var
                         ApprovalsMgmt: Codeunit "Approvals Mgmt.";
                     begin
+                        Rec.CheckPurchaseAmount();
                         if ApprovalsMgmt.CheckPurchaseApprovalPossible(Rec) then
                             ApprovalsMgmt.OnSendPurchaseDocForApproval(Rec);
                     end;

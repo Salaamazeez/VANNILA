@@ -6,6 +6,14 @@ pageextension 50207 PurchaseOrderExt extends "Purchase Order"
         {
             Visible = false;
         }
+        modify("VAT Bus. Posting Group")
+        {
+            Visible = false;
+        }
+        modify("Promised Receipt Date")
+        {
+            Visible = false;
+        }
     }
 
     actions
@@ -22,5 +30,20 @@ pageextension 50207 PurchaseOrderExt extends "Purchase Order"
         {
             Visible = false;
         }
+        modify(SendApprovalRequest)
+        {
+            trigger OnBeforeAction()
+            begin
+                Rec.CheckPurchaseAmount();
+                Rec.TestField()
+            end;
+        }
+        modify(Release) {  
+            trigger OnBeforeAction()
+            begin
+                Rec.CheckPurchaseAmount();
+                Rec.TestField()
+            end;
+        }      
     }
 }

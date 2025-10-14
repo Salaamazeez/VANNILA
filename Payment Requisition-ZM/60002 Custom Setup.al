@@ -74,7 +74,25 @@ table 60002 "Payment Mgt Setup"
             DataClassification = ToBeClassified;
             TableRelation = "No. Series";
         }
-        //"Store Requisition Nos." "Store Return Nos."
+        field(50061; "Journal Template Name"; Code[10])
+        {
+            Description = 'This is used to hold journal template name for suggest vendor payment';
+            Caption = 'Journal Template Name';
+            NotBlank = true;
+            TableRelation = "Gen. Journal Template";
+        }
+        field(50062; "Journal Batch Name"; Code[10])
+        {
+            Description = 'This is used to hold journal batch name for suggest vendor payment';
+            Caption = 'Journal Batch Name';
+            TableRelation = "Gen. Journal Batch".Name where("Journal Template Name" = field("Journal Template Name"));
+
+            trigger OnValidate()
+            begin
+                // UpdateJournalBatchID();
+            end;
+        }
+
     }
 
     keys

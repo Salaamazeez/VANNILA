@@ -6,6 +6,15 @@ pageextension 50052 SalesInvoiceSubform extends "Sales Invoice Subform"
         {
             editable = false;
         }
+        modify("Description 2")
+        {
+            Visible = true;
+            Caption = 'Narration';
+        }
+        modify("Gen. Prod. Posting Group")
+        {
+            visible = True;
+        }
         addafter("Line Amount")
         {
             field("Tax Type"; Rec."Tax Type")

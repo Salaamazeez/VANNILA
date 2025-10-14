@@ -42,11 +42,15 @@ pageextension 50006 UserSetupExt extends "User Setup"
             {
                 ApplicationArea = All;
             }
-field("Send Payment Batch"; Rec."Send Payment Batch")
+            field("Send Payment Batch"; Rec."Send Payment Batch")
             {
                 ApplicationArea = All;
                 Caption = 'Send Payment Batch';
 
+            }
+            field("Edit VAT/WHT Credit"; Rec."Edit VAT/WHT Credit")
+            {
+                ApplicationArea = All;
             }
 
         }

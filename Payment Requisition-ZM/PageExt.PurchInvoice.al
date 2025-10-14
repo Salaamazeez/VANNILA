@@ -18,14 +18,20 @@ pageextension 50102 PurchaseInvoiceExt extends "Purchase Invoice"
                 ApplicationArea = All;
 
             }
+        }
 
-            
-            
+        modify("Location Code")
+        {
+            Visible = false;
+        }
+        modify("VAT Bus. Posting Group")
+        {
+            Visible = false;
         }
     }
 
     actions
-    {  
+    {
         modify(Post)
         {
             trigger OnBeforeAction()
@@ -44,6 +50,7 @@ pageextension 50102 PurchaseInvoiceExt extends "Purchase Invoice"
         {
             trigger OnBeforeAction()
             begin
+                Rec.CheckPurchaseAmount();
                 Rec.TestField()
             end;
         }
@@ -51,6 +58,7 @@ pageextension 50102 PurchaseInvoiceExt extends "Purchase Invoice"
         {
             trigger OnBeforeAction()
             begin
+                Rec.CheckPurchaseAmount();
                 Rec.TestField()
             end;
         }

@@ -64,12 +64,14 @@ Page 90211 "Get Payment Voucher"
         }
         area(factboxes)
         {
-            systempart(Control29; Links)
+            systempart(link; Links)
             {
+                ApplicationArea = All;
                 Visible = false;
             }
-            systempart(Control28; Notes)
+            systempart(Note; Notes)
             {
+                ApplicationArea = All;
                 Visible = false;
             }
         }

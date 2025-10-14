@@ -35,10 +35,12 @@ page 50029 VATAndWHTEntries
                 field("VAT/WHT Percent"; Rec."VAT/WHT Percent")
                 {
                     ToolTip = 'Specifies the value of the Amount field.', Comment = '%';
+                    Visible = false;
                 }
                 field("VAT/WHT Posting Group"; Rec."VAT/WHT Posting Group")
                 {
                     ToolTip = 'Specifies the value of the VAT/WHT Posting Group field.', Comment = '%';
+                    Visible = false;
                 }
                 field(Selected; Rec.Selected)
                 {
@@ -47,6 +49,8 @@ page 50029 VATAndWHTEntries
                 field(Credit; Rec.Credit)
                 {
                     ApplicationArea = All;
+                    Editable = EditableField;
+
                 }
 
                 field("Adjustment %"; Rec."Adjustment %")
@@ -61,6 +65,7 @@ page 50029 VATAndWHTEntries
                 field("Linked to VAT/WHT"; Rec."Linked to VAT/WHT")
                 {
                     ApplicationArea = Basic;
+                    Visible = false;
                 }
             }
         }
@@ -69,6 +74,11 @@ page 50029 VATAndWHTEntries
     begin
         if CloseAction in [Action::OK, Action::LookupOK] then
             CreateLines;
+    end;
+
+    trigger OnOpenPage()
+    begin
+        EditableFields()
     end;
 
     local procedure CreateLines()
@@ -82,6 +92,18 @@ page 50029 VATAndWHTEntries
         if Rec."Document Type" in ['SALES ' + Format(SDocType::Order), 'SALES ' + Format(SDocType::Invoice)] then
             GeneralCodeunit.CreateSalesLine(Rec);
     end;
+
+    procedure EditableFields()
+    var
+        userSetup: Record "User Setup";
+    begin
+        if userSetup.get(UserId) then
+            if userSetup."Edit VAT/WHT Credit" then
+                EditableField := true;
+    end;
+
+
+
 
     // local procedure CreatePurchaseLine(Rec: Record VATAndWHTEntry)
     // var
@@ -163,4 +185,5 @@ page 50029 VATAndWHTEntries
         PDocType: Enum "Purchase Document Type";
         SDocType: Enum "Sales Document Type";
         GeneralCodeunit: Codeunit GeneralCodeunit;
+        EditableField: Boolean;
 }

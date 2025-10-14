@@ -1,7 +1,7 @@
 Table 90224 "Posted Payment Trans Hdr"
 {
-    DrillDownPageID = "Payment List";
-    LookupPageID = "Payment List";
+    DrillDownPageID = "Payment Window List";
+    LookupPageID = "Payment Window List";
 
     fields
     {

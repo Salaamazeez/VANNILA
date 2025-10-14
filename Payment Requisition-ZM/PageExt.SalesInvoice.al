@@ -1,6 +1,5 @@
 pageextension 50123 SalesInvoiceExt extends "Sales Invoice"
 {
-
     actions
     {
         modify(Post)

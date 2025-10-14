@@ -105,10 +105,12 @@ page 60002 "Payment Voucher Card"
                 }
                 field("Journal Template Name"; Rec."Journal Template Name")
                 {
+                    Visible = false;
                     ApplicationArea = All;
                 }
                 field("Journal Batch Name"; Rec."Journal Batch Name")
                 {
+                    Visible = false;
                     ApplicationArea = All;
                 }
                 field("Shortcut Dimension 1 Code"; Rec."Shortcut Dimension 1 Code")
@@ -494,11 +496,24 @@ page 60002 "Payment Voucher Card"
         }
 
     }
+    trigger OnOpenPage()
+    var
+        PaymentMgtSetup: Record "Payment Mgt Setup";
+    begin
+        PaymentMgtSetup.Get();
+        Rec."Journal Template Name" := PaymentMgtSetup."Journal Template Name";
+        Rec."Journal Batch Name" := PaymentMgtSetup."Journal Batch Name";
+    end;
 
     trigger OnAfterGetRecord()
+     var
+        PaymentMgtSetup: Record "Payment Mgt Setup";
     begin
         EnableFields;
-        SetControlAppearance
+        SetControlAppearance;
+        PaymentMgtSetup.Get();
+        Rec."Journal Template Name" := PaymentMgtSetup."Journal Template Name";
+        Rec."Journal Batch Name" := PaymentMgtSetup."Journal Batch Name";
     end;
 
     local procedure SetControlAppearance()
@@ -552,12 +567,12 @@ page 60002 "Payment Voucher Card"
 
     end;
 
-local procedure CreateJnlLine()
-begin
-    GenJournalLine.Init();
-    GenJournalLine."Journal Template Name" := Rec."Journal Template Name";
-    GenJournalLine."Journal Batch Name" := Rec."Journal Batch Name";
-end;
+    local procedure CreateJnlLine()
+    begin
+        GenJournalLine.Init();
+        GenJournalLine."Journal Template Name" := Rec."Journal Template Name";
+        GenJournalLine."Journal Batch Name" := Rec."Journal Batch Name";
+    end;
 
     var
         PaymentVoucherHeader: Record "Payment Voucher Header";

@@ -6,6 +6,11 @@ pageextension 50051 SalesOrderSubform extends "Sales Order Subform"
         {
             editable = false;
         }
+         modify("Description 2")
+        {
+            Caption = 'Narration';
+            Visible = true;
+        }
         addafter("Line Amount")
         {
             field("Tax Type"; Rec."Tax Type")
