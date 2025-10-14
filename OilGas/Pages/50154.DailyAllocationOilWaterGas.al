@@ -8,6 +8,7 @@ page 50154 DailyAllocationOilWaterGas
     Editable = false;
     ModifyAllowed = true;
     InsertAllowed = false;
+    DeleteAllowed = true;
 
     layout
     {

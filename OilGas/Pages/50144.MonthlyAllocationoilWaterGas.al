@@ -7,6 +7,7 @@ page 50144 SalesByDrainaigePoint
     UsageCategory = Tasks;
     Editable = true;
     ModifyAllowed = true;
+    DeleteAllowed = true;
     InsertAllowed = false;
 
     layout
