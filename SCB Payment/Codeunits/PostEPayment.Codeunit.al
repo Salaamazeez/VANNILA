@@ -1,12 +1,12 @@
 Codeunit 90211 "Post E-Payment"
 {
-    TableNo = "Payment Window Header";
+    TableNo = "Payment Schedule Header";
 
     trigger OnRun()
     var
-        EPaymentLine: Record "Payment Window Line";
-        PostedEPayHeader: Record "Posted Payment Trans Hdr";
-        PostedEPayLine: Record "Posted Payment Trans Line";
+        EPaymentLine: Record "Payment Schedule Line";
+        PostedEPayHeader: Record "Posted Payment Schedule Hdr";
+        PostedEPayLine: Record "Posted Payment Schedule Line";
 
     begin
 
@@ -37,11 +37,11 @@ Codeunit 90211 "Post E-Payment"
     end;
 
     var
-        EPaymentHeader: Record "Payment Window Header";
+        EPaymentHeader: Record "Payment Schedule Header";
         EntryAmountBuffer: array[2] of Record "Entry No. Amount Buffer" temporary;
         PostingTxt: label 'Do you want to post the E-Payment?';
 
-    procedure CreateEntryBuffer(EPaymentLine: Record "Payment Window Line")
+    procedure CreateEntryBuffer(EPaymentLine: Record "Payment Schedule Line")
     begin
         EntryAmountBuffer[1]."Business Unit Code" := EPaymentLine."Source No.";
         EntryAmountBuffer[1]."Entry No." := 0;
@@ -77,7 +77,7 @@ Codeunit 90211 "Post E-Payment"
         PaymentHeader: Record "Payment Voucher Header";
         GenJnlLine: Record "Gen. Journal Line";
         RecdRef: RecordRef;
-        //PaymentPost: Codeunit "Payment Post (Yes/No)";
+    //PaymentPost: Codeunit "Payment Post (Yes/No)";
     begin
         EntryAmountBuffer[1].FindSet;
         RecdRef.Open(Database::"Payment Voucher Header");

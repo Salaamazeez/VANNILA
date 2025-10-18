@@ -1,4 +1,4 @@
-Table 90225 "Posted Payment Trans Line"
+Table 90225 "Posted Payment Schedule Line"
 {
 
     fields

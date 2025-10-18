@@ -3,7 +3,7 @@ Page 90238 "Payment Window List"
     CardPageID = "Payment Window Card";
     Editable = false;
     PageType = List;
-    SourceTable = "Payment Window Header";
+    SourceTable = "Payment Schedule Header";
     ApplicationArea = All;
     UsageCategory = Lists;
     layout
@@ -67,7 +67,7 @@ Page 90238 "Payment Window List"
                 var
                     UserSetup: Record "User Setup";
                     EnableErr: Label 'Kindly enable %1 on %2', Comment = '%1 is Use , %2 is Payment Setup';
-                    PmtTranSetup: Record "Payment Trans Setup";
+                    PmtTranSetup: Record "Payment Schedule Setup";
                     PaymentIntegrHook: Codeunit "Payment-Integr. Hook";
                 begin
                     // UserSetup.Get(UserId);
@@ -93,7 +93,7 @@ Page 90238 "Payment Window List"
                 var
                     UserSetup: Record "User Setup";
                     EnableErr: Label 'Kindly enable %1 on %2', Comment = '%1 is Use , %2 is Payment Setup';
-                    PmtTranSetup: Record "Payment Trans Setup";
+                    PmtTranSetup: Record "Payment Schedule Setup";
                     PaymentIntegrHook: Codeunit CreateSchedule;
                 begin
                     // UserSetup.Get(UserId);

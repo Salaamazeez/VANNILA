@@ -1,7 +1,7 @@
 #pragma warning disable AA0005, AA0008, AA0018, AA0021, AA0072, AA0137, AA0201, AA0206, AA0218, AA0228, AL0254, AL0424, AS0011, AW0006 // ForNAV settings
 Table 90217 "Payment-DebitAccounts"
 {
-    Permissions = tabledata "Payment Window Header" = r;
+    Permissions = tabledata "Payment Schedule Header" = r;
 
     fields
     {
@@ -114,7 +114,7 @@ Table 90217 "Payment-DebitAccounts"
     end;
 
     var
-        PaymentTranHdr: Record "Payment Window Header";
+        PaymentTranHdr: Record "Payment Schedule Header";
         Text004: label 'Account No. %1,Bank Code %2 can be found on the related debit accounts. Kindly contact your administrator.';
 }
 

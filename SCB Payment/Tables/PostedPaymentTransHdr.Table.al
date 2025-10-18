@@ -1,4 +1,4 @@
-Table 90224 "Posted Payment Trans Hdr"
+Table 90224 "Posted Payment Schedule Hdr"
 {
     DrillDownPageID = "Payment Window List";
     LookupPageID = "Payment Window List";
@@ -29,7 +29,7 @@ Table 90224 "Posted Payment Trans Hdr"
         }
         field(15; "Record Count"; Integer)
         {
-            CalcFormula = count("Posted Payment Trans Line" where("Batch Number" = field("Batch Number")));
+            CalcFormula = count("Posted Payment Schedule Line" where("Batch Number" = field("Batch Number")));
             Editable = false;
             FieldClass = FlowField;
         }
@@ -104,7 +104,7 @@ Table 90224 "Posted Payment Trans Hdr"
         }
         field(38; "Total Amount"; Decimal)
         {
-            CalcFormula = sum("Payment Window Line".Amount where("Batch Number" = field("Batch Number")));
+            CalcFormula = sum("Payment Schedule Line".Amount where("Batch Number" = field("Batch Number")));
             Editable = false;
             FieldClass = FlowField;
         }
@@ -123,7 +123,7 @@ Table 90224 "Posted Payment Trans Hdr"
         }
         field(41; Processed; Integer)
         {
-            CalcFormula = count("Posted Payment Trans Line" where("Batch Number" = field("Batch Number"),
+            CalcFormula = count("Posted Payment Schedule Line" where("Batch Number" = field("Batch Number"),
                                                                     "Interswitch Status" = filter("-1" | "1" | "2")));
             Editable = false;
             FieldClass = FlowField;

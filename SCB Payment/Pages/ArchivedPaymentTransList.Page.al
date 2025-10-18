@@ -1,9 +1,9 @@
-Page 90230 "Archived Payment Trans List"
+Page 90230 "Archived Payment Schedule List"
 {
-    CardPageID = "Archived Payment Trans Card";
+    CardPageID = "Archived Payment Schedule Card";
     Editable = false;
     PageType = List;
-    SourceTable = "Posted Payment Trans Hdr";
+    SourceTable = "Posted Payment Schedule Hdr";
 
     layout
     {

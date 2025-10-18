@@ -32,7 +32,7 @@ page 90239 "Payment Role Centre"
             action(PaymentTransactions)
             {
                 ApplicationArea = All;
-                Caption = 'Payment Transactions';
+                Caption = 'Payment Scheduleactions';
                 RunObject = Page "Payment Window List";
             }
             action(Open)
@@ -72,7 +72,7 @@ page 90239 "Payment Role Centre"
                 {
                     ApplicationArea = All;
                     Caption = 'Archived Transactions';
-                    RunObject = Page "Archived Payment Trans List";
+                    RunObject = Page "Archived Payment Schedule List";
                 }
             }
             group(Administration)
@@ -110,7 +110,7 @@ page 90239 "Payment Role Centre"
                     ApplicationArea = All;
                     Caption = 'Payment Setup';
                     Image = Setup;
-                    RunObject = Page "Payment Trans Setup";
+                    RunObject = Page "Payment Schedule Setup";
                 }
             }
 

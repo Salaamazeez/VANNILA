@@ -1,6 +1,6 @@
 // Codeunit 52092236 "Payment - Get Payment Voucher"
 // {
-//     TableNo = "Payment Window Header";
+//     TableNo = "Payment Schedule Header";
 
 //     trigger OnRun()
 //     var
@@ -32,8 +32,8 @@
 //     end;
 
 //     var
-//         PaymentTransHeader: Record "Payment Window Header";
-//         PaymentTransLine: Record "Payment Window Line";
+//         PaymentTransHeader: Record "Payment Schedule Header";
+//         PaymentTransLine: Record "Payment Schedule Line";
 //         GetPaymentList: Page "Get Payment Voucher";
 //         LineNo: Integer;
 //         PaymentSchedule: Record "Payment Schedule";
@@ -173,7 +173,7 @@
 //     end;
 
 
-//     procedure SetPaymentTranHeader(var PaymentTransHeader2: Record "Payment Window Header")
+//     procedure SetPaymentTranHeader(var PaymentTransHeader2: Record "Payment Schedule Header")
 //     begin
 //         PaymentTransHeader.Get(PaymentTransHeader2."Batch Number");
 //         PaymentTransHeader.TestField(Submitted, false);
@@ -182,8 +182,8 @@
 
 //     procedure CreateHeaderBatch(PaymentHeader: Code[20]; BatchName: Text) "Batch Number": Code[20]
 //     var
-//         PaymentTransHeaderRec: Record "Payment Window Header";
-//         NewPaymentTransHeaderRec: Record "Payment Window Header";
+//         PaymentTransHeaderRec: Record "Payment Schedule Header";
+//         NewPaymentTransHeaderRec: Record "Payment Schedule Header";
 //         Position: Integer;
 //     begin
 //         PaymentTransHeaderRec.Get(PaymentHeader);
@@ -213,8 +213,8 @@
 
 //     procedure CreateHeaderFromApprovedPV(PaymentVoucherNo: Code[20]) "Batch Number": Code[20]
 //     var
-//         PaymentTransHeaderRec: Record "Payment Window Header";
-//         NewPaymentTransHeaderRec: Record "Payment Window Header";
+//         PaymentTransHeaderRec: Record "Payment Schedule Header";
+//         NewPaymentTransHeaderRec: Record "Payment Schedule Header";
 //         Position: Integer;
 //         PaymentHeader: Record "Payment Header";
 //         GeneralLedgerSetup: Record "General Ledger Setup";
@@ -247,7 +247,7 @@
 //         PaymentBatchTex: Text[100];
 //         FirstPaymentHeader: Code[10];
 //         //PaymentGateways: Codeunit "Payment Gateways";
-//         PaymentTransHeader: Record "Payment Window Header";
+//         PaymentTransHeader: Record "Payment Schedule Header";
 //     begin
 //         PaymentTransLine.SetRange("Batch Number", PaymentHeader."No.");
 //         if PaymentTransLine.Find('+') then

@@ -1,4 +1,4 @@
-Table 90220 "Payment Window Line"
+Table 90220 "Payment Schedule Line"
 {
 
     fields
@@ -287,7 +287,7 @@ Table 90220 "Payment Window Line"
     trigger OnDelete()
     var
         FindGenJnl: Boolean;
-        PaymentLine: Record "Payment Window Line";
+        PaymentLine: Record "Payment Schedule Line";
         FindCashLine: Boolean;
     begin
         // if PaymentHeader.Get("Source No.") then begin
@@ -373,9 +373,9 @@ Table 90220 "Payment Window Line"
 
     var
         CBNBanks: Record "Bank";
-        PmtTranSetup: Record "Payment Trans Setup";
-        TransHeader: Record "Payment Window Header";
-        PaymentLine: Record "Payment Window Line";
+        PmtTranSetup: Record "Payment Schedule Setup";
+        TransHeader: Record "Payment Schedule Header";
+        PaymentLine: Record "Payment Schedule Line";
         GenJournal: Record "Gen. Journal Line";
         NoSeriesMgt: Codeunit NoSeriesManagement;
         RecdRef: RecordRef;
@@ -384,11 +384,11 @@ Table 90220 "Payment Window Line"
         StatusCheckSuspended: Boolean;
 
         Txt002: label 'Batch Number %1 already submitted, Transaction cannot be deleted';
-        //TransHeader: Record "Payment Window Header";
+        //TransHeader: Record "Payment Schedule Header";
         GeneralJournalLine: Record "Gen. Journal Line";
-        PaymentTransLines: Record "Payment Window Line";
+        PaymentTransLines: Record "Payment Schedule Line";
         PaymentHeader: Record "Payment Voucher Header";
-        //ClosedPayroll: Record "Closed Payroll-PayslipHder";
+    //ClosedPayroll: Record "Closed Payroll-PayslipHder";
 
 
     procedure TestStatusOpen()

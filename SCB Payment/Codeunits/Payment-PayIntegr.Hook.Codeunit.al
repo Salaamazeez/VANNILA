@@ -18,9 +18,9 @@
 //         LineNo: Integer;
 //         NotFoundErr: label 'Account No. %1,Bank Code %2 cannot be found on the related debit accounts', Comment = '%1 is the Account No.,%2 is the Bank Code';
 
-//     // procedure CreateSchedule(var PaymentTranHdr: Record "Payment Window Header")
+//     // procedure CreateSchedule(var PaymentTranHdr: Record "Payment Schedule Header")
 //     // var
-//     //     PaymentTranLine: Record "Payment Window Line";
+//     //     PaymentTranLine: Record "Payment Schedule Line";
 //     //     DebitAccount: Record "Payment-DebitAccounts";
 //     //     HttpResponseMessage: HttpResponseMessage;
 //     //     MyJsonToken: JsonToken;
@@ -117,9 +117,9 @@
 
 
 
-//     // procedure CreateSchedule(var PaymentTranHdr: Record "Payment Window Header")
+//     // procedure CreateSchedule(var PaymentTranHdr: Record "Payment Schedule Header")
 //     // var
-//     //     PaymentTranLine: Record "Payment Window Line";
+//     //     PaymentTranLine: Record "Payment Schedule Line";
 //     //     DebitAccount: Record "Payment-DebitAccounts";
 //     //     HttpResponseMessage: HttpResponseMessage;
 //     //     MyJsonToken: JsonToken;
@@ -216,9 +216,9 @@
 
 
 
-//     procedure CreateSchedule(var PaymentTranHdr: Record "Payment Window Header")
+//     procedure CreateSchedule(var PaymentTranHdr: Record "Payment Schedule Header")
 //     var
-//         PaymentTranLine: Record "Payment Window Line";
+//         PaymentTranLine: Record "Payment Schedule Line";
 //         DebitAccount: Record "Payment-DebitAccounts";
 //         HttpResponseMessage: HttpResponseMessage;
 //         BearerToken: Text;
@@ -320,7 +320,7 @@
 
 //     // procedure GetDebitAccount()
 //     // var
-//     //     PaymentTranLine: Record "Payment Window Line";
+//     //     PaymentTranLine: Record "Payment Schedule Line";
 //     //     DebitAccount: Record "Payment-DebitAccounts";
 //     //     HttpResponseMessage: HttpResponseMessage;
 //     //     MyJsonToken: JsonToken;
@@ -395,7 +395,7 @@
 //     //     Message(MessageText);
 //     // end;
 
-//     // procedure GetPaymentUpdate(var PaymentScheduleHdr: Record "Payment Window Header")
+//     // procedure GetPaymentUpdate(var PaymentScheduleHdr: Record "Payment Schedule Header")
 //     // var
 //     //     //PFACode: Record "PFA Code";
 //     //     HttpResponseMessage: HttpResponseMessage;
@@ -414,7 +414,7 @@
 //     //     JObject2: JsonObject;
 //     //     MyArray: JsonArray;
 //     //     LineNo: Integer;
-//     //     PaymentScheduleLine: Record "Payment Window Line";
+//     //     PaymentScheduleLine: Record "Payment Schedule Line";
 //     //     BankCode: Code[20];
 //     //     AccountNumber: Code[20];
 //     // begin

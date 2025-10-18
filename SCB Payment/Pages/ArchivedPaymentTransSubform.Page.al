@@ -1,4 +1,4 @@
-Page 90231 "Archived Payment Trans Subform"
+Page 90231 "Archived Pmt Schedule Subform"
 {
     AutoSplitKey = true;
     DelayedInsert = true;
@@ -7,7 +7,7 @@ Page 90231 "Archived Payment Trans Subform"
     InsertAllowed = false;
     ModifyAllowed = false;
     PageType = ListPart;
-    SourceTable = "Posted Payment Trans Line";
+    SourceTable = "Posted Payment Schedule Line";
 
     layout
     {
@@ -66,6 +66,6 @@ Page 90231 "Archived Payment Trans Subform"
     var
         Text001: label 'Are you sure you want to process the %1 selected records';
         Text002: label 'Function Cancelled';
-        TransRec: Record "Payment Window Header";
+        TransRec: Record "Payment Schedule Header";
 }
 

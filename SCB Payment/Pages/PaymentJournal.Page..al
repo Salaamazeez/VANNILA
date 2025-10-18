@@ -2197,7 +2197,7 @@
 //         GetPaymentJnl.CreatePaymentJnlLines(Rec);
 //     end;
 
-//     procedure SetPaymentJournal(var PaymentHeader2: Record "Payment Window Header")
+//     procedure SetPaymentJournal(var PaymentHeader2: Record "Payment Schedule Header")
 //     begin
 //         PaymentHeader.Get(PaymentHeader2."Batch Number");
 //     end;
@@ -2211,7 +2211,7 @@
 //     var
 //         PowerAutomateTemplatesEnabled: Boolean;
 //         PowerAutomateTemplatesFeatureLbl: Label 'PowerAutomateTemplates', Locked = true;
-//         PaymentHeader: Record "Payment Window Header";
+//         PaymentHeader: Record "Payment Schedule Header";
 //         PaymentJnlRec2: Record "Gen. Journal Line";
 
 //     local procedure InitPowerAutomateTemplateVisibility()

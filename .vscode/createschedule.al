@@ -1,6 +1,6 @@
-// procedure CreateSchedule(var PaymentTranHdr: Record "Payment Window Header")
+// procedure CreateSchedule(var PaymentTranHdr: Record "Payment Schedule Header")
 // var
-//     PaymentTranLine: Record "Payment Window Line";
+//     PaymentTranLine: Record "Payment Schedule Line";
 //     PmtTranSetup: Record "Payment Transaction Setup";
 //     ResponseText: Text;
 //     JsonResponseObj: JsonObject;
