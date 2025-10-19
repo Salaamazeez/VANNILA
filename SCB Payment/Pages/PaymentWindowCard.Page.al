@@ -370,11 +370,6 @@ page 90237 "Payment Window Card"
                         UserSetup: Record "User Setup";
                         EnableErr: Label 'Kindly enable %1 on %2', Comment = '%1 is Use , %2 is Payment Setup';
                     begin
-                        // UserSetup.Get(UserId);
-                        // if not (UserSetup."Send Payment Batch") then
-                        //     Error(AdmTxt);
-                        // UserSetup.TestField("Send Payment Batch");
-                        // Rec.TestField(Status, Rec.Status::Approved);
                         PmtTranSetup.Get();
                         if PmtTranSetup."Use Pmt Authomation" then begin
                             if CONFIRM('Do you want to send batch', TRUE, false) then

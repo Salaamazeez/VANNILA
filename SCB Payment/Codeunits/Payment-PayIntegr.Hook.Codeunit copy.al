@@ -225,8 +225,6 @@ Codeunit 90208 "Payment-Integr. Hook"
         BaseUrl: Text;
         RequestType: Text;
         ServiceResult: Text;
-
-        // JSON objects
         json: Text;
         RootObj: JsonObject;
         PayloadObj: JsonObject;
@@ -256,95 +254,98 @@ Codeunit 90208 "Payment-Integr. Hook"
         LineNo: Integer;
         Success: Boolean;
         MessageText: Text;
+        CompanyInfo: Record "Company Information";
+        CustomerRec: Record Customer;
     begin
+        CompanyInfo.Get();
         Window.Open('Progressing.....');
         PmtTranSetup.Get();
 
         if PaymentTranHdr."API Platform" = PaymentTranHdr."API Platform"::SCB then begin
             // Validate debit account
-            /*  DebitAccount.Reset;
+              DebitAccount.Reset;
               DebitAccount.SetRange(Id, PaymentTranHdr."Debit Account Id");
               DebitAccount.SetRange("Account Number", PaymentTranHdr."Bank Account Number");
               DebitAccount.SetRange("Bank Code", PaymentTranHdr."Bank CBN Code");
               if not DebitAccount.FindFirst() then
                   Error(NotFoundErr, PaymentTranHdr."Bank Account Number", PaymentTranHdr."Bank CBN Code");
 
-              // ===== Root claims =====
-              // RootObj.Add('iat', CurrentDateTime()); 
-              // RootObj.Add('exp', CurrentDateTime() + 30000); 
-              // RootObj.Add('aud', 'CLIENT');
-              // RootObj.Add('jti', CreateGuid());
-              // RootObj.Add('iss', 'SCB');
+              //===== Root claims =====
+              RootObj.Add('iat', CurrentDateTime()); 
+              RootObj.Add('exp', CurrentDateTime() + 30000); 
+              RootObj.Add('aud', 'CLIENT');
+              RootObj.Add('jti', CreateGuid());
+              RootObj.Add('iss', 'SCB');
 
-              // // ===== Header =====
-              // HeaderObj.Add('messageSender', PaymentTranHdr."Message Sender");
-              // HeaderObj.Add('messageId', PaymentTranHdr."Batch Number");
-              // HeaderObj.Add('countryCode', PaymentTranHdr."Country Code");
-              // HeaderObj.Add('timestamp', CurrentDateTime()); 
+              // ===== Header =====
+              HeaderObj.Add('messageSender', CompanyInfo.Name);
+              HeaderObj.Add('messageId', CreateGuid());
+              HeaderObj.Add('countryCode', CompanyInfo."Country/Region Code");
+              HeaderObj.Add('timestamp', CurrentDateTime()); 
 
-              // // ===== Instruction =====
-              // InstructionObj.Add('paymentTimestamp', CurrentDateTime());
-              // InstructionObj.Add('requiredExecutionDate', Format(Today, 0, 9)); // yyyy-mm-dd
+              // ===== Instruction =====
+              InstructionObj.Add('paymentTimestamp', CurrentDateTime());
+              InstructionObj.Add('requiredExecutionDate', Format(Today, 0, 9)); // yyyy-mm-dd
 
-              // // Amount
-              // PaymentTranLine.Reset;
-              // PaymentTranLine.SetRange("Batch Number", PaymentTranHdr."Batch Number");
-              // if PaymentTranLine.FindFirst() then begin
-              //     AmountObj.Add('currencyCode', PaymentTranLine."Currency Code");
-              //     AmountObj.Add('amount', PaymentTranLine.Amount);
-              // end else begin
-              //     AmountObj.Add('currencyCode', PaymentTranHdr."Currency Code");
-              //     AmountObj.Add('amount', PaymentTranHdr."Total Amount");
-              // end;
-              // InstructionObj.Add('amount', AmountObj);
+              // Amount
+              PaymentTranLine.Reset;
+              PaymentTranLine.SetRange("Batch Number", PaymentTranHdr."Batch Number");
+              if PaymentTranLine.FindFirst() then begin
+                  AmountObj.Add('currencyCode', PaymentTranLine."Currency Code");
+                  AmountObj.Add('amount', PaymentTranLine.Amount);
+              end else begin
+                  AmountObj.Add('currencyCode', PaymentTranHdr."Currency Code");
+                  AmountObj.Add('amount', PaymentTranHdr."Total Amount");
+              end;
+              InstructionObj.Add('amount', AmountObj);
 
-              // InstructionObj.Add('referenceId', PaymentTranHdr."Reference Id");
-              // InstructionObj.Add('paymentType', PaymentTranHdr."Payment Type");
+              InstructionObj.Add('referenceId', PaymentTranHdr."Batch Number");
+              InstructionObj.Add('paymentType', PaymentTranHdr."Payment Type");
 
-              // // Debtor
-              // DebtorObj.Add('name', PaymentTranHdr."Debtor Name");
-              // InstructionObj.Add('debtor', DebtorObj);
+              // Debtor
+              DebtorObj.Add('name', PaymentTranHdr."Bank Name");
+              InstructionObj.Add('debtor', DebtorObj);
 
-              // // Debtor Account
-              // DebtorAccountObj.Add('id', DebitAccount."Account Number");
-              // DebtorAccountObj.Add('identifierType', DebitAccount."Identifier Type");
-              // InstructionObj.Add('debtorAccount', DebtorAccountObj);
+              // Debtor Account
+              DebtorAccountObj.Add('id', PaymentTranLine."From Account Number");
+              DebtorAccountObj.Add('identifierType', '');//DebitAccount."Identifier Type"
+              InstructionObj.Add('debtorAccount', DebtorAccountObj);
 
-              // // Debtor Agent -> Financial Institution -> Postal Address
-              // PostalAddressObj.Add('country', DebitAccount."Country Code");
-              // FinInstObj.Add('postalAddress', PostalAddressObj);
-              // FinInstObj.Add('name', DebitAccount."Bank Name");
-              // FinInstObj.Add('BIC', DebitAccount."BIC");
-              // DebtorAgentObj.Add('financialInstitution', FinInstObj);
-              // InstructionObj.Add('debtorAgent', DebtorAgentObj);
+              // Debtor Agent -> Financial Institution -> Postal Address
+              PostalAddressObj.Add('country', CustomerRec."Country/Region Code");
+              FinInstObj.Add('postalAddress', PostalAddressObj);
+              FinInstObj.Add('name', DebitAccount."Bank Name");
+              FinInstObj.Add('BIC', '');
+              DebtorAgentObj.Add('financialInstitution', FinInstObj);
+              InstructionObj.Add('debtorAgent', DebtorAgentObj);
 
-              // // Creditor (from PaymentTranLine)
-              // CreditorObj.Add('name', PaymentTranLine."Beneficiary Name");
-              // InstructionObj.Add('creditor', CreditorObj);
+              // Creditor (from PaymentTranLine)
+              CreditorObj.Add('name', PaymentTranLine.Payee);
+              InstructionObj.Add('creditor', CreditorObj);
 
-              // // Creditor Agent
-              // CreditorFinInstObj.Add('name', PaymentTranLine."Beneficiary Bank Name");
-              // CreditorFinInstObj.Add('BIC', PaymentTranLine."Beneficiary BIC");
-              // CreditorAgentObj.Add('financialInstitution', CreditorFinInstObj);
-              // CreditorAgentObj.Add('branchCode', PaymentTranLine."Beneficiary Branch Code");
-              // CreditorAgentObj.Add('clearingSystemId', PaymentTranLine."Beneficiary Bank Code");
-              // InstructionObj.Add('creditorAgent', CreditorAgentObj);
+              // Creditor Agent
+              CreditorFinInstObj.Add('name', PaymentTranLine.Payee);
+              CreditorFinInstObj.Add('BIC', '');
+              CreditorAgentObj.Add('financialInstitution', CreditorFinInstObj);
+              CreditorAgentObj.Add('branchCode', '');
+              CreditorAgentObj.Add('clearingSystemId', '');
+              InstructionObj.Add('creditorAgent', CreditorAgentObj);
 
-              // // Creditor Account
-              // CreditorAccountObj.Add('id', PaymentTranLine."To Account Number");
-              // CreditorAccountObj.Add('identifierType', PaymentTranLine."Beneficiary Identifier Type");
-              // InstructionObj.Add('creditorAccount', CreditorAccountObj);
+              // Creditor Account
+              CreditorAccountObj.Add('id', PaymentTranLine."To Account Number");
+              CreditorAccountObj.Add('identifierType', '');
+              InstructionObj.Add('creditorAccount', CreditorAccountObj);
 
-              // // Remittance Info
-              // MultiUnstructuredArr.Add(PaymentTranLine."Remittance Information");
-              // RemittanceObj.Add('multiUnstructured', MultiUnstructuredArr);
-              // InstructionObj.Add('remittanceInfo', RemittanceObj);
+              // Remittance Info
+              MultiUnstructuredArr.Add(PaymentTranLine.Description);
+              RemittanceObj.Add('multiUnstructured', MultiUnstructuredArr);
+              InstructionObj.Add('remittanceInfo', RemittanceObj);
 
-              // // ===== Payload =====
-              // PayloadObj.Add('header', HeaderObj);
-              // PayloadObj.Add('instruction', InstructionObj);
-              // RootObj.Add('payload', PayloadObj);
-              */
+              // ===== Payload =====
+              PayloadObj.Add('header', HeaderObj);
+              PayloadObj.Add('instruction', InstructionObj);
+              RootObj.Add('payload', PayloadObj);
+              
             PmtTranSetup.Get;
             json := '{ "header": { "messageSender": "RENGAS", "messageId": "RNG8778935909761832025", "countryCode": "NG", "timestamp": 1742300390 }, "instruction":         { "paymentTimestamp": 1742296796, "requiredExecutionDate": "2025-03-18", "amount": { "currencyCode": "NGN", "amount": 60 }, "referenceId": "REN00060285", "paymentType": "ACH", "debtor": { "name": "RENGAS SCB" }, "debtorAccount": { "id": "2402126942", "identifierType": "Other" }, "debtorAgent": { "financialInstitution": { "postalAddress": { "country": "NG" }, "name": "STANDARD CHARTERED BK", "BIC": "SCBLNGLAXXX" } }, "creditor": { "name": "Test Creditor" }, "creditorAgent": { "financialInstitution": { "name": "GUARANTY TRUST BANK PLC", "BIC": "GTBINGLAXXX" }, "branchCode": "52146", "clearingSystemId": "058" }, "creditorAccount": { "id": "0242700347", "identifierType": "Other" }, "remittanceInfo": { "multiUnstructured": [ "Payment to " ] } } }';
             // ===== Convert to text and send =====
