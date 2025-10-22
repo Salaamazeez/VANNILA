@@ -5,7 +5,7 @@ page 50154 DailyAllocationOilWaterGas
     PageType = List;
     SourceTable = DailyAllocationOilWaterGas;
     UsageCategory = Tasks;
-    Editable = false;
+    Editable = true;
     ModifyAllowed = true;
     InsertAllowed = false;
     DeleteAllowed = true;

@@ -5,7 +5,7 @@ page 50162 MonthlyReconData
     PageType = List;
     SourceTable = MonthlyReconData;
     UsageCategory = Tasks;
-    Editable = false;
+    Editable = true;
     ModifyAllowed = true;
     InsertAllowed = false;
     DeleteAllowed = true;
