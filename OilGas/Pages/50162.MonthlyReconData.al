@@ -193,7 +193,7 @@ page 50162 MonthlyReconData
 
     trigger OnOpenPage()
     begin
-        Error('Page under development');
+        //Error('Page under development');
         if UserSetup.Get(UserId) then
             if (not UserSetup."OilGas Data Upload") then
                 Error(ErrorOpenOilGas);
