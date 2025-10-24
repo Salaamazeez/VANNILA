@@ -1,7 +1,7 @@
 page 90237 "Payment Window Card"
 {
     PageType = Document;
-    SourceTable = "Payment Window Header";
+    SourceTable = "Payment Schedule Header";
 
     layout
     {
@@ -344,7 +344,7 @@ page 90237 "Payment Window Card"
                     trigger OnAction()
                     var
                         UserSetup: Record "User Setup";
-                        //ClosedPayrollPayslipHeader: Record "Closed Payroll-PayslipHder";
+                    //ClosedPayrollPayslipHeader: Record "Closed Payroll-PayslipHder";
                     begin
                         Rec.TestField(Status, Rec.Status::Open);
                         if Rec.Submitted then
@@ -370,11 +370,6 @@ page 90237 "Payment Window Card"
                         UserSetup: Record "User Setup";
                         EnableErr: Label 'Kindly enable %1 on %2', Comment = '%1 is Use , %2 is Payment Setup';
                     begin
-                        // UserSetup.Get(UserId);
-                        // if not (UserSetup."Send Payment Batch") then
-                        //     Error(AdmTxt);
-                        // UserSetup.TestField("Send Payment Batch");
-                        // Rec.TestField(Status, Rec.Status::Approved);
                         PmtTranSetup.Get();
                         if PmtTranSetup."Use Pmt Authomation" then begin
                             if CONFIRM('Do you want to send batch', TRUE, false) then
@@ -545,8 +540,8 @@ page 90237 "Payment Window Card"
     end;
 
     var
-        TransLine: Record "Payment Window Line";
-        PmtTranSetup: Record "Payment Trans Setup";
+        TransLine: Record "Payment Schedule Line";
+        PmtTranSetup: Record "Payment Schedule Setup";
         GeneralJournalLine: Record "Gen. Journal Line";
         PaymentIntegrHook: Codeunit "Payment-Integr. Hook";
         BatchNoTxt: label 'Batch Number %1 has already been submitted', comment = '%1 is the Batch Numbe';
@@ -562,6 +557,6 @@ page 90237 "Payment Window Card"
         Text004: label 'Batch Number %1 has already been submitted';
         PensionRemittance: Boolean;
         IsMultipleRemittancePeriod: Boolean;
-        //PensionRemittanceReport: Report "Pension Remittance";
+    //PensionRemittanceReport: Report "Pension Remittance";
 
 }

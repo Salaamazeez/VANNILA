@@ -1,10 +1,10 @@
-Page 90240 "Payment Trans Setup"
+Page 90240 "Payment Schedule Setup"
 {
     //DeleteAllowed = false;
     //InsertAllowed = false;
     PageType = Card;
-    SourceTable = "Payment Trans Setup";
-    ApplicationArea = All; 
+    SourceTable = "Payment Schedule Setup";
+    ApplicationArea = All;
     UsageCategory = Administration;
 
     layout

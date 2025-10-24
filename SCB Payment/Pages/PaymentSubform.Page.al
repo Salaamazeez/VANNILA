@@ -3,7 +3,7 @@ Page 90241 "Payment Subform"
     AutoSplitKey = true;
     DelayedInsert = true;
     PageType = ListPart;
-    SourceTable = "Payment Window Line";
+    SourceTable = "Payment Schedule Line";
 
     layout
     {
@@ -85,7 +85,7 @@ Page 90241 "Payment Subform"
     // trigger OnDeleteRecord(): Boolean
     // var
     //     FindGenJnl: Boolean;
-    //     PaymentLine: Record "Payment Window Line";
+    //     PaymentLine: Record "Payment Schedule Line";
     //     FindCashLine: Boolean;
     // begin
     //     PaymentLine := Rec;
@@ -149,8 +149,8 @@ Page 90241 "Payment Subform"
 
     // var
     //     Txt002: label 'Batch Number %1 already submitted, Transaction cannot be deleted';
-    //     TransHeader: Record "Payment Window Header";
+    //     TransHeader: Record "Payment Schedule Header";
     //     GeneralJournalLine: Record "Gen. Journal Line";
-    //     PaymentTransLines: Record "Payment Window Line";
+    //     PaymentTransLines: Record "Payment Schedule Line";
 }
 

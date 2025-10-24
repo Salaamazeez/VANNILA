@@ -1,4 +1,4 @@
-Table 90218 "Payment Trans Setup"
+Table 90218 "Payment Schedule Setup"
 {
     Caption = 'Payment Setup';
 
@@ -30,7 +30,7 @@ Table 90218 "Payment Trans Setup"
         field(22; "Payment Platform"; Option)
         {
             OptionCaption = 'SCB';
-            OptionMembers =SCB;
+            OptionMembers = SCB;
             DataClassification = EndUserIdentifiableInformation;
         }
         field(25; "Single View Request No. Series"; Code[20])
@@ -80,7 +80,7 @@ Table 90218 "Payment Trans Setup"
                 // UpdateJournalBatchID();
             end;
         }
-       
+
         field(52132418; "Nibss Schedule Size"; Text[50])
         {
             DataClassification = EndUserIdentifiableInformation;

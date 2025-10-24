@@ -9,9 +9,9 @@ codeunit 90209 "Payment-_Webhook"
     var
 
         BankAccount: Record "Bank Account";
-        PmtTranSetup: Record "Payment Trans Setup";
-        PaymentHdr: Record "Payment Window Header";
-        PaymentLine: Record "Payment Window Line";
+        PmtTranSetup: Record "Payment Schedule Setup";
+        PaymentHdr: Record "Payment Schedule Header";
+        PaymentLine: Record "Payment Schedule Line";
         PostEPayment: Codeunit "Post E-Payment";
         MyArray: JsonArray;
         BeneficiariesResult: Text;
@@ -137,12 +137,12 @@ codeunit 90209 "Payment-_Webhook"
         exit(json)
     end;
 
-    local procedure UpdateBankCharges(MyJObject: JsonObject; PaymentHdr: Record "Payment Window Header")
+    local procedure UpdateBankCharges(MyJObject: JsonObject; PaymentHdr: Record "Payment Schedule Header")
     var
-        PaymentLine2: Record "Payment Window Line";
+        PaymentLine2: Record "Payment Schedule Line";
         NextLineNo: Integer;
         Amount: Decimal;
-        PaymentNotification: Record "Payment Trans Notification";
+        PaymentNotification: Record "Payment Schedule Notification";
         JsonToken: JsonToken;
     begin
         PaymentNotification.Init();
@@ -169,7 +169,7 @@ codeunit 90209 "Payment-_Webhook"
         PostBankCharges(PaymentNotification)
     end;
 
-    procedure PostBankCharges(PaymentTransNotification: Record "Payment Trans Notification")
+    procedure PostBankCharges(PaymentTransNotification: Record "Payment Schedule Notification")
     var
         GeneralJournalLine: Record "Gen. Journal Line";
         GeneralJournalPosting: Codeunit "Gen. Jnl.-Post Line";

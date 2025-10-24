@@ -1,4 +1,4 @@
-Table 90219 "Payment Window Header"
+Table 90219 "Payment Schedule Header"
 {
     DrillDownPageID = "Payment Window List";
     LookupPageID = "Payment Window List";
@@ -33,7 +33,7 @@ Table 90219 "Payment Window Header"
         }
         field(15; "Record Count"; Integer)
         {
-            CalcFormula = count("Payment Window Line" where("Batch Number" = field("Batch Number")));
+            CalcFormula = count("Payment Schedule Line" where("Batch Number" = field("Batch Number")));
             Editable = false;
             FieldClass = FlowField;
         }
@@ -164,7 +164,7 @@ Table 90219 "Payment Window Header"
         }
         field(38; "Total Amount"; Decimal)
         {
-            CalcFormula = sum("Payment Window Line".Amount where("Batch Number" = field("Batch Number")));
+            CalcFormula = sum("Payment Schedule Line".Amount where("Batch Number" = field("Batch Number")));
             Editable = false;
             FieldClass = FlowField;
         }
@@ -183,7 +183,7 @@ Table 90219 "Payment Window Header"
         }
         field(41; Processed; Integer)
         {
-            CalcFormula = count("Payment Window Line" where("Batch Number" = field("Batch Number"),
+            CalcFormula = count("Payment Schedule Line" where("Batch Number" = field("Batch Number"),
                                                               "Interswitch Status" = filter("-1" | "1" | "2")));
             Editable = false;
             FieldClass = FlowField;
@@ -195,7 +195,7 @@ Table 90219 "Payment Window Header"
         field(43; "API Platform"; Option)
         {
             OptionCaption = 'SCB';
-            OptionMembers =SCB;
+            OptionMembers = SCB;
             DataClassification = EndUserIdentifiableInformation;
         }
         field(44; "Check Status Response"; Text[250])
@@ -240,7 +240,7 @@ Table 90219 "Payment Window Header"
         field(50004; "Payroll-E/DCode"; Code[20])
         {
             DataClassification = EndUserIdentifiableInformation;
-           // TableRelation = "Payroll-E/D";
+            // TableRelation = "Payroll-E/D";
 
             trigger OnValidate()
             begin
@@ -311,47 +311,54 @@ Table 90219 "Payment Window Header"
             OptionCaption = ' ,Payment Voucher,G/L Journal,Payroll';
             OptionMembers = " ",PV,GLJournal,Payroll;
         }
-        field(52132418; "Global Dimension 1 Code Desc"; Text[100])
+        field(50021; "Payment Type"; Option)
+        {
+            DataClassification = ToBeClassified;
+            OptionCaption = ' ,ACH,RTGS,BT,TT,XACH,XBT,IBFT,PAY';
+            OptionMembers = " ",ACH,RTGS,BT,TT,XACH,XBT,IBFT,PAY;
+        }
+        //
+        field(50022; "Global Dimension 1 Code Desc"; Text[100])
         {
             CalcFormula = lookup("Dimension Value".Name where(Code = field("Global Dimension 1 Code"),
                                                                "Global Dimension No." = const(1)));
             Editable = false;
             FieldClass = FlowField;
         }
-        field(52132419; "Global Dimension 1 Code"; Code[20])
+        field(50023; "Global Dimension 1 Code"; Code[20])
         {
             DataClassification = EndUserIdentifiableInformation;
             TableRelation = "Dimension Value".Code where("Global Dimension No." = const(1),
                                                           Blocked = filter(false));
         }
-        field(52132421; "Related Batches"; Text[100])
+        field(50024; "Related Batches"; Text[100])
         {
             DataClassification = EndUserIdentifiableInformation;
         }
-        field(52132422; "Payroll Period"; Code[10])
+        field(50025; "Payroll Period"; Code[10])
         {
             //TableRelation = "Payroll-Period";
             DataClassification = EndUserIdentifiableInformation;
         }
 
-        field(52132425; "Payment Reference"; Text[100])
+        field(50026; "Payment Reference"; Text[100])
         {
             DataClassification = CustomerContent;
         }
-        field(52132426; Balance; Decimal)
+        field(50027; Balance; Decimal)
         {
             Editable = false;
             DataClassification = CustomerContent;
         }
-        field(52132429; "Schedule Id"; Text[100])
+        field(50028; "Schedule Id"; Text[100])
         {
             DataClassification = CustomerContent;
         }
-        field(52132430; "Process Completed"; Boolean)
+        field(50029; "Process Completed"; Boolean)
         {
             DataClassification = CustomerContent;
         }
-        field(52132431; "Debit Account Id"; Text[100])
+        field(50030; "Debit Account Id"; Text[100])
         {
             DataClassification = CustomerContent;
         }
@@ -396,8 +403,8 @@ Table 90219 "Payment Window Header"
 
     var
         BankRec: Record "Bank Account";
-        PmtTranSetup: Record "Payment Trans Setup";
-        TransLine: Record "Payment Window Line";
+        PmtTranSetup: Record "Payment Schedule Setup";
+        TransLine: Record "Payment Schedule Line";
         PaymentDebitAccount: Record "Payment-DebitAccounts";
         PaymentBankMapping: Record "Payment Bank Mapping";
         NoSeriesMgt: Codeunit NoSeriesManagement;
@@ -408,19 +415,19 @@ Table 90219 "Payment Window Header"
         Text002: label 'Batch Number %1 already submitted, Transaction cannot be deleted';
         Text003: label 'Line does not exist for Batch Number %1';
         EnablePayrollPeriodField: Boolean;
-        CashlitLn: Record "Payment Window Line";
+        CashlitLn: Record "Payment Schedule Line";
         FileName: Text;
-        // PayrollEDRec: Record "Payroll-E/D";
-        // PayrollSetup: Record "Payroll-Setup";
+    // PayrollEDRec: Record "Payroll-E/D";
+    // PayrollSetup: Record "Payroll-Setup";
 
     procedure Recreate()
     var
 
-        NewPaymentHeader: Record "Payment Window Header";
-        PaymentLine: Record "Payment Window Line";
-        NewPaymentLine: Record "Payment Window Line";
-        PostedPaymentHeader: Record "Posted Payment Trans Hdr";
-        PostedPaymentLine: Record "Posted Payment Trans Line";
+        NewPaymentHeader: Record "Payment Schedule Header";
+        PaymentLine: Record "Payment Schedule Line";
+        NewPaymentLine: Record "Payment Schedule Line";
+        PostedPaymentHeader: Record "Posted Payment Schedule Hdr";
+        PostedPaymentLine: Record "Posted Payment Schedule Line";
         GeneralJournalLine: Record "Gen. Journal Line";
         ErrorTxt: Label 'Action not allowed';
     begin
@@ -484,8 +491,8 @@ Table 90219 "Payment Window Header"
 
     procedure ArchiveOnly()
     var
-        PaymentLine: Record "Payment Window Line";
-        PostedPaymentHeader: Record "Posted Payment Trans Hdr";
+        PaymentLine: Record "Payment Schedule Line";
+        PostedPaymentHeader: Record "Posted Payment Schedule Hdr";
         ReasonForA: Integer;
         Errer001Txt: Label 'Action not allowed';
     begin

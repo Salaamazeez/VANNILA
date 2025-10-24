@@ -1,6 +1,6 @@
 codeunit 90210 "Payment - Get Payment"
 {
-    TableNo = "Payment Window Header";
+    TableNo = "Payment Schedule Header";
     /*     trigger OnRun()
         var
             GeneralJournalLine: Record "Gen. Journal Line";
@@ -35,8 +35,8 @@ codeunit 90210 "Payment - Get Payment"
         end;
      */
     var
-        PaymentTransHeader: Record "Payment Window Header";
-        PaymentTransLine: Record "Payment Window Line";
+        PaymentTransHeader: Record "Payment Schedule Header";
+        PaymentTransLine: Record "Payment Schedule Line";
         VendorBankAcc: Record "Vendor Bank Account";
         VendorRec: Record Vendor;
         CustBankAcc: Record "Customer Bank Account";
@@ -199,7 +199,7 @@ codeunit 90210 "Payment - Get Payment"
         end;
 
      */
-    procedure SetPaymentTranHeader(var PaymentTransHeader2: Record "Payment Window Header")
+    procedure SetPaymentTranHeader(var PaymentTransHeader2: Record "Payment Schedule Header")
     begin
         PaymentTransHeader.Get(PaymentTransHeader2."Batch Number");
         if CheckIsChargeLine then begin
@@ -211,8 +211,8 @@ codeunit 90210 "Payment - Get Payment"
 
     procedure CreateHeaderBatch(PaymentHeader: Code[20]; BatchName: Text) "Batch Number": Code[20]
     var
-        PaymentTransHeaderRec: Record "Payment Window Header";
-        NewPaymentTransHeaderRec: Record "Payment Window Header";
+        PaymentTransHeaderRec: Record "Payment Schedule Header";
+        NewPaymentTransHeaderRec: Record "Payment Schedule Header";
     begin
         PaymentTransHeaderRec.Get(PaymentHeader);
         NewPaymentTransHeaderRec.Init();
@@ -234,7 +234,7 @@ codeunit 90210 "Payment - Get Payment"
         exit;
     end;
 
-    procedure GetPaymentVoucher(var Rec: Record "Payment Window Header")
+    procedure GetPaymentVoucher(var Rec: Record "Payment Schedule Header")
     var
         PaymentHeader: Record "Payment Voucher Header";
         PaymentSchedule: Record "Payment Schedule";
@@ -251,10 +251,10 @@ codeunit 90210 "Payment - Get Payment"
             PaymentSchedule.SetRange(PaymentSchedule."Source Document No.", PaymentHeader."No.");
             repeat
                 //if (PaymentHeader."Payment Type" = PaymentHeader."payment type"::"Supp. Invoice") then begin
-                    //PaymentHeader.TestField("Payee Bank Code");
-                    PaymentHeader.TestField("Bal Account No.");
-                    //PaymentHeader.TestField("Payee");
-                //end;
+                //PaymentHeader.TestField("Payee Bank Code");
+                PaymentHeader.TestField("Bal Account No.");
+            //PaymentHeader.TestField("Payee");
+            //end;
             until PaymentHeader.Next = 0;
             // PaymentTransHeader."Attached to Entity" := PaymentTransHeader."Attached to Entity"::PV;
             // PaymentTransHeader.Modify();
@@ -279,7 +279,7 @@ codeunit 90210 "Payment - Get Payment"
         FirstPaymentHeader: Code[10];
         PageNo: Integer;
         SerialNo: Integer;
-        PmtTranSetup: Record "Payment Trans Setup";
+        PmtTranSetup: Record "Payment Schedule Setup";
     begin
         PaymentTransLine.SetRange("Batch Number", PaymentTransHeader."Batch Number");
         PmtTranSetup.Get;
@@ -292,7 +292,7 @@ codeunit 90210 "Payment - Get Payment"
         with PaymentHeader do begin
             if PaymentHeader.Find('-') then begin
                 repeat
-                
+
                     PaymentHeader.CalcFields("Voucher Amount", "Schedule Amount");
                     RecdRef.GetTable(PaymentHeader);
                     if PaymentHeader."Schedule Amount" = 0 then begin

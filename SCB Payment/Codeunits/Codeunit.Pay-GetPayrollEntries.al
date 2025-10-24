@@ -1,6 +1,6 @@
 // Codeunit 52092242 "Payment - Get Payroll Entries"
 // {
-//     TableNo = "Payment Window Header";
+//     TableNo = "Payment Schedule Header";
 
 //     trigger OnRun()
 //     var
@@ -27,7 +27,7 @@
 //     end;
 
 //     var
-//         PaymentTransHeader: Record "Payment Window Header";
+//         PaymentTransHeader: Record "Payment Schedule Header";
 //         GLSetup: Record "General Ledger Setup";
 //         PmtTranSetup: Record "Payment Trans Setup";
 //         NextEntryNo: Integer;
@@ -43,7 +43,7 @@
 //         Body: Text;
 
 
-//     procedure SetPaymentTranHeader(var PaymentTransHeader2: Record "Payment Window Header")
+//     procedure SetPaymentTranHeader(var PaymentTransHeader2: Record "Payment Schedule Header")
 //     begin
 //         PaymentTransHeader.Get(PaymentTransHeader2."Batch Number");
 //         PaymentTransHeader.TestField(Submitted, false);
@@ -51,7 +51,7 @@
 
 //     procedure CreatePayrollEntries(var ClosePayrollHeader: Record "Closed Payroll-PayslipHder")
 //     var
-//         PaymentTransLine: Record "Payment Window Line";
+//         PaymentTransLine: Record "Payment Schedule Line";
 //         RecdRef: RecordRef;
 //         PageNo: Integer;
 //         SerialNo: Integer;
@@ -95,7 +95,7 @@
 
 //     local procedure GetNextEntryNo(): Integer
 //     var
-//         PaymentTransLine: Record "Payment Window Line";
+//         PaymentTransLine: Record "Payment Schedule Line";
 //     begin
 //         if NextEntryNo = 0 then begin
 //             PaymentTransLine.SetRange("Batch Number", PaymentTransHeader."Batch Number");
@@ -112,7 +112,7 @@
 
 //     procedure CreatePayrollPensionRemittanceEntries(var ClosePayrollHeader: Record "Closed Payroll-PayslipHder")
 //     var
-//         PaymentTransLine: Record "Payment Window Line";
+//         PaymentTransLine: Record "Payment Schedule Line";
 //         RecdRef: RecordRef;
 //         PageNo: Integer;
 //         SerialNo: Integer;
@@ -186,7 +186,7 @@
 //         TotalEmployerVoluntaryContributionAmt: Decimal;
 //         GrandTotalContributionAmt: Decimal;
 //         PensionAdministrator: Record "Pension Administrator";
-//         TransHeader: Record "Payment Window Header";
+//         TransHeader: Record "Payment Schedule Header";
 //         MailSubject: Text;
 //     begin
 //         TransHeader.Get(PaymentBatch);
@@ -213,8 +213,8 @@
 //     procedure SendPensionRemittanceExcelScheduleToPFAs(PaymentBatch: Code[20]; myEmployeeContributionED: Text; myEmployeerContributionED: Text; myEmployerVoluntaryContributionED: Text; myEmployeeVoluntaryContributionED: Text; myTotalPensionContributionED: Code[20])
 //     var
 //         PensionAdministrator: Record "Pension Administrator";
-//         PaymentTransHeader: Record "Payment Window Header";
-//         PaymentTransLines: Record "Payment Window Line";
+//         PaymentTransHeader: Record "Payment Schedule Header";
+//         PaymentTransLines: Record "Payment Schedule Line";
 //         CompanyInformation: Record "Company Information";
 //     begin
 //         PaymentTransHeader.Get(PaymentBatch);
@@ -275,7 +275,7 @@
 //     local procedure CreatePensionRemittanceExcelScheduleBody(PayrollPeriod: Code[10]; PensionAdministratorCode: Code[10]; PaymentBatch: Code[20]; var TotalEmployeeContributionAmt: Decimal; var TotalEmployerContributionAmt: Decimal; var TotalEmployeeVoluntaryContributionAmt: Decimal; var TotalEmployerVoluntaryContributionAmt: Decimal; var GrandTotalContributionAmt: Decimal)
 //     var
 //         ClosedPayrollPayslipLine: Record "Closed Payroll-PayslipLine";
-//         TransHeader: Record "Payment Window Header";
+//         TransHeader: Record "Payment Schedule Header";
 //         PayrollSetup: Record "Payroll-Setup";
 //         EmployeeContributionAmt: Decimal;
 //         EmployerContributionAmt: Decimal;

@@ -15,7 +15,7 @@ Page 90211 "Get Payment Voucher"
                 {
                     ApplicationArea = Basic;
                 }
-                field(PostingDescription; Rec. "Detailed Pay Description")
+                field(PostingDescription; Rec."Detailed Pay Description")
                 {
                     ApplicationArea = Basic;
                 }
@@ -54,7 +54,7 @@ Page 90211 "Get Payment Voucher"
                 field(PayeeNo; Rec."Payee No.")
                 {
                     ApplicationArea = Basic;
-                    
+
                 }
                 // field(Payee; Rec.pay)
                 // {
@@ -124,10 +124,10 @@ Page 90211 "Get Payment Voucher"
 
     var
         PaymentCheck: Codeunit "Payment Export Gen. Jnl Check";
-        PaymentHeader: Record "Payment Window Header";
+        PaymentHeader: Record "Payment Schedule Header";
 
 
-    procedure SetPaymentHeader(var PaymentHeader2: Record "Payment Window Header")
+    procedure SetPaymentHeader(var PaymentHeader2: Record "Payment Schedule Header")
     begin
         PaymentHeader.Get(PaymentHeader2."Batch Number");
     end;

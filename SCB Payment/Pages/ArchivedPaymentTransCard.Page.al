@@ -1,8 +1,8 @@
-Page 90229 "Archived Payment Trans Card"
+Page 90229 "Archived Payment Schedule Card"
 {
     Editable = false;
     PageType = Document;
-    SourceTable = "Posted Payment Trans Hdr";
+    SourceTable = "Posted Payment Schedule Hdr";
 
     layout
     {
@@ -42,7 +42,7 @@ Page 90229 "Archived Payment Trans Card"
                     Caption = 'Approval for Submission';
                 }
             }
-            part(PaymentSubform; "Archived Payment Trans Subform")
+            part(PaymentSubform; "Archived Pmt Schedule Subform")
             {
                 ApplicationArea = All;
                 SubPageLink = "Batch Number" = field("Batch Number");
