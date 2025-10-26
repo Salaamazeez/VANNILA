@@ -5,7 +5,7 @@ page 50162 MonthlyReconData
     PageType = List;
     SourceTable = MonthlyReconData;
     UsageCategory = Tasks;
-    Editable = false;
+    Editable = true;
     ModifyAllowed = true;
     InsertAllowed = false;
     DeleteAllowed = true;
@@ -193,7 +193,7 @@ page 50162 MonthlyReconData
 
     trigger OnOpenPage()
     begin
-        Error('Page under development');
+        //Error('Page under development');
         if UserSetup.Get(UserId) then
             if (not UserSetup."OilGas Data Upload") then
                 Error(ErrorOpenOilGas);
