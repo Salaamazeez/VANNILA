@@ -79,7 +79,6 @@ Page 90238 "Payment Window List"
                 end;
 
             }
-
             action(SendBatch2)
             {
                 ApplicationArea = All;
@@ -106,12 +105,38 @@ Page 90238 "Payment Window List"
 
             }
 
-        }
-    }
+            // action(SendBatch3)
+            // {
+            //     ApplicationArea = All;
+            //     Caption = 'Send Batch Azure';
+            //     Image = SendElectronicDocument;
+            //     Promoted = true;
+            //     PromotedCategory = Process;
+            //     ShortCutKey = 'F9';
+            //     ToolTip = 'Send the approved Payment batch to oktopus payment platform';
+            //     trigger OnAction()
+            //     var
+            //         UserSetup: Record "User Setup";
+            //         EnableErr: Label 'Kindly enable %1 on %2', Comment = '%1 is Use , %2 is Payment Setup';
+            //         PmtTranSetup: Record "Payment Schedule Setup";
+            //         //SendBCWebhookPayload: Codeunit "Send BC Webhook Payload";
+            //     begin
+            //         // UserSetup.Get(UserId);
+            //         // if not (UserSetup."Send Payment Batch") then
+            //         //     Error(AdmTxt);
+            //         // UserSetup.TestField("Send Payment Batch");
+            //         // Rec.TestField(Status, Rec.Status::Approved);
+            //         SendBCWebhookPayload.Run()
+            //     end;
 
-    var
-        UserSetup: Record "User Setup";
-    //PayrollPeriods: Page "Payroll Periods";
-    //PayrollPeriodRec: Record "Payroll-Period";
+        }
+
+    }
 }
+
+//var
+//    UserSetup: Record "User Setup";
+//PayrollPeriods: Page "Payroll Periods";
+//PayrollPeriodRec: Record "Payroll-Period";
+
 

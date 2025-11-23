@@ -341,8 +341,10 @@ Table 90220 "Payment Schedule Line"
         if "Reference Number" = '' then begin
             PmtTranSetup.Get();
             PmtTranSetup.TestField(PmtTranSetup."Reference No. Series");
-            NoSeriesMgt.InitSeries(PmtTranSetup."Reference No. Series", PmtTranSetup."Reference No. Series", 0D, "Reference Number",
-                                    PmtTranSetup."Reference No. Series");
+            // NoSeriesMgt.InitSeries(PmtTranSetup."Reference No. Series", PmtTranSetup."Reference No. Series", 0D, "Reference Number",
+            //                         PmtTranSetup."Reference No. Series");
+           "Reference Number" := NoSeriesMgt.GetNextNo(PmtTranSetup."Reference No. Series");
+
         end;
 
         "Date Created" := CreateDatetime(Today, Time);
@@ -377,7 +379,7 @@ Table 90220 "Payment Schedule Line"
         TransHeader: Record "Payment Schedule Header";
         PaymentLine: Record "Payment Schedule Line";
         GenJournal: Record "Gen. Journal Line";
-        NoSeriesMgt: Codeunit NoSeriesManagement;
+        NoSeriesMgt: Codeunit "No. Series";
         RecdRef: RecordRef;
         TransTxt: label 'Batch Number %1 already submitted, Transaction cannot be modified', Comment = '%1 is the Batch Number';
         // Text002: label 'Batch Number %1 already submitted, Transaction cannot be deleted';

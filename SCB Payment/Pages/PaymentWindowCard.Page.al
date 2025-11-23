@@ -303,6 +303,7 @@ page 90237 "Payment Window Card"
                     Promoted = true;
                     PromotedCategory = Process;
                     ToolTip = 'To view and get journal lines';
+                    Visible=false;
                     trigger OnAction()
                     var
                         GetGLJournal: Codeunit "Payment - Get Payment";
@@ -429,7 +430,7 @@ page 90237 "Payment Window Card"
                 {
                     ApplicationArea = All;
                     Image = Post;
-                    ToolTip = 'To post the ';
+                    //ToolTip = 'To post the ';
                     trigger OnAction()
                     var
                         PostEPayment: Codeunit "Post E-Payment";

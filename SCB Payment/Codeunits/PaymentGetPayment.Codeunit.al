@@ -51,6 +51,7 @@ codeunit 90210 "Payment - Get Payment"
         PayeeName: Text[100];
         BankName: Text[100];
         Batch: label ' Payment Batch';
+    //v:Record venpay
     /* 
         procedure CreatePaymentJnlLines(var GeneralJournalLine: Record "Gen. Journal Line")
         var
@@ -297,19 +298,24 @@ codeunit 90210 "Payment - Get Payment"
                     RecdRef.GetTable(PaymentHeader);
                     if PaymentHeader."Schedule Amount" = 0 then begin
                         //PaymentHeader.TestField("Payee Bank Code");
-                        PaymentHeader.TestField(PaymentHeader."Bal Account No.");
+                        PaymentHeader.TestField("Bal Account No.");
                         //PaymentHeader.TestField("Payee");
                         //PaymentHeader.TestField("Payee CBN Bank Code");
+                        PaymentLine.SetRange("Document No.",PaymentHeader."No.");
+                        PaymentLine.FindFirst();
                         LineNo := LineNo + 10000;
                         PaymentTransLine.Init;
                         PaymentTransLine."Batch Number" := PaymentTransHeader."Batch Number";
                         PaymentTransLine."Line No." := LineNo;
-                        //PaymentTransLine.Validate("Bank CBN Code", "Payee CBN Bank Code");
-                        PaymentTransLine."To Account Number" := PaymentHeader."Bal Account No.";
+                        if PaymentLine."Account Type" = PaymentLine."Account Type"::Vendor then
+                            if VendorBankAcc.Get(PaymentLine."Account No.", PaymentLine."Preferred Bank Account Code") then
+                                PaymentTransLine."To Account Number" := VendorBankAcc."Bank Account No.";
                         PaymentTransLine.Amount := (PaymentHeader."Voucher Amount");
                         PaymentTransLine.Description := PaymentHeader."Request Description";
-                        PaymentTransLine."Payee No." := PaymentHeader."Payee No.";
-                        //PaymentTransLine.Payee := PaymentHeader.pa;
+                        PaymentTransLine."Payee No." := PaymentLine."Account No.";
+                        VendorRec.Get( PaymentTransLine."Payee No.");
+                        PaymentTransLine.Payee := VendorRec.Name;
+                        PaymentTransLine."Bank Name" := VendorBankAcc.Name;
                         PaymentTransLine."Reference Type" := PaymentTransLine."reference type"::Voucher;
                         PaymentTransLine."Record ID" := RecdRef.RecordId;
                         if Format(SerialNo) = PmtTranSetup."Nibss Schedule Size" then begin
@@ -393,8 +399,8 @@ codeunit 90210 "Payment - Get Payment"
                             end;
                         until PaymentLine.Next = 0;
                     end;
-                    PaymentHeader."Payment ID" := PaymentTransHeader."Batch Number";
-                    PaymentHeader.Modify;
+                // PaymentHeader."Payment ID" := PaymentTransHeader."Batch Number";
+                // PaymentHeader.Modify;
                 until PaymentHeader.Next = 0;
             end;
         end

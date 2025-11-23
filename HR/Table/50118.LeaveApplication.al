@@ -540,8 +540,10 @@ table 50118 LeaveApplication
         IF "Leave Code" = '' THEN BEGIN
             HRMSetup.GET;
             HRMSetup.TESTFIELD("Leave Nos");
-            NoSeriesMgt.InitSeries(HRMSetup."Leave Nos", xRec."No. Series", 0D, "Leave Code", "No. Series");
-            //NoSeries.AreRelated(HRMSetup."Leave Nos", xRec."No. Series", 0D, "Leave Code", "No. Series");
+            //NoSeriesMgt.InitSeries(HRMSetup."Leave Nos", xRec."No. Series", 0D, "Leave Code", "No. Series");
+            If NoSeriesMgt.AreRelated(HRMSetup."Leave Nos", xRec."No. Series") then
+                "No. Series" := xRec."No. Series";
+            "Leave Code" := NoSeriesMgt.GetNextNo(HRMSetup."Leave Nos");
         END;
 
         "Created By" := UserId;
@@ -552,7 +554,7 @@ table 50118 LeaveApplication
 
     var
         HRMSetup: Record "Human Resources Setup";
-        NoSeriesMgt: Codeunit NoSeriesManagement;
+        NoSeriesMgt: Codeunit "No. Series";
         NoSeries: Codeunit "No. Series";
         EmployeeRec: Record employee;
         SupervisorEmp: Record employee;
@@ -630,8 +632,8 @@ table 50118 LeaveApplication
             LeavAppRec := Rec;
             HRMSetup.GET;
             HRMSetup.TESTFIELD(HRMSetup."Leave Nos");
-            if NoSeriesMgt.SelectSeries(HRMSetup."Leave Nos", OldLeaveApp."No. Series", "No. Series") then begin
-                NoSeriesMgt.SetSeries("Leave Code");
+            if NoSeriesMgt.LookupRelatedNoSeries(HRMSetup."Leave Nos", xRec."No. Series", "No. Series") then begin
+                NoSeriesMgt.GetNextNo("Leave Code");
                 Rec := LeavAppRec;
                 exit(true);
             end;

@@ -455,7 +455,7 @@ table 60009 "Payment Voucher Header"
             FieldClass = FlowField;
             CalcFormula = sum("Payment Voucher Line".Amount where("Document No." = field("No.")));
         }
-        
+
     }
 
 
@@ -480,7 +480,7 @@ table 60009 "Payment Voucher Header"
         UserSetup: Record "User Setup";
         DimMgt: Codeunit DimensionManagement;
         PaymentMgtSetup: record "Payment Mgt Setup";
-        NoSeriesMgt: Codeunit "NoSeriesManagement";
+        NoSeriesMgt: Codeunit "No. Series";
         BankAcc: Record "Bank Account";
         PaymentVoucherHeader: Record "Payment Voucher Header";
         PaymentVoucherLine: Record "Payment Voucher Line";
@@ -502,6 +502,8 @@ table 60009 "Payment Voucher Header"
         VendLedgerEntry: Record "Vendor Ledger Entry";
         Text501: Label 'Invoice %1';
         EmpRec: Record Employee;
+        GenJnlCheckLin: Codeunit "Gen. Jnl.-Check Line";
+        GeneralJournalPosting: Codeunit "Gen. Jnl.-Post Line";
 
     procedure ValidateShortcutDimCode(FieldNumber: Integer; var ShortcutDimCode: Code[20])
     var
@@ -535,10 +537,10 @@ table 60009 "Payment Voucher Header"
         SignRegulator := 1;
         if Posted then
             Error('This Voucher has been posted already');
-        GenJournalLine2.SETRANGE("Journal Template Name", 'GENERAL');
-        GenJournalLine2.SETRANGE("Journal Batch Name", 'DEFAULT');
-        IF GenJournalLine2.FINDFIRST THEN
-            GenJournalLine2.DELETEALL;
+        // GenJournalLine2.SETRANGE("Journal Template Name", 'SCB');
+        // GenJournalLine2.SETRANGE("Journal Batch Name", 'SCB');
+        // IF GenJournalLine2.FINDFIRST THEN
+        //     GenJournalLine2.DELETEALL;
 
         PaymentVoucherLine.SETCURRENTKEY("Document No.", "Line No.");
         PaymentVoucherLine.SETRANGE("Document No.", "No.");
@@ -546,8 +548,8 @@ table 60009 "Payment Voucher Header"
             REPEAT
 
                 GenJournalLine.INIT;
-                GenJournalLine."Journal Template Name" := 'GENERAL';
-                GenJournalLine."Journal Batch Name" := 'DEFAULT';
+                // GenJournalLine."Journal Template Name" := 'SCB';
+                // GenJournalLine."Journal Batch Name" := 'SCB';
                 GenJournalLine."Line No." := PaymentVoucherLine."Line No.";
                 GenJournalLine."Posting Date" := Date;
                 GenJournalLine."Document No." := "No.";
@@ -624,13 +626,14 @@ table 60009 "Payment Voucher Header"
                     GenJournalLine.INSERT;
                 end;
 
-            // PaymentReqRec.SetRange("No.", "Former PR No.");
-            // if PaymentReqRec.FindFirst() then begin
-            //     PaymentReqRec.Posted := true;
-            //     PaymentReqRec.Modify();
-            // end;
+                // PaymentReqRec.SetRange("No.", "Former PR No.");
+                // if PaymentReqRec.FindFirst() then begin
+                //     PaymentReqRec.Posted := true;
+                //     PaymentReqRec.Modify();
+                // end;
+                GeneralJournalPosting.RunWithCheck(GenJournalLine);
             UNTIL PaymentVoucherLine.NEXT = 0;
-        CODEUNIT.RUN(CODEUNIT::"Gen. Jnl.-Post", GenJournalLine);
+        //CODEUNIT.RUN(CODEUNIT::"Gen. Jnl.-Post", GenJournalLine);
 
 
         CheckPostedJnl;
@@ -1049,7 +1052,11 @@ table 60009 "Payment Voucher Header"
         IF "No." = '' THEN BEGIN
             PaymentMgtSetup.GET;
             PaymentMgtSetup.TESTFIELD("Payment Voucher No.");
-            NoSeriesMgt.InitSeries(PaymentMgtSetup."Payment Voucher No.", xRec."No. Series", 0D, "No.", "No. Series");
+
+            If NoSeriesMgt.AreRelated(PaymentMgtSetup."Payment Voucher No.", xRec."No. Series") then
+                "No. Series" := xRec."No. Series";
+            "No." := NoSeriesMgt.GetNextNo(PaymentMgtSetup."Payment Voucher No.");
+            //NoSeriesMgt.InitSeries(PaymentMgtSetup."Payment Voucher No.", xRec."No. Series", 0D, "No.", "No. Series");
         END;
     end;
 

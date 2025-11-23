@@ -111,45 +111,49 @@ Table 90219 "Payment Schedule Header"
         field(35; "Bank Account Code"; Code[20])
         {
             Description = 'This is Navision''s bank account no.';
-            TableRelation = "Payment Bank Mapping";
+            TableRelation = "Bank Account";
             DataClassification = EndUserIdentifiableInformation;
 
             trigger OnValidate()
+            var
+                Bank: Record "Bank Account";
             begin
-                if "Bank Account Code" <> '' then begin
-                    if PaymentBankMapping.Get("Bank Account Code") then begin
-                        //PaymentBankMapping.TestField(Blocked, false);
-                        "Bank CBN Code" := PaymentBankMapping."Bank CBN Code";
-                        "Bank Account Number" := PaymentBankMapping."Bank Account No.";
-                        "Bank Name" := PaymentBankMapping.Name;
-                        "Currency Code" := PaymentBankMapping."Payment Currency Code"
-                    end;
-                end else begin
-                    "Bank CBN Code" := '';
-                    "Bank Account Number" := '';
-                    "Bank Name" := '';
-                    "Currency Code" := '';
-                end;
-                //to be used when going live
-                if "Bank Account Code" <> '' Then begin
-                    if PaymentBankMapping.Get("Bank Account Code") Then begin
-                        PaymentDebitAccount.SetRange("Account Number", PaymentBankMapping."Bank Account No.");
-                        PaymentDebitAccount.SetRange("Bank Code", PaymentBankMapping."Bank CBN Code");
-                        if NOT PaymentDebitAccount.FINDFIRST() then
-                            error(Error003Txt, PaymentBankMapping."Bank Account No.", PaymentBankMapping."Bank CBN Code");
-                        PaymentBankMapping.TESTFIELD(Blocked, false);
-                        "Bank CBN Code" := PaymentBankMapping."Bank CBN Code";
-                        "Bank Account Number" := PaymentBankMapping."Bank Account No.";
-                        "Debit Account Id" := PaymentBankMapping."Debit Account Id";
-                        "Bank Name" := PaymentBankMapping.Name;
-                        "Currency Code" := PaymentBankMapping."Payment Currency Code"
-                    end;
-                end ELSE begin
-                    "Bank CBN Code" := '';
-                    "Bank Account Number" := '';
-                    "Bank Name" := '';
-                    "Currency Code" := '';
-                end;
+                Bank.Get("Bank Account Code");
+                "Bank Name" := Bank.Name
+                // if "Bank Account Code" <> '' then begin
+                //     if PaymentBankMapping.Get("Bank Account Code") then begin
+                //         //PaymentBankMapping.TestField(Blocked, false);
+                //         "Bank CBN Code" := PaymentBankMapping."Bank CBN Code";
+                //         "Bank Account Number" := PaymentBankMapping."Bank Account No.";
+                //         "Bank Name" := PaymentBankMapping.Name;
+                //         "Currency Code" := PaymentBankMapping."Payment Currency Code"
+                //     end;
+                // end else begin
+                //     "Bank CBN Code" := '';
+                //     "Bank Account Number" := '';
+                //     "Bank Name" := '';
+                //     "Currency Code" := '';
+                // end;
+                // //to be used when going live
+                // if "Bank Account Code" <> '' Then begin
+                //     if PaymentBankMapping.Get("Bank Account Code") Then begin
+                //         PaymentDebitAccount.SetRange("Account Number", PaymentBankMapping."Bank Account No.");
+                //         PaymentDebitAccount.SetRange("Bank Code", PaymentBankMapping."Bank CBN Code");
+                //         if NOT PaymentDebitAccount.FINDFIRST() then
+                //             error(Error003Txt, PaymentBankMapping."Bank Account No.", PaymentBankMapping."Bank CBN Code");
+                //         PaymentBankMapping.TESTFIELD(Blocked, false);
+                //         "Bank CBN Code" := PaymentBankMapping."Bank CBN Code";
+                //         "Bank Account Number" := PaymentBankMapping."Bank Account No.";
+                //         "Debit Account Id" := PaymentBankMapping."Debit Account Id";
+                //         "Bank Name" := PaymentBankMapping.Name;
+                //         "Currency Code" := PaymentBankMapping."Payment Currency Code"
+                //     end;
+                // end ELSE begin
+                //     "Bank CBN Code" := '';
+                //     "Bank Account Number" := '';
+                //     "Bank Name" := '';
+                //     "Currency Code" := '';
+                // end;
             end;
         }
         field(36; "Recipient Email"; Text[250])
@@ -384,8 +388,9 @@ Table 90219 "Payment Schedule Header"
         if "Batch Number" = '' then begin
             PmtTranSetup.TestField(PmtTranSetup."Batch No. Series");
             PmtTranSetup.TestField(PmtTranSetup."Payment Platform", PmtTranSetup."Payment Platform"::SCB);
-            NoSeriesMgt.InitSeries(PmtTranSetup."Batch No. Series", PmtTranSetup."Batch No. Series", 0D, "Batch Number",
-                                   PmtTranSetup."Batch No. Series");
+            // NoSeriesMgt.InitSeries(PmtTranSetup."Batch No. Series", PmtTranSetup."Batch No. Series", 0D, "Batch Number",
+            //                        PmtTranSetup."Batch No. Series");
+           "Batch Number" := NoSeriesMgt.GetNextNo(PmtTranSetup."Batch No. Series");
         end;
         "Date Created" := CreateDatetime(Today, Time);
         "Created by" := Format(UserId());
@@ -407,7 +412,7 @@ Table 90219 "Payment Schedule Header"
         TransLine: Record "Payment Schedule Line";
         PaymentDebitAccount: Record "Payment-DebitAccounts";
         PaymentBankMapping: Record "Payment Bank Mapping";
-        NoSeriesMgt: Codeunit NoSeriesManagement;
+        NoSeriesMgt: Codeunit "No. Series";
         Error001Txt: label 'Batch Number %1 already submitted, Transaction cannot be modified', Comment = '%1 is the Batch Number';
         Error002Txt: label 'Line does not exist for Batch Number %1', Comment = '%1 is the Batch Number';
         Error003Txt: Label 'Account No. %1,Bank Code %2 cannot be found on the related debit accounts', Comment = '%1 is the Account No., %2 is the Bank Code';

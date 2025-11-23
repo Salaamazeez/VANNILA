@@ -13,16 +13,17 @@ Codeunit 90211 "Post E-Payment"
         if not Confirm(PostingTxt, false) then
             exit;
         EPaymentHeader.Get(Rec."Batch Number");
-        Rec.TestField(Status, Rec.Status::Approved);
-        Rec.TestField("Date Submitted");
+        //Rec.TestField(Status, Rec.Status::Approved);
+        //Rec.TestField("Date Submitted");
         if EPaymentHeader."API Platform" = EPaymentHeader."API Platform"::SCB then
-            Rec.TestField("Process Completed");
+            //Rec.TestField("Process Completed");
         EPaymentLine.SetRange("Batch Number", Rec."Batch Number");
         EPaymentLine.FindSet();
         repeat
             CreateEntryBuffer(EPaymentLine);
         until EPaymentLine.Next() = 0;
-        PostEpayment();
+        //PostEpayment();
+        PostPVEpayment();
         EPaymentLine.Find('-');
         repeat
             PostedEPayLine.TransferFields(EPaymentLine);
@@ -75,7 +76,7 @@ Codeunit 90211 "Post E-Payment"
     procedure PostPVEpayment()
     var
         PaymentHeader: Record "Payment Voucher Header";
-        GenJnlLine: Record "Gen. Journal Line";
+        //GenJnlLine: Record "Gen. Journal Line";
         RecdRef: RecordRef;
     //PaymentPost: Codeunit "Payment Post (Yes/No)";
     begin

@@ -413,7 +413,7 @@ table 50155 Retirement
         Vend: Record Vendor;
         GLAcc: Record "G/L Account";
         PaymentMgtSetup: Record "Payment Mgt Setup";
-        NoSeriesMgt: Codeunit NoSeriesManagement;
+        NoSeriesMgt: Codeunit "No. Series";
         DimMgt: Codeunit DimensionManagement;
         UserSetup: Record "User Setup";
         CAImprestMgt: Record "Cash Advance";
@@ -447,7 +447,8 @@ table 50155 Retirement
         IF "No." = '' THEN BEGIN
             PaymentMgtSetup.GET;
             PaymentMgtSetup.TESTFIELD("Retirement Nos.");
-            NoSeriesMgt.InitSeries(PaymentMgtSetup."Retirement Nos.", xRec."No. Series", 0D, "No.", "No. Series");
+            If NoSeriesMgt.AreRelated(PaymentMgtSetup."Retirement Nos.", xRec."No. Series") then
+                "No. Series" := xRec."No. Series";
             "Retiring Officer" := UserId;
         END;
 

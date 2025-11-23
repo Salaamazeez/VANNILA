@@ -454,11 +454,11 @@ Codeunit 50002 "Approval Mgt"
         end;
     end;
 
-    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Purch.-Post", OnBeforePostVendorEntry, '', false, false)]
-    local procedure "Purch.-Post_OnBeforePostVendorEntry"(var GenJnlLine: Record "Gen. Journal Line"; var PurchHeader: Record "Purchase Header"; var TotalPurchLine: Record "Purchase Line"; var TotalPurchLineLCY: Record "Purchase Line"; PreviewMode: Boolean; CommitIsSupressed: Boolean; var GenJnlPostLine: Codeunit "Gen. Jnl.-Post Line"; var IsHandled: Boolean)
-    begin
-        //GenJnlLine."Description 2" := PurchHeader
-    end;
+    // [EventSubscriber(ObjectType::Codeunit, Codeunit::"Purch.-Post", OnBeforePostVendorEntry, '', false, false)]
+    // local procedure "Purch.-Post_OnBeforePostVendorEntry"(var GenJnlLine: Record "Gen. Journal Line"; var PurchHeader: Record "Purchase Header"; var TotalPurchLine: Record "Purchase Line"; var TotalPurchLineLCY: Record "Purchase Line"; PreviewMode: Boolean; CommitIsSupressed: Boolean; var GenJnlPostLine: Codeunit "Gen. Jnl.-Post Line"; var IsHandled: Boolean)
+    // begin
+    //     //GenJnlLine."Description 2" := PurchHeader
+    // end;
 
     procedure GetTableIDForApproval(TableID: Integer): Integer
     begin

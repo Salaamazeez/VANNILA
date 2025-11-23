@@ -365,7 +365,9 @@ table 50130 "Purch. Requistion"
         IF "No." = '' THEN BEGIN
             PaymentMgtSetup.GET;
             PaymentMgtSetup.TESTFIELD("Payment Requisition Nos.");
-            NoSeriesMgt.InitSeries(PaymentMgtSetup."Purchase Requisition Nos.", xRec."No. Series", 0D, "No.", "No. Series");
+            If NoSeriesMgt.AreRelated(PaymentMgtSetup."Purchase Requisition Nos.", xRec."No. Series") then
+                "No. Series" := xRec."No. Series";
+            "No." := NoSeriesMgt.GetNextNo(PaymentMgtSetup."Purchase Requisition Nos.");
             "Requester No." := UserId;
             Requester := UserId;
         END;
@@ -714,7 +716,7 @@ table 50130 "Purch. Requistion"
         PaymentMgtSetup: Record "Payment Mgt Setup";
         PurchaseSetup: Record "Purchases & Payables Setup";
         PurchaseSetup2: Record "Purchases & Payables Setup";
-        NoSeriesMgt: Codeunit "NoSeriesManagement";
+        NoSeriesMgt: Codeunit "No. Series";
         // DimMgt: Codeunit DimensionManagement;
         PurchHeader: Record "Purchase Header";
         PurchRequisitionLine: Record "Purchase Requisition Line";

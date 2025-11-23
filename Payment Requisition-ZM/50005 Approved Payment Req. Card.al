@@ -302,7 +302,7 @@ page 50007 "Approved Payment Req. Card"
     end;
 
     var
-        NoSeriesMgt: Codeunit NoSeriesManagement;
+        NoSeriesMgt: Codeunit "No. Series";
         CustSetup: Record "Payment Mgt Setup";
         PVHeaderNo: Code[20];
         PRHeader: Record "Payment Requisition";

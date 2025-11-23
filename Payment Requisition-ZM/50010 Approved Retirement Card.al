@@ -175,7 +175,7 @@ page 50010 "Approved Retirement Card"
                     Retirement: Record Retirement;
                     PVHeader: Record "Payment Voucher Header";
                     PVHeaderNo: Code[20];
-                    NoSeriesMgt: Codeunit NoSeriesManagement;
+                    NoSeriesMgt: Codeunit "No. Series";
                     RetirementLine: Record "Retirement Line";
                     PVLine: Record "Payment Voucher Line";
                     LineNo: Integer;
@@ -261,7 +261,7 @@ page 50010 "Approved Retirement Card"
                     CRcptHeader: Record "Cash Receipt";
                     RetmntHeader: Record Retirement;
                     CRcptHdrNo: Code[20];
-                    NoSeriesMgt: Codeunit NoSeriesManagement;
+                    NoSeriesMgt: Codeunit "No. Series";
                     CRcptLine: Record "Cash Receipt Line";
                     RetmntLine: Record "Retirement Line";
 

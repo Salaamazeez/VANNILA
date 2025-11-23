@@ -233,20 +233,6 @@ page 50005 "Pending Payment Req. Card"
     end;
 
     var
-        NoSeriesMgt: Codeunit NoSeriesManagement;
-        CustSetup: Record "Payment Mgt Setup";
-        PVHeaderNo: Code[20];
-        PRHeader: Record "Payment Requisition";
-        PRLine: Record "Payment Requisition Line";
-        PVHeader: Record "Payment Voucher Header";
-        PVLine: Record "Payment Voucher Line";
-        //DocumentApprovalWorkflow: Codeunit "Document Approval Workflow"; //50001 Document Approval Workflow
-        PaymentRequisition: Record "Payment Requisition";
-        RecRef: RecordRef;
-        RecID: RecordID;
-        PaymentRequisitionLine: Record "Payment Requisition Line";
-        //DocumentApprovalEntry: Record "Document Approval Entry";
-        TotalAmount: Decimal;
         OpenApprovalEntriesExistForCurrUser: Boolean;
         OpenApprovalEntriesExist: Boolean;
         ApprovalMgt: Codeunit "Approval Mgt";

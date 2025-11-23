@@ -264,7 +264,7 @@ table 60021 "Cash Advance"
     var
         CashAdvanceLine: Record "Cash Advance Line";
         PaymentMgtSetup: Record "Payment Mgt Setup";
-        NoSeriesMgt: Codeunit NoSeriesManagement;
+        NoSeriesMgt: Codeunit "No. Series";
         DimMgt: Codeunit DimensionManagement;
         BankAccount: Record "Bank Account";
         CurrExchRate: Record "Currency Exchange Rate";
@@ -293,7 +293,9 @@ table 60021 "Cash Advance"
         IF "No." = '' THEN BEGIN
             PaymentMgtSetup.GET;
             PaymentMgtSetup.TESTFIELD("Cash Advance Nos.");
-            NoSeriesMgt.InitSeries(PaymentMgtSetup."Cash Advance Nos.", xRec."No. Series", 0D, "No.", "No. Series");
+            If NoSeriesMgt.AreRelated(PaymentMgtSetup."Cash Advance Nos.", xRec."No. Series") then
+                "No. Series" := xRec."No. Series";
+            "No." := NoSeriesMgt.GetNextNo(PaymentMgtSetup."Cash Advance Nos.");
         END;
     end;
 
@@ -486,7 +488,7 @@ DimMgt.EditDimensionSet(
         CAdvHeader: Record "Cash Advance";
         PVHeader: Record "Payment Voucher Header";
         PVHeaderNo: Code[20];
-        NoSeriesMgt: Codeunit NoSeriesManagement;
+        NoSeriesMgt: Codeunit "No. Series";
         CAdvLine: Record "Cash Advance Line";
         PVLine: Record "Payment Voucher Line";
     begin

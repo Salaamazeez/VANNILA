@@ -306,7 +306,7 @@ table 60000 "Payment Requisition"
         UserSetup: Record "User Setup";
         DimMgt: Codeunit DimensionManagement;
         PaymentMgtSetup: record "Payment Mgt Setup";
-        NoSeriesMgt: Codeunit "NoSeriesManagement";
+        NoSeriesMgt: Codeunit "No. Series";
         Cust: Record Customer;
         Vend: Record Vendor;
         GLAcc: Record "G/L Account";
@@ -659,7 +659,10 @@ DimMgt.EditDimensionSet(
         IF "No." = '' THEN BEGIN
             PaymentMgtSetup.GET;
             PaymentMgtSetup.TESTFIELD("Payment Requisition Nos.");
-            NoSeriesMgt.InitSeries(PaymentMgtSetup."Payment Requisition Nos.", xRec."No. Series", 0D, "No.", "No. Series");
+            //NoSeriesMgt.InitSeries(PaymentMgtSetup."Payment Requisition Nos.", xRec."No. Series", 0D, "No.", "No. Series");
+            If NoSeriesMgt.AreRelated(PaymentMgtSetup."Payment Requisition Nos.", xRec."No. Series") then
+                "No. Series" := xRec."No. Series";
+            "No." := NoSeriesMgt.GetNextNo(PaymentMgtSetup."Payment Requisition Nos.");
         END;
     end;
 

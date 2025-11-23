@@ -17,10 +17,10 @@ page 90239 "Payment Role Centre"
                 {
                     ApplicationArea = All;
                 }
-                chartpart(BANK_SWEEPING; BANK_SWEEPING)
-                {
-                    ApplicationArea = All;
-                }
+                // chartpart(BANK_SWEEPING; BANK_SWEEPING)
+                // {
+                //     ApplicationArea = All;
+                // }
             }
         }
     }

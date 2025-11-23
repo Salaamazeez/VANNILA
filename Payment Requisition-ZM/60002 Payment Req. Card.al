@@ -291,20 +291,8 @@ page 60008 "Payment Req. Card"
     end;
 
     var
-        NoSeriesMgt: Codeunit NoSeriesManagement;
-        CustSetup: Record "Payment Mgt Setup";
-        PVHeaderNo: Code[20];
-        PRHeader: Record "Payment Requisition";
-        PRLine: Record "Payment Requisition Line";
-        PVHeader: Record "Payment Voucher Header";
-        PVLine: Record "Payment Voucher Line";
+      
         PaymentRequisition: Record "Payment Requisition";
-        RecRef: RecordRef;
-        RecID: RecordID;
-        PaymentRequisitionLine: Record "Payment Requisition Line";
-        //DocumentApprovalEntry: Record "Document Approval Entry";
-        TotalAmount: Decimal;
         OpenApprovalEntriesExistForCurrUser: Boolean;
         OpenApprovalEntriesExist: Boolean;
-        EnableControl: Boolean;
 }

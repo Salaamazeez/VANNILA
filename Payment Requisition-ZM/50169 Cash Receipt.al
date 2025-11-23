@@ -457,7 +457,7 @@ table 50169 "Cash Receipt"
         Cust: Record Customer;
         GLAcc: Record "G/L Account";
         PaymentMgtSetup: Record "Payment Mgt Setup";
-        NoSeriesMgt: Codeunit NoSeriesManagement;
+        NoSeriesMgt: Codeunit "No. Series";
         DimMgt: Codeunit DimensionManagement;
         UserSetup: Record "User Setup";
         CAImprestMgt: Record "Cash Advance";
@@ -489,7 +489,9 @@ table 50169 "Cash Receipt"
         IF "No." = '' THEN BEGIN
             PaymentMgtSetup.GET;
             PaymentMgtSetup.TESTFIELD("Retirement Nos.");
-            NoSeriesMgt.InitSeries(PaymentMgtSetup."Cash Receipt Nos.", xRec."No. Series", 0D, "No.", "No. Series");
+            If NoSeriesMgt.AreRelated(PaymentMgtSetup."Cash Receipt Nos.", xRec."No. Series") then
+                "No. Series" := xRec."No. Series";
+            "No." := NoSeriesMgt.GetNextNo(PaymentMgtSetup."Cash Receipt Nos.");
             "Retiring Officer" := UserId;
         END;
 

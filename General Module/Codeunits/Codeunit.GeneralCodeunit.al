@@ -224,11 +224,7 @@ codeunit 50102 GeneralCodeunit
         VATAndWHTEntries.RUNMODAL;
     end;
 
-    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Sales-Post", 'OnBeforePostInvPostBuffer', '', false, false)]
-local procedure "Sales-Post_OnBeforePostInvPostBuffer"(var GenJnlLine: Record "Gen. Journal Line"; var InvoicePostBuffer: Record "Invoice Post. Buffer"; var SalesHeader: Record "Sales Header"; CommitIsSuppressed: Boolean; var GenJnlPostLine: Codeunit "Gen. Jnl.-Post Line"; PreviewMode: Boolean)
-begin
-end;
-
+  
 [EventSubscriber(ObjectType::Codeunit, Codeunit::"Sales Post Invoice Events", OnPostLinesOnBeforeGenJnlLinePost, '', false, false)]
 local procedure "Sales Post Invoice Events_OnPostLinesOnBeforeGenJnlLinePost"(var GenJnlLine: Record "Gen. Journal Line"; SalesHeader: Record "Sales Header"; TempInvoicePostingBuffer: Record "Invoice Posting Buffer" temporary; var GenJnlPostLine: Codeunit "Gen. Jnl.-Post Line"; PreviewMode: Boolean; SuppressCommit: Boolean)
 begin
