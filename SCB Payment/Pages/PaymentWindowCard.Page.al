@@ -36,6 +36,19 @@ page 90237 "Payment Window Card"
                     ApplicationArea = All;
                     Editable = false;
                 }
+                field("Payment Type"; Rec."Payment Type")
+                {
+                    ApplicationArea = All;
+                }
+                field("Creditor Identifier Type"; Rec."Creditor Identifier Type")
+                {
+                    ApplicationArea = All;
+                }
+                field("Debtor Identifier Type"; Rec."Debtor Identifier Type")
+                {
+                    ApplicationArea = All;
+                }
+                
                 field(SubmissionResponse; Rec."Submission Response Code")
                 {
                     ToolTip = 'Specifies the value of the Submission Response Code field.';
@@ -85,6 +98,11 @@ page 90237 "Payment Window Card"
                     ApplicationArea = All;
                 }
 
+                field("Debtor BIC";Rec."Debtor BIC")
+                {
+                    ToolTip = 'Specifies the value of the Credit BIC field.';
+                    ApplicationArea = All;
+                }
             }
 
             group("Payroll Details")
@@ -303,7 +321,7 @@ page 90237 "Payment Window Card"
                     Promoted = true;
                     PromotedCategory = Process;
                     ToolTip = 'To view and get journal lines';
-                    Visible=false;
+                    Visible = false;
                     trigger OnAction()
                     var
                         GetGLJournal: Codeunit "Payment - Get Payment";
@@ -372,6 +390,10 @@ page 90237 "Payment Window Card"
                         EnableErr: Label 'Kindly enable %1 on %2', Comment = '%1 is Use , %2 is Payment Setup';
                     begin
                         PmtTranSetup.Get();
+                        Rec.TestField("Payment Type");
+                        Rec.TestField("Debtor Identifier Type");
+                        Rec.TestField("Creditor Identifier Type");
+                        Rec.TestField("Debtor BIC");
                         if PmtTranSetup."Use Pmt Authomation" then begin
                             if CONFIRM('Do you want to send batch', TRUE, false) then
                                 PaymentIntegrHook.CreateSchedule(Rec)
@@ -394,12 +416,12 @@ page 90237 "Payment Window Card"
                         UserSetup: Record "User Setup";
                         EnableErr: Label 'Kindly enable %1 on %2', Comment = '%1 is Use , %2 is Payment Setup';
                     begin
-                        UserSetup.Get(UserId);
-                        if not (UserSetup."Send Payment Batch") then
-                            Error(AdmTxt);
-                        UserSetup.TestField("Send Payment Batch", true);
-                        Rec.TestField(Status, Rec.Status::Approved);
-                        //PaymentIntegrHook.GetPaymentUpdate(Rec);
+                        // UserSetup.Get(UserId);
+                        //     Error(AdmTxt);
+                        // if not (UserSetup."Send Payment Batch") then
+                        // UserSetup.TestField("Send Payment Batch", true);
+                        // Rec.TestField(Status, Rec.Status::Approved);
+                        PaymentIntegrHook.UpdatePaymentStatus(Rec);
 
                     end;
 

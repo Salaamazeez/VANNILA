@@ -58,142 +58,253 @@ Codeunit 90208 "Payment-Integr. Hook"
         Window.Open('Progressing.....');
         PmtTranSetup.Get();
         if PaymentTranHdr."API Platform" = PaymentTranHdr."API Platform"::SCB then begin
-            // Validate debit account
-            //===== Root claims =====
-            RootObj.Add('iat', CurrentDateTime());
-            RootObj.Add('exp', CurrentDateTime() + 30000);
-            RootObj.Add('aud', 'CLIENT');
-            RootObj.Add('jti', DelChr(CreateGuid(), '=', '{}'));
-            RootObj.Add('iss', 'SCB');
-
-            // ===== Header =====
-            HeaderObj.Add('messageSender', CompanyInfo.Name);
-            HeaderObj.Add('messageId', DelChr(CreateGuid(), '=', '{}'));
-            HeaderObj.Add('countryCode', CompanyInfo."Country/Region Code");
-            HeaderObj.Add('timestamp', CurrentDateTime());
-
-            // ===== Instruction =====
-            InstructionObj.Add('paymentTimestamp', CurrentDateTime());
-            InstructionObj.Add('requiredExecutionDate', Format(Today, 0, 9)); // yyyy-mm-dd
-            if PaymentTranLine."Currency Code" <> '' then
-                CurrCode := PaymentTranLine."Currency Code"
-            else
-                CurrCode := 'NG';
-            // Amount
             PaymentTranLine.Reset;
             PaymentTranLine.SetRange("Batch Number", PaymentTranHdr."Batch Number");
             if PaymentTranLine.FindFirst() then begin
-                AmountObj.Add('currencyCode', CurrCode);
-                AmountObj.Add('amount', PaymentTranLine.Amount);
-            end else begin
-                if PaymentTranHdr."Currency Code" <> '' then
-                    CurrCode := PaymentTranHdr."Currency Code"
-                else
-                    CurrCode := 'NG';
-                AmountObj.Add('currencyCode', CurrCode);
-                AmountObj.Add('amount', PaymentTranHdr."Total Amount");
+                repeat
+                    // clear the objects
+                    Clear(RootObj);
+                    Clear(PayloadObj);
+                    Clear(HeaderObj);
+                    Clear(InstructionObj);
+                    Clear(AmountObj);
+                    Clear(DebtorObj);
+                    Clear(DebtorAccountObj);
+                    Clear(DebtorAgentObj);
+                    Clear(FinInstObj);
+                    Clear(PostalAddressObj);
+
+                    Clear(CreditorObj);
+                    Clear(CreditorAgentObj);
+                    Clear(CreditorFinInstObj);
+                    Clear(CreditorAccountObj);
+
+                    Clear(RemittanceObj);
+
+                    // JSON Arrays
+                    Clear(MultiUnstructuredArr);
+                    Clear(MyArray);
+
+                    // Http-related objects (optional, if reusing)
+                    Clear(Headers);
+                    Clear(HttpContent);
+                    Clear(JsonResponseObj);
+                    Clear(JObject2);
+                    Clear(MyJsonToken);
+                    //===== Root claims =====
+
+                    RootObj.Add('iat', CurrentDateTime());
+                    RootObj.Add('exp', CurrentDateTime() + 30000);
+                    RootObj.Add('aud', 'CLIENT');
+                    RootObj.Add('jti', DelChr(CreateGuid(), '=', '{}'));
+                    RootObj.Add('iss', 'SCB');
+
+                    // ===== Header =====
+                    //HeaderObj.Add('messageSender', CompanyInfo.Name);
+                    HeaderObj.Add('messageId', DelChr(CreateGuid(), '=', '{}'));
+                    HeaderObj.Add('countryCode', CopyStr(CompanyInfo."Country/Region Code", 1, 2));
+                    HeaderObj.Add('timestamp', ToUnixTimestamp(Format(CurrentDateTime())));
+
+                    // ===== Instruction =====
+                    InstructionObj.Add('paymentTimestamp', ToUnixTimestamp(Format(CurrentDateTime())));
+                    InstructionObj.Add('requiredExecutionDate', Format(Today, 0, 9));
+                    // yyyy-mm-dd
+                    // if PaymentTranLine."Currency Code" <> '' then
+                    //     CurrCode := PaymentTranLine."Currency Code"
+                    // else
+                    //     CurrCode := 'NGN';
+                    // Amount
+                    // PaymentTranLine.Reset;
+                    // PaymentTranLine.SetRange("Batch Number", PaymentTranHdr."Batch Number");
+                    // if PaymentTranLine.FindFirst() then begin
+                    //     repeat
+                    if PaymentTranLine."Currency Code" <> '' then
+                        CurrCode := PaymentTranLine."Currency Code"
+                    else
+                        CurrCode := 'NGN';
+                    //     AmountObj.Add('currencyCode', CurrCode);
+                    //     AmountObj.Add('amount', PaymentTranLine.Amount);
+                    // end else begin
+                    //     if PaymentTranHdr."Currency Code" <> '' then
+                    //         CurrCode := PaymentTranHdr."Currency Code"
+                    //     else
+                    //         CurrCode := 'NGN';
+                    //     AmountObj.Add('currencyCode', CurrCode);
+                    //     AmountObj.Add('amount', PaymentTranHdr."Total Amount");
+                    //end;
+                    AmountObj.Add('currencyCode', CurrCode);
+                    AmountObj.Add('amount', PaymentTranLine.Amount);
+                    InstructionObj.Add('amount', AmountObj);
+                    InstructionObj.Add('referenceId', PaymentTranHdr."Batch Number");
+                    InstructionObj.Add('paymentType', Format(PaymentTranHdr."Payment Type"));//
+
+                    // Debtor
+                    BankAccount.Get(PaymentTranHdr."Bank Account Code");
+                    DebtorObj.Add('name', BankAccount.Name);
+                    InstructionObj.Add('debtor', DebtorObj);
+
+                    // Debtor Account
+                    DebtorAccountObj.Add('id', BankAccount."Bank Account No.");
+                    DebtorAccountObj.Add('identifierType', Format(PaymentTranHdr."Debtor Identifier Type"));//DebitAccount."Identifier Type"
+                    InstructionObj.Add('debtorAccount', DebtorAccountObj);
+
+                    // Debtor Agent -> Financial Institution -> Postal Address
+                    PostalAddressObj.Add('country', CopyStr(BankAccount."Country/Region Code", 1, 2));
+                    FinInstObj.Add('postalAddress', PostalAddressObj);
+                    FinInstObj.Add('name', BankAccount.Name);
+                    FinInstObj.Add('BIC', Format(PaymentTranHdr."Debtor BIC"));
+                    DebtorAgentObj.Add('financialInstitution', FinInstObj);
+                    InstructionObj.Add('debtorAgent', DebtorAgentObj);
+
+                    // Creditor (from PaymentTranLine)
+                    CreditorObj.Add('name', PaymentTranLine.Payee);
+                    InstructionObj.Add('creditor', CreditorObj);
+
+                    // Creditor Agent
+                    CreditorFinInstObj.Add('name', PaymentTranLine.Payee);
+                    CreditorFinInstObj.Add('BIC', Format(PaymentTranLine."Creditor BIC"));
+                    CreditorAgentObj.Add('financialInstitution', CreditorFinInstObj);
+                    CreditorAgentObj.Add('branchCode', PaymentTranLine."Branch Code");
+                    CreditorAgentObj.Add('clearingSystemId', PaymentTranLine."Bank CBN Code");
+                    InstructionObj.Add('creditorAgent', CreditorAgentObj);
+
+                    // Creditor Account
+                    CreditorAccountObj.Add('id', PaymentTranLine."To Account Number");
+                    CreditorAccountObj.Add('identifierType', Format(PaymentTranHdr."Creditor Identifier Type"));
+                    InstructionObj.Add('creditorAccount', CreditorAccountObj);
+
+                    // Remittance Info
+                    MultiUnstructuredArr.Add(DelChr(PaymentTranLine.Description));
+                    RemittanceObj.Add('multiUnstructured', MultiUnstructuredArr);
+                    InstructionObj.Add('remittanceInfo', RemittanceObj);
+
+                    // ===== Payload =====
+                    PayloadObj.Add('header', HeaderObj);
+                    PayloadObj.Add('instruction', InstructionObj);
+                    RootObj.Add('payload', PayloadObj);
+                    //Message(Format(PayloadObj));
+                    PmtTranSetup.Get;
+                    PayloadObj.WriteTo(json);
+                    //json := '{ "header": { "messageId": "RNG8778935909761832025", "countryCode": "NG", "timestamp": 1742300390 }, "instruction":         { "paymentTimestamp": 1742296796, "requiredExecutionDate": "2025-03-18", "amount": { "currencyCode": "NGN", "amount": 60 }, "referenceId": "REN00060292", "paymentType": "ACH", "debtor": { "name": "RENGAS SCB" }, "debtorAccount": { "id": "2402126942", "identifierType": "Other" }, "debtorAgent": { "financialInstitution": { "postalAddress": { "country": "NG" }, "name": "STANDARD CHARTERED BK", "BIC": "SCBLNGLAXXX" } }, "creditor": { "name": "Test Creditor" }, "creditorAgent": { "financialInstitution": { "name": "GUARANTY TRUST BANK PLC", "BIC": "GTBINGLAXXX" }, "branchCode": "52146", "clearingSystemId": "058" }, "creditorAccount": { "id": "0242700347", "identifierType": "Other" }, "remittanceInfo": { "multiUnstructured": [ "Paymentto" ] } }}';
+                    Message(json);
+                    //json := '{ "header": { "messageSender": "RENGAS", "messageId": "RNG8778935909761832025", "countryCode": "NG", "timestamp": 1742300390 }, "instruction":         { "paymentTimestamp": 1742296796, "requiredExecutionDate": "2025-03-18", "amount": { "currencyCode": "NGN", "amount": 60 }, "referenceId": "REN00060285", "paymentType": "ACH", "debtor": { "name": "RENGAS SCB" }, "debtorAccount": { "id": "2402126942", "identifierType": "Other" }, "debtorAgent": { "financialInstitution": { "postalAddress": { "country": "NG" }, "name": "STANDARD CHARTERED BK", "BIC": "SCBLNGLAXXX" } }, "creditor": { "name": "Test Creditor" }, "creditorAgent": { "financialInstitution": { "name": "GUARANTY TRUST BANK PLC", "BIC": "GTBINGLAXXX" }, "branchCode": "52146", "clearingSystemId": "058" }, "creditorAccount": { "id": "0242700347", "identifierType": "Other" }, "remittanceInfo": { "multiUnstructured": [ "Payment to " ] } } }';
+                    // ===== Convert to text and send =====
+                    // RootObj.WriteTo(json);
+                    //StringContent.WriteFrom(json);
+                    //BearerToken := PmtTranSetup."Secret Key";
+                    WebhookUrl := PmtTranSetup."Create Schedule URL";
+                    RequestType := 'POST';
+                    //CallPaymentWebService(BaseUrl, RequestType, StringContent, HttpResponseMessage, BearerToken);
+                    HttpContent.WriteFrom(json);
+                    HttpContent.GetHeaders(Headers);
+                    Headers.Clear();
+                    Headers.Add('Content-Type', 'application/json');
+                    // 🔹 Send POST request
+                    if HttpClient.Post(WebhookUrl, HttpContent, HttpResponse) then begin
+                        HttpResponse.Content().ReadAs(ServiceResult);
+                        //Message('Webhook POST succeeded:\%1', ServiceResult);
+                        //ServiceResult := '{"status":true,"data":"¦ùä-GWÀÒâ44dier\":\"PSC000004\",\"internalTrackingId\":\"48a549de-7b03-4b54-be9f-be9fd36c1156\",\"clientReferenceId\":\"PSC000004\",\"referenceId\":\"PSC000004\",\"statusString\":\"Pending\",\"timestamp\":\"2025-11-29T15:43:32.294Z\"}"}';
+                        JsonResponseObj.ReadFrom(ServiceResult);
+                        if JsonResponseObj.Get('status', MyJsonToken) then
+                            if not MyJsonToken.AsValue().IsNull then
+                                Success := MyJsonToken.AsValue().AsBoolean();
+                    end else
+                        Error('Failed to send webhook payload to %1', WebhookUrl);
+                    // ===== Response handling =====
+                    //JsonResponseObj.ReadFrom(ServiceResult);
+                    //Message(ServiceResult);
+                    //if StrPos(ServiceResult, 'Received') > 0 then
+                    //    Success := true;
+                    PaymentTranHdr."Date Submitted" := CurrentDateTime;
+                    if Success then begin
+                        PaymentTranHdr."Submission Response Code" := 'REQUEST ACCEPTED';
+                        PaymentTranHdr."Create Schedule Status" := 'REQUEST ACCEPTED';
+                        PaymentTranHdr."Date Submitted" := CurrentDateTime;
+                        PaymentTranHdr."Submitted by" := Format(UserId);
+                        PaymentTranHdr.Submitted := Success;
+                        // if JsonResponseObj.Get('data', MyJsonToken) then
+                        //     ServiceResult := MyJsonToken.AsValue().AsText();
+                        // JsonResponseObj.ReadFrom(ServiceResult);
+                        if JsonResponseObj.Get('statusString', MyJsonToken) then
+                            if not MyJsonToken.AsValue().IsNull then
+                                PaymentTranLine."Status Description" := MyJsonToken.AsValue().AsText();
+                        if JsonResponseObj.Get('statusCode', MyJsonToken) then
+                            if not MyJsonToken.AsValue().IsNull then
+                                PaymentTranLine."Uploaded Status Code" := MyJsonToken.AsValue().AsText();
+                        if JsonResponseObj.Get('reasonCode', MyJsonToken) then
+                            if not MyJsonToken.AsValue().IsNull then
+                                PaymentTranLine."Reason Code" := MyJsonToken.AsValue().AsText();
+                        PaymentTranLine.Status := MyJsonToken.AsValue().AsText();
+                        //PaymentTranHdr."Check Status Response" := MyJsonToken.AsValue().AsText();
+                        Message('Schedule created!!');
+                        Window.Close();
+                        PaymentTranHdr.Modify();
+                        //exit
+                    end;
+                //end;
+                until PaymentTranLine.Next() = 0;
             end;
-            InstructionObj.Add('amount', AmountObj);
-            InstructionObj.Add('referenceId', PaymentTranHdr."Batch Number");
-            InstructionObj.Add('paymentType', Format(PaymentTranHdr."Payment Type"));
 
-            // Debtor
-            BankAccount.Get(PaymentTranHdr."Bank Account Code");
-            DebtorObj.Add('name', BankAccount.Name);
-            InstructionObj.Add('debtor', DebtorObj);
-
-            // Debtor Account
-            DebtorAccountObj.Add('id', BankAccount."Bank Account No.");
-            DebtorAccountObj.Add('identifierType', '');//DebitAccount."Identifier Type"
-            InstructionObj.Add('debtorAccount', DebtorAccountObj);
-
-            // Debtor Agent -> Financial Institution -> Postal Address
-            PostalAddressObj.Add('country', BankAccount."Country/Region Code");
-            FinInstObj.Add('postalAddress', PostalAddressObj);
-            FinInstObj.Add('name', BankAccount.Name);
-            FinInstObj.Add('BIC', '');
-            DebtorAgentObj.Add('financialInstitution', FinInstObj);
-            InstructionObj.Add('debtorAgent', DebtorAgentObj);
-
-            // Creditor (from PaymentTranLine)
-            CreditorObj.Add('name', PaymentTranLine.Payee);
-            InstructionObj.Add('creditor', CreditorObj);
-
-            // Creditor Agent
-            CreditorFinInstObj.Add('name', PaymentTranLine.Payee);
-            CreditorFinInstObj.Add('BIC', '');
-            CreditorAgentObj.Add('financialInstitution', CreditorFinInstObj);
-            CreditorAgentObj.Add('branchCode', '');
-            CreditorAgentObj.Add('clearingSystemId', '');
-            InstructionObj.Add('creditorAgent', CreditorAgentObj);
-
-            // Creditor Account
-            CreditorAccountObj.Add('id', PaymentTranLine."To Account Number");
-            CreditorAccountObj.Add('identifierType', '');
-            InstructionObj.Add('creditorAccount', CreditorAccountObj);
-
-            // Remittance Info
-            MultiUnstructuredArr.Add(PaymentTranLine.Description);
-            RemittanceObj.Add('multiUnstructured', MultiUnstructuredArr);
-            InstructionObj.Add('remittanceInfo', RemittanceObj);
-
-            // ===== Payload =====
-            PayloadObj.Add('header', HeaderObj);
-            PayloadObj.Add('instruction', InstructionObj);
-            RootObj.Add('payload', PayloadObj);
-            //Message(Format(PayloadObj));
-            PmtTranSetup.Get;
-            PayloadObj.WriteTo(json);
-            //json := '{ "header": { "messageSender": "RENGAS", "messageId": "RNG8778935909761832025", "countryCode": "NG", "timestamp": 1742300390 }, "instruction":         { "paymentTimestamp": 1742296796, "requiredExecutionDate": "2025-03-18", "amount": { "currencyCode": "NGN", "amount": 60 }, "referenceId": "REN00060285", "paymentType": "ACH", "debtor": { "name": "RENGAS SCB" }, "debtorAccount": { "id": "2402126942", "identifierType": "Other" }, "debtorAgent": { "financialInstitution": { "postalAddress": { "country": "NG" }, "name": "STANDARD CHARTERED BK", "BIC": "SCBLNGLAXXX" } }, "creditor": { "name": "Test Creditor" }, "creditorAgent": { "financialInstitution": { "name": "GUARANTY TRUST BANK PLC", "BIC": "GTBINGLAXXX" }, "branchCode": "52146", "clearingSystemId": "058" }, "creditorAccount": { "id": "0242700347", "identifierType": "Other" }, "remittanceInfo": { "multiUnstructured": [ "Payment to " ] } }}';
-            //Message(json);            
-            //json := '{ "header": { "messageSender": "RENGAS", "messageId": "RNG8778935909761832025", "countryCode": "NG", "timestamp": 1742300390 }, "instruction":         { "paymentTimestamp": 1742296796, "requiredExecutionDate": "2025-03-18", "amount": { "currencyCode": "NGN", "amount": 60 }, "referenceId": "REN00060285", "paymentType": "ACH", "debtor": { "name": "RENGAS SCB" }, "debtorAccount": { "id": "2402126942", "identifierType": "Other" }, "debtorAgent": { "financialInstitution": { "postalAddress": { "country": "NG" }, "name": "STANDARD CHARTERED BK", "BIC": "SCBLNGLAXXX" } }, "creditor": { "name": "Test Creditor" }, "creditorAgent": { "financialInstitution": { "name": "GUARANTY TRUST BANK PLC", "BIC": "GTBINGLAXXX" }, "branchCode": "52146", "clearingSystemId": "058" }, "creditorAccount": { "id": "0242700347", "identifierType": "Other" }, "remittanceInfo": { "multiUnstructured": [ "Payment to " ] } } }';
-            // ===== Convert to text and send =====
-            // RootObj.WriteTo(json);
-            //StringContent.WriteFrom(json);
-            //BearerToken := PmtTranSetup."Secret Key";
-            WebhookUrl := PmtTranSetup."Create Schedule URL";
-            RequestType := 'POST';
-            //CallPaymentWebService(BaseUrl, RequestType, StringContent, HttpResponseMessage, BearerToken);
-            HttpContent.WriteFrom(json);
-            HttpContent.GetHeaders(Headers);
-            Headers.Clear();
-            Headers.Add('Content-Type', 'application/json');
-            // 🔹 Send POST request
-            if HttpClient.Post(WebhookUrl, HttpContent, HttpResponse) then begin
-                HttpResponse.Content().ReadAs(ServiceResult);
-                Message('Webhook POST succeeded:\%1', ServiceResult);
-                JsonResponseObj.ReadFrom(ServiceResult);
-                if JsonResponseObj.Get('status', MyJsonToken) then
-                    if not MyJsonToken.AsValue().IsNull then
-                        Success := MyJsonToken.AsValue().AsBoolean();
-            end else
-                Error('Failed to send webhook payload to %1', WebhookUrl);
-            // ===== Response handling =====
-            JsonResponseObj.ReadFrom(ServiceResult);
-            //Message(ServiceResult);
-            //if StrPos(ServiceResult, 'Received') > 0 then
-            //    Success := true;
-            PaymentTranHdr."Date Submitted" := CurrentDateTime;
-            if Success then begin
-                PaymentTranHdr."Submission Response Code" := 'REQUEST ACCEPTED';
-                PaymentTranHdr."Create Schedule Status" := 'REQUEST ACCEPTED';
-                PaymentTranHdr."Date Submitted" := CurrentDateTime;
-                PaymentTranHdr."Submitted by" := Format(UserId);
-                PaymentTranHdr.Submitted := Success;
-                if JsonResponseObj.Get('statusString', MyJsonToken) then
-                    if not MyJsonToken.AsValue().IsNull then
-                        PaymentTranHdr."Check Status Response" := MyJsonToken.AsValue().AsText();
-                Message('Schedule created!!');
-                Window.Close();
-                exit
-            end;
+            PaymentTranHdr.Modify();
+            Message('No schedule created!!');
+            Window.Close();
         end;
-
-        PaymentTranHdr.Modify();
-        Message('No schedule created!!');
-        Window.Close();
     end;
 
+    procedure UpdatePaymentStatus(var PaymentTranHdr: Record "Payment Schedule Header")
+    var
+        PayloadObj: JsonObject;
+        InnerPayloadObj: JsonObject;
+        ClientRefArray: JsonArray;
+        Timestamp: Integer;
+        ResultJson: Text;
+        Headers: HttpHeaders;
+        HttpContent: HttpContent;
+        MyJsonToken: JsonToken;
+        JsonResponseObj: JsonObject;
+        JObject2: JsonObject;
+        MyArray: JsonArray;
+        LineNo: Integer;
+        HttpClient: HttpClient;
+        HttpResponse: HttpResponseMessage;
+        WebhookUrl: Text;
+        ServiceResult: Text;
+        Success: Boolean;
+    begin
+        // Current Unix timestamp
+        PmtTranSetup.Get();
+
+        Timestamp := ToUnixTimestamp(Format(CurrentDateTime()));
+        //Root SCB Payload
+        // ---- Inner "payload" object ----
+        ClientRefArray.Add(PaymentTranHdr."Batch Number");  // <-- Add more if you wantREN00060301
+        ClientRefArray.Add('REN00060303');
+        // Convert to text
+        WebhookUrl := PmtTranSetup."Update Schedule URL";
+        ClientRefArray.WriteTo(ResultJson);
+        HttpContent.WriteFrom(ResultJson);
+        HttpContent.GetHeaders(Headers);
+        Headers.Clear();
+        Headers.Add('Content-Type', 'application/json');
+        // 🔹 Send POST request
+        if HttpClient.Post(WebhookUrl, HttpContent, HttpResponse) then begin
+            HttpResponse.Content().ReadAs(ServiceResult);
+            Message('Webhook POST succeeded:\%1', ServiceResult);
+            //ServiceResult := '{"status":true,"data":"¦ùä-GWÀÒâ44dier\":\"PSC000004\",\"internalTrackingId\":\"48a549de-7b03-4b54-be9f-be9fd36c1156\",\"clientReferenceId\":\"PSC000004\",\"referenceId\":\"PSC000004\",\"statusString\":\"Pending\",\"timestamp\":\"2025-11-29T15:43:32.294Z\"}"}';
+            //DecodeSCBData(ServiceResult);
+            JsonResponseObj.ReadFrom(ServiceResult);
+            if JsonResponseObj.Get('status', MyJsonToken) then
+                if not MyJsonToken.AsValue().IsNull then
+                    Success := MyJsonToken.AsValue().AsBoolean();
+        end else
+            Error('Failed to send webhook payload to %1', WebhookUrl);
+        // ===== Response handling =====
+        //JsonResponseObj.ReadFrom(ServiceResult);
+        //Message(ServiceResult);
+        //if StrPos(ServiceResult, 'Received') > 0 then
+        //    Success := true;
+        PaymentTranHdr."Date Submitted" := CurrentDateTime;
+    end;
 
     local procedure CallPaymentWebService(BaseUrl: Text; RestMethod: Text; var HttpContent: HttpContent; var HttpResponseMessage: HttpResponseMessage; Bearer: Text)
     var
@@ -235,44 +346,40 @@ Codeunit 90208 "Payment-Integr. Hook"
         end;
     end;
 
-    //     //     local procedure CallPaymentUpdateWebService(BaseUrl: Text; RestMethod: Text; var HttpContent: HttpContent; var HttpResponseMessage: HttpResponseMessage; Bearer: Text)
-    //     //     var
-    //     //         HttpClient: HttpClient;
-    //     //         HttpRequestMessage: HttpRequestMessage;
-    //     //         myHttpRequestMessage: HttpRequestMessage;
-    //     //         ContentHeaders: HttpHeaders;
-    //     //         HttpClientHandler: Codeunit "Http Client Handler";
-    //     //         RestClient: Codeunit "Rest Client";
-    //     //         json: Text;
-    //     //         JsonArray: JsonArray;
-    //     //         myContent: HttpContent;
-    //     //     begin
-    //     //         HttpClient.SetBaseAddress(BaseUrl);
-    //     //         case RestMethod of
-    //     //             'GET':
-    //     //                 begin
-    //     //                     myHttpRequestMessage.Method := RestMethod;
-    //     //                     HttpClient.DefaultRequestHeaders.Add('api-key', Bearer);
-    //     //                     HttpClient.DefaultRequestHeaders.Add('Accept', 'application/json');
-    //     //                     HttpClient.Send(myHttpRequestMessage, HttpResponseMessage);
-    //     //                 end;
-    //     //             'POST':
-    //     //                 begin
 
-    //     //                     HttpContent.GetHeaders(ContentHeaders);
-    //     //                     if ContentHeaders.Contains('Content-Type') then ContentHeaders.Remove('Content-Type');
-    //     //                     ContentHeaders.Add('Content-Type', 'application/json');
-    //     //                     HttpContent.GetHeaders(ContentHeaders);
-    //     //                     HttpClient.DefaultRequestHeaders.Add('api-key', Bearer);
-    //     //                     HttpClient.DefaultRequestHeaders.Add('Accept', 'application/json');
-    //     //                     HttpClient.Post('', HttpContent, HttpResponseMessage);
-    //     //                 end;
-    //     //             'PUT':
-    //     //                 HttpClient.Put('', HttpContent, HttpResponseMessage);
-    //     //             'DELETE':
-    //     //                 HttpClient.Delete('', HttpResponseMessage);
-    //     //         end;
-    //     //     end;
+    procedure ToUnixTimestamp(IsoString: Text): BigInteger
+    var
+        DT: DateTime;
+        UnixEpoch: DateTime;
+        MilliSeconds: Duration;
+    begin
+        // Convert ISO string to DateTime
+        Evaluate(DT, IsoString);
 
-    // }
+        // Unix epoch: 1970-01-01T00:00:00Z
+        UnixEpoch := CreateDateTime(19700101D, 000000T);
+
+        // Duration between timestamp and epoch
+        MilliSeconds := DT - UnixEpoch;
+
+        // Convert from milliseconds → seconds
+        exit(Round(MilliSeconds / 1000, 1, '='));
+    end;
+
+
+    procedure DecodeSCBData(DataEncoded: Text): Text
+    var
+        Base64: Codeunit "Base64 Convert";
+        Bytes: List of [Byte];
+        DecodedText: Text;
+    begin
+        // Convert Base64 string into bytes
+        DecodedText := Base64.FromBase64(DataEncoded);
+
+        // Convert bytes into UTF-8 string
+        //DecodedText := Base64.ToText(Bytes);
+        Message(DataEncoded);
+        exit(DecodedText);
+    end;
+
 }

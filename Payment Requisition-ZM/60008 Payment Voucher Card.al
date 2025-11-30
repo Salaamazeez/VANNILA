@@ -99,6 +99,7 @@ page 60002 "Payment Voucher Card"
                     ApplicationArea = All;
 
                 }
+                field("Payment Method"; Rec."Payment Method") { ApplicationArea = All; }
                 field(Posted; Rec.Posted)
                 {
 
@@ -506,7 +507,7 @@ page 60002 "Payment Voucher Card"
     end;
 
     trigger OnAfterGetRecord()
-     var
+    var
         PaymentMgtSetup: Record "Payment Mgt Setup";
     begin
         EnableFields;
@@ -546,6 +547,7 @@ page 60002 "Payment Voucher Card"
             Rec.TestField("Loan ID");
         Rec.TestField("Request Description");
         // Rec.TestField(Beneficiary);
+        Rec.TestField("Payment Method");
         Rec.TestField("Bal Account No.");
         Rec.TestField("Shortcut Dimension 1 Code");
         Rec.TestField("Shortcut Dimension 2 Code");

@@ -366,8 +366,28 @@ Table 90219 "Payment Schedule Header"
         {
             DataClassification = CustomerContent;
         }
+        field(50031; "Creditor Identifier Type"; Option)
+        {
+            DataClassification = ToBeClassified;
+            OptionCaption = ' ,BAN,IBAN,Other';
+            OptionMembers = " ",BAN,IBAN,Other;
+        }//BAN, IBAN, Other 
+        field(50032; "Debtor BIC"; Text[30])
+        {
+            ValidateTableRelation = false;
+            TableRelation = "SWIFT Code".Code;
+        }
 
-
+        field(50034; "Debtor Identifier Type"; Option)
+        {
+            DataClassification = ToBeClassified;
+            OptionCaption = ' ,BAN,IBAN,Other';
+            OptionMembers = " ",BAN,IBAN,Other;
+        }
+        // field(50035; "Debtor BIC Code"; Code[20])
+        // {
+        //     TableRelation = "SWIFT Code".Code;
+        // }
     }
 
     keys
@@ -390,7 +410,7 @@ Table 90219 "Payment Schedule Header"
             PmtTranSetup.TestField(PmtTranSetup."Payment Platform", PmtTranSetup."Payment Platform"::SCB);
             // NoSeriesMgt.InitSeries(PmtTranSetup."Batch No. Series", PmtTranSetup."Batch No. Series", 0D, "Batch Number",
             //                        PmtTranSetup."Batch No. Series");
-           "Batch Number" := NoSeriesMgt.GetNextNo(PmtTranSetup."Batch No. Series");
+            "Batch Number" := NoSeriesMgt.GetNextNo(PmtTranSetup."Batch No. Series");
         end;
         "Date Created" := CreateDatetime(Today, Time);
         "Created by" := Format(UserId());
@@ -399,7 +419,8 @@ Table 90219 "Payment Schedule Header"
 
     trigger OnModify()
     begin
-        if Submitted then Error(Error001Txt, "Batch Number");
+        if xRec.Submitted = Rec.Submitted then
+            if Submitted then Error(Error001Txt, "Batch Number");
         "Last Modified Date" := CreateDatetime(Today, Time);
         "Last modified by" := Format(UserId());
         PmtTranSetup.Get();

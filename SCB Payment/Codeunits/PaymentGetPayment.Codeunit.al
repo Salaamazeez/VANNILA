@@ -51,6 +51,7 @@ codeunit 90210 "Payment - Get Payment"
         PayeeName: Text[100];
         BankName: Text[100];
         Batch: label ' Payment Batch';
+        NoSeriesMgt: Codeunit "No. Series";
     //v:Record venpay
     /* 
         procedure CreatePaymentJnlLines(var GeneralJournalLine: Record "Gen. Journal Line")
@@ -281,6 +282,7 @@ codeunit 90210 "Payment - Get Payment"
         PageNo: Integer;
         SerialNo: Integer;
         PmtTranSetup: Record "Payment Schedule Setup";
+        Vendor: Record Vendor;
     begin
         PaymentTransLine.SetRange("Batch Number", PaymentTransHeader."Batch Number");
         PmtTranSetup.Get;
@@ -303,25 +305,31 @@ codeunit 90210 "Payment - Get Payment"
                         //PaymentHeader.TestField("Payee CBN Bank Code");
                         PaymentLine.SetRange("Document No.",PaymentHeader."No.");
                         PaymentLine.FindFirst();
+                        VendorRec.Get(PaymentLine."Account No.");
                         LineNo := LineNo + 10000;
                         PaymentTransLine.Init;
                         PaymentTransLine."Batch Number" := PaymentTransHeader."Batch Number";
                         PaymentTransLine."Line No." := LineNo;
                         if PaymentLine."Account Type" = PaymentLine."Account Type"::Vendor then
-                            if VendorBankAcc.Get(PaymentLine."Account No.", PaymentLine."Preferred Bank Account Code") then
+                            if VendorBankAcc.Get(PaymentLine."Account No.", VendorRec."Preferred Bank Account Code") then
                                 PaymentTransLine."To Account Number" := VendorBankAcc."Bank Account No.";
                         PaymentTransLine.Amount := (PaymentHeader."Voucher Amount");
                         PaymentTransLine.Description := PaymentHeader."Request Description";
                         PaymentTransLine."Payee No." := PaymentLine."Account No.";
-                        VendorRec.Get( PaymentTransLine."Payee No.");
+                        //VendorRec.Get( PaymentTransLine."Payee No.");
                         PaymentTransLine.Payee := VendorRec.Name;
                         PaymentTransLine."Bank Name" := VendorBankAcc.Name;
+                        PaymentTransLine."Bank CBN Code" := VendorBankAcc."CBN Code";
+                        PaymentTransLine. "Branch Code":= VendorBankAcc."Bank Branch No.";
                         PaymentTransLine."Reference Type" := PaymentTransLine."reference type"::Voucher;
+                        PaymentTransLine."Source Type" := PaymentTransLine."Source Type"::Vendor;
                         PaymentTransLine."Record ID" := RecdRef.RecordId;
-                        if Format(SerialNo) = PmtTranSetup."Nibss Schedule Size" then begin
-                            PageNo := PageNo + 1;
-                            SerialNo := 1;
-                        end;
+                     PaymentTransLine.   "Reference Number" := NoSeriesMgt.GetNextNo(PmtTranSetup."Reference No. Series");
+                        // if Format(SerialNo) = PmtTranSetup."Nibss Schedule Size" then begin
+                        //     PageNo := PageNo + 1;
+                        //     SerialNo := 1;
+                        // end;
+                        PaymentTransLine."Creditor BIC" := VendorBankAcc."SWIFT Code";
                         PaymentTransLine."Source No." := PaymentHeader."No.";
                         PaymentTransLine."Schedule Page No." := PageNo;
                         PaymentTransLine."Schedule Serial No." := SerialNo;
@@ -386,10 +394,10 @@ codeunit 90210 "Payment - Get Payment"
 
                                     PaymentTransLine."Payee No." := PaymentScheduleLine."Payee No.";
                                     PaymentTransLine."Payee BVN" := PaymentScheduleLine."Payee BVN";
-                                    if Format(SerialNo) = PmtTranSetup."Nibss Schedule Size" then begin
-                                        PageNo := PageNo + 1;
-                                        SerialNo := 1;
-                                    end;
+                                    // if Format(SerialNo) = PmtTranSetup."Nibss Schedule Size" then begin
+                                    //     PageNo := PageNo + 1;
+                                    //     SerialNo := 1;
+                                    // end;
                                     PaymentTransLine."Schedule Page No." := PageNo;
                                     PaymentTransLine."Schedule Serial No." := SerialNo;
                                     PaymentTransLine.Insert(true);

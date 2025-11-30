@@ -31,6 +31,10 @@ Page 90241 "Payment Subform"
                 {
                     ApplicationArea = All;
                 }
+                field("Branch Code"; Rec."Branch Code")
+                {
+                    ApplicationArea = All;
+                }
                 field(PayeeNo; Rec."Payee No.")
                 {
                     ApplicationArea = All;
@@ -61,6 +65,11 @@ Page 90241 "Payment Subform"
                 }
                 field(ReasonCode; Rec."Reason Code")
                 {
+                    ApplicationArea = All;
+                }
+                field("Creditor BIC"; Rec."Creditor BIC")
+                {
+                    ToolTip = 'Specifies the value of the Credit BIC field.';
                     ApplicationArea = All;
                 }
                 field(UploadedStatusText; Rec."Uploaded Status Text")

@@ -11,6 +11,7 @@ pageextension 90223 VendorBankAccountCardExt extends "Vendor Bank Account Card"
                 ApplicationArea = All;
                 Caption = 'CBN Bank Code';
             }
+           
         }
     }
 }

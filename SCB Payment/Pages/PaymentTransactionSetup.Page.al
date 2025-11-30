@@ -34,11 +34,15 @@ Page 90240 "Payment Schedule Setup"
                     ToolTip = 'Specifies the value of the Get Payment Schedule URL field.';
                     ApplicationArea = All;
                 }
-                field("Get Debit Account"; Rec."Get Debit Account")
+                field("Update Schedule URL";Rec."Update Schedule URL")
                 {
-                    ToolTip = 'Specifies the value of the Get Debit Account field.';
-                    ApplicationArea = All;
+                    ApplicationArea = Basic;
                 }
+                // field("Get Debit Account"; Rec."Get Debit Account")
+                // {
+                //     ToolTip = 'Specifies the value of the Get Debit Account field.';
+                //     ApplicationArea = All;
+                // }
                 field("Secret Key"; Rec."Secret Key")
                 {
                     ToolTip = 'Specifies the value of the Secret Key field.';

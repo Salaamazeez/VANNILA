@@ -240,6 +240,15 @@ Table 90220 "Payment Schedule Line"
         field(50007; "External Document No."; Text[30])
         {
             DataClassification = CustomerContent;
+        }//
+        field(50008; "Branch Code"; Code[20])
+        {
+            DataClassification = CustomerContent;
+        }
+        field(50009; "Creditor BIC"; Text[30])
+        {
+            TableRelation = "SWIFT Code".Code;
+            ValidateTableRelation = false;
         }
     }
 
@@ -343,7 +352,7 @@ Table 90220 "Payment Schedule Line"
             PmtTranSetup.TestField(PmtTranSetup."Reference No. Series");
             // NoSeriesMgt.InitSeries(PmtTranSetup."Reference No. Series", PmtTranSetup."Reference No. Series", 0D, "Reference Number",
             //                         PmtTranSetup."Reference No. Series");
-           "Reference Number" := NoSeriesMgt.GetNextNo(PmtTranSetup."Reference No. Series");
+            "Reference Number" := NoSeriesMgt.GetNextNo(PmtTranSetup."Reference No. Series");
 
         end;
 

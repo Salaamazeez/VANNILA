@@ -81,36 +81,33 @@ Table 90218 "Payment Schedule Setup"
             end;
         }
 
-        field(52132418; "Nibss Schedule Size"; Text[50])
-        {
-            DataClassification = EndUserIdentifiableInformation;
-        }
-        field(52132425; "Use Pmt Authomation"; Boolean)
-        {
-            DataClassification = CustomerContent;
-        }
-        field(52132426; "Create Schedule URL"; Text[250])
-        {
-            DataClassification = CustomerContent;
-        }
-        field(52132427; "Get Debit Account"; Text[250])
-        {
-            DataClassification = CustomerContent;
-        }
-        field(52132428; "Secret Key"; Text[2048])
-        {
-            DataClassification = CustomerContent;
-            //ExtendedDatatype = Masked;
-        }
-        field(52132429; "Payment Auto Post"; Boolean)
-        {
-            DataClassification = CustomerContent;
-        }
-        field(52132430; "Charges Auto Post"; Boolean)
+
+        field(50063; "Create Schedule URL"; Text[250])
         {
             DataClassification = CustomerContent;
         }
 
+        field(50064; "Secret Key"; Text[2048])
+        {
+            DataClassification = CustomerContent;
+            //ExtendedDatatype = Masked;
+        }
+        field(50065; "Payment Auto Post"; Boolean)
+        {
+            DataClassification = CustomerContent;
+        }
+        field(50066; "Charges Auto Post"; Boolean)
+        {
+            DataClassification = CustomerContent;
+        }
+        field(50067; "Update Schedule URL"; Text[250])
+        {
+            DataClassification = CustomerContent;
+        }
+        field(50068; "Use Pmt Authomation"; Boolean)
+        {
+            DataClassification = CustomerContent;
+        }
     }
 
     keys
