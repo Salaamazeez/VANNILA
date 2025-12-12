@@ -13,11 +13,17 @@ Codeunit 90211 "Post E-Payment"
         if not Confirm(PostingTxt, false) then
             exit;
         EPaymentHeader.Get(Rec."Batch Number");
-        //Rec.TestField(Status, Rec.Status::Approved);
-        //Rec.TestField("Date Submitted");
+        Rec.TestField(Status, Rec.Status::Approved);
+        Rec.TestField("Date Submitted");
         if EPaymentHeader."API Platform" = EPaymentHeader."API Platform"::SCB then
-            //Rec.TestField("Process Completed");
+            Rec.TestField("Process Completed");
         EPaymentLine.SetRange("Batch Number", Rec."Batch Number");
+        EPaymentLine.SetFilter("Status Description", '%1', 'Pending Status');
+        if EPaymentLine.FindSet() then
+            error('You cannot post until the payment lines status are all sucess(es)');
+        EPaymentLine.Reset();
+        EPaymentLine.SetRange("Batch Number", Rec."Batch Number");
+        EPaymentLine.SetFilter("Status Description", '<>%1', 'Pending Status');
         EPaymentLine.FindSet();
         repeat
             CreateEntryBuffer(EPaymentLine);

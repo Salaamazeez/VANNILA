@@ -7,7 +7,7 @@
 //     layout
 //     {
 //         area(content)
-//         {
+//         {  
 //             group(Group)
 //             {
 //                 field("Code"; Rec.Code)

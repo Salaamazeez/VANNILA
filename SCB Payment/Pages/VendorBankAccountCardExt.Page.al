@@ -11,7 +11,10 @@ pageextension 90223 VendorBankAccountCardExt extends "Vendor Bank Account Card"
                 ApplicationArea = All;
                 Caption = 'CBN Bank Code';
             }
-           
+            field("Creditor Identifier Type"; Rec."Creditor Identifier Type")
+            {
+                ApplicationArea = All;
+            }
         }
     }
 }

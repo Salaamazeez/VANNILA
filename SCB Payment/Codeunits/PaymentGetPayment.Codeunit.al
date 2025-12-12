@@ -296,46 +296,53 @@ codeunit 90210 "Payment - Get Payment"
             if PaymentHeader.Find('-') then begin
                 repeat
 
+
                     PaymentHeader.CalcFields("Voucher Amount", "Schedule Amount");
                     RecdRef.GetTable(PaymentHeader);
                     if PaymentHeader."Schedule Amount" = 0 then begin
-                        //PaymentHeader.TestField("Payee Bank Code");
-                        PaymentHeader.TestField("Bal Account No.");
-                        //PaymentHeader.TestField("Payee");
-                        //PaymentHeader.TestField("Payee CBN Bank Code");
-                        PaymentLine.SetRange("Document No.",PaymentHeader."No.");
-                        PaymentLine.FindFirst();
-                        VendorRec.Get(PaymentLine."Account No.");
-                        LineNo := LineNo + 10000;
-                        PaymentTransLine.Init;
-                        PaymentTransLine."Batch Number" := PaymentTransHeader."Batch Number";
-                        PaymentTransLine."Line No." := LineNo;
-                        if PaymentLine."Account Type" = PaymentLine."Account Type"::Vendor then
-                            if VendorBankAcc.Get(PaymentLine."Account No.", VendorRec."Preferred Bank Account Code") then
-                                PaymentTransLine."To Account Number" := VendorBankAcc."Bank Account No.";
-                        PaymentTransLine.Amount := (PaymentHeader."Voucher Amount");
-                        PaymentTransLine.Description := PaymentHeader."Request Description";
-                        PaymentTransLine."Payee No." := PaymentLine."Account No.";
-                        //VendorRec.Get( PaymentTransLine."Payee No.");
-                        PaymentTransLine.Payee := VendorRec.Name;
-                        PaymentTransLine."Bank Name" := VendorBankAcc.Name;
-                        PaymentTransLine."Bank CBN Code" := VendorBankAcc."CBN Code";
-                        PaymentTransLine. "Branch Code":= VendorBankAcc."Bank Branch No.";
-                        PaymentTransLine."Reference Type" := PaymentTransLine."reference type"::Voucher;
-                        PaymentTransLine."Source Type" := PaymentTransLine."Source Type"::Vendor;
-                        PaymentTransLine."Record ID" := RecdRef.RecordId;
-                     PaymentTransLine.   "Reference Number" := NoSeriesMgt.GetNextNo(PmtTranSetup."Reference No. Series");
-                        // if Format(SerialNo) = PmtTranSetup."Nibss Schedule Size" then begin
-                        //     PageNo := PageNo + 1;
-                        //     SerialNo := 1;
-                        // end;
-                        PaymentTransLine."Creditor BIC" := VendorBankAcc."SWIFT Code";
-                        PaymentTransLine."Source No." := PaymentHeader."No.";
-                        PaymentTransLine."Schedule Page No." := PageNo;
-                        PaymentTransLine."Schedule Serial No." := SerialNo;
-                        SerialNo := SerialNo + 1;
-                        PaymentTransLine.Insert();
-                        SerialNo := SerialNo + 1;
+                        PaymentLine.Reset();
+                        PaymentLine.SetRange("Document No.", PaymentHeader."No.");
+                        if PaymentLine.FindFirst() then
+                            //PaymentHeader.TestField("Payee Bank Code");
+                            repeat
+                                PaymentHeader.TestField("Bal Account No.");
+                                //PaymentHeader.TestField("Payee");
+                                //PaymentHeader.TestField("Payee CBN Bank Code");
+                                // PaymentLine.SetRange("Document No.", PaymentHeader."No.");
+                                // PaymentLine.FindFirst();
+                                VendorRec.Get(PaymentLine."Account No.");
+                                LineNo := LineNo + 10000;
+                                PaymentTransLine.Init;
+                                PaymentTransLine."Batch Number" := PaymentTransHeader."Batch Number";
+                                PaymentTransLine."Line No." := LineNo;
+                                if PaymentLine."Account Type" = PaymentLine."Account Type"::Vendor then
+                                    if VendorBankAcc.Get(PaymentLine."Account No.", VendorRec."Preferred Bank Account Code") then
+                                        PaymentTransLine."To Account Number" := VendorBankAcc."Bank Account No.";
+                                PaymentTransLine.Amount := (PaymentLine.Amount);
+                                PaymentTransLine.Description := PaymentHeader."Request Description";
+                                PaymentTransLine."Payee No." := PaymentLine."Account No.";
+                                //VendorRec.Get( PaymentTransLine."Payee No.");
+                                PaymentTransLine.Payee := VendorRec.Name;
+                                PaymentTransLine."Bank Name" := VendorBankAcc.Name;
+                                PaymentTransLine."Bank CBN Code" := VendorBankAcc."CBN Code";
+                                PaymentTransLine."Branch Code" := VendorBankAcc."Bank Branch No.";
+                                PaymentTransLine."Reference Type" := PaymentTransLine."reference type"::Voucher;
+                                PaymentTransLine."Creditor Identifier Type" := VendorBankAcc."Creditor Identifier Type";
+                                PaymentTransLine."Source Type" := PaymentTransLine."Source Type"::Vendor;
+                                PaymentTransLine."Record ID" := RecdRef.RecordId;
+                                PaymentTransLine."Reference Number" := NoSeriesMgt.GetNextNo(PmtTranSetup."Reference No. Series");
+                                // if Format(SerialNo) = PmtTranSetup."Nibss Schedule Size" then begin
+                                //     PageNo := PageNo + 1;
+                                //     SerialNo := 1;
+                                // end;
+                                PaymentTransLine."Creditor BIC" := VendorBankAcc."SWIFT Code";
+                                PaymentTransLine."Source No." := PaymentHeader."No.";
+                                PaymentTransLine."Schedule Page No." := PageNo;
+                                PaymentTransLine."Schedule Serial No." := SerialNo;
+                                SerialNo := SerialNo + 1;
+                                PaymentTransLine.Insert();
+                                SerialNo := SerialNo + 1;
+                            Until PaymentLine.Next() = 0
                     end else begin
                         //PaymentLine.SetRange("Document Type", PaymentHeader."Document Type");
                         PaymentLine.SetRange("Document No.", PaymentHeader."No.");
@@ -407,8 +414,8 @@ codeunit 90210 "Payment - Get Payment"
                             end;
                         until PaymentLine.Next = 0;
                     end;
-                // PaymentHeader."Payment ID" := PaymentTransHeader."Batch Number";
-                // PaymentHeader.Modify;
+                PaymentHeader."Payment ID" := PaymentTransHeader."Batch Number";
+                PaymentHeader.Modify;
                 until PaymentHeader.Next = 0;
             end;
         end

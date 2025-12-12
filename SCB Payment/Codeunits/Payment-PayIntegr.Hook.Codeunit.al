@@ -60,6 +60,7 @@ Codeunit 90208 "Payment-Integr. Hook"
         if PaymentTranHdr."API Platform" = PaymentTranHdr."API Platform"::SCB then begin
             PaymentTranLine.Reset;
             PaymentTranLine.SetRange("Batch Number", PaymentTranHdr."Batch Number");
+            PaymentTranLine.SetFilter("Status Description", '%1', '');
             if PaymentTranLine.FindFirst() then begin
                 repeat
                     // clear the objects
@@ -107,6 +108,8 @@ Codeunit 90208 "Payment-Integr. Hook"
 
                     // ===== Instruction =====
                     InstructionObj.Add('paymentTimestamp', ToUnixTimestamp(Format(CurrentDateTime())));
+                    if PaymentTranHdr."Payment Type Preference" = PaymentTranHdr."Payment Type Preference"::Explicit then
+                        InstructionObj.Add('paymentTypePreference', Format(PaymentTranHdr."Payment Type Preference"));
                     InstructionObj.Add('requiredExecutionDate', Format(Today, 0, 9));
                     // yyyy-mm-dd
                     // if PaymentTranLine."Currency Code" <> '' then
@@ -122,22 +125,11 @@ Codeunit 90208 "Payment-Integr. Hook"
                         CurrCode := PaymentTranLine."Currency Code"
                     else
                         CurrCode := 'NGN';
-                    //     AmountObj.Add('currencyCode', CurrCode);
-                    //     AmountObj.Add('amount', PaymentTranLine.Amount);
-                    // end else begin
-                    //     if PaymentTranHdr."Currency Code" <> '' then
-                    //         CurrCode := PaymentTranHdr."Currency Code"
-                    //     else
-                    //         CurrCode := 'NGN';
-                    //     AmountObj.Add('currencyCode', CurrCode);
-                    //     AmountObj.Add('amount', PaymentTranHdr."Total Amount");
-                    //end;
                     AmountObj.Add('currencyCode', CurrCode);
                     AmountObj.Add('amount', PaymentTranLine.Amount);
                     InstructionObj.Add('amount', AmountObj);
-                    InstructionObj.Add('referenceId', PaymentTranHdr."Batch Number");
+                    InstructionObj.Add('referenceId', PaymentTranLine."Reference Number");
                     InstructionObj.Add('paymentType', Format(PaymentTranHdr."Payment Type"));//
-
                     // Debtor
                     BankAccount.Get(PaymentTranHdr."Bank Account Code");
                     DebtorObj.Add('name', BankAccount.Name);
@@ -164,15 +156,19 @@ Codeunit 90208 "Payment-Integr. Hook"
                     CreditorFinInstObj.Add('name', PaymentTranLine.Payee);
                     CreditorFinInstObj.Add('BIC', Format(PaymentTranLine."Creditor BIC"));
                     CreditorAgentObj.Add('financialInstitution', CreditorFinInstObj);
-                    CreditorAgentObj.Add('branchCode', PaymentTranLine."Branch Code");
-                    CreditorAgentObj.Add('clearingSystemId', PaymentTranLine."Bank CBN Code");
+                    if not (PaymentTranHdr."Payment Type Preference" = PaymentTranHdr."Payment Type Preference"::Explicit) then begin
+                        CreditorAgentObj.Add('branchCode', PaymentTranLine."Branch Code");
+                        CreditorAgentObj.Add('clearingSystemId', PaymentTranLine."Bank CBN Code");
+                    end;
                     InstructionObj.Add('creditorAgent', CreditorAgentObj);
 
                     // Creditor Account
                     CreditorAccountObj.Add('id', PaymentTranLine."To Account Number");
-                    CreditorAccountObj.Add('identifierType', Format(PaymentTranHdr."Creditor Identifier Type"));
+                    if (PaymentTranHdr."Payment Type Preference" = PaymentTranHdr."Payment Type Preference"::Explicit) then
+                        CreditorAccountObj.Add('currency', PaymentTranLine."Currency Code");
+                    CreditorAccountObj.Add('identifierType', Format(PaymentTranLine."Creditor Identifier Type"));
                     InstructionObj.Add('creditorAccount', CreditorAccountObj);
-
+                    InstructionObj.Add('purpose', PaymentTranLine.Description);
                     // Remittance Info
                     MultiUnstructuredArr.Add(DelChr(PaymentTranLine.Description));
                     RemittanceObj.Add('multiUnstructured', MultiUnstructuredArr);
@@ -186,7 +182,7 @@ Codeunit 90208 "Payment-Integr. Hook"
                     PmtTranSetup.Get;
                     PayloadObj.WriteTo(json);
                     //json := '{ "header": { "messageId": "RNG8778935909761832025", "countryCode": "NG", "timestamp": 1742300390 }, "instruction":         { "paymentTimestamp": 1742296796, "requiredExecutionDate": "2025-03-18", "amount": { "currencyCode": "NGN", "amount": 60 }, "referenceId": "REN00060292", "paymentType": "ACH", "debtor": { "name": "RENGAS SCB" }, "debtorAccount": { "id": "2402126942", "identifierType": "Other" }, "debtorAgent": { "financialInstitution": { "postalAddress": { "country": "NG" }, "name": "STANDARD CHARTERED BK", "BIC": "SCBLNGLAXXX" } }, "creditor": { "name": "Test Creditor" }, "creditorAgent": { "financialInstitution": { "name": "GUARANTY TRUST BANK PLC", "BIC": "GTBINGLAXXX" }, "branchCode": "52146", "clearingSystemId": "058" }, "creditorAccount": { "id": "0242700347", "identifierType": "Other" }, "remittanceInfo": { "multiUnstructured": [ "Paymentto" ] } }}';
-                    Message(json);
+                    //Message(json);
                     //json := '{ "header": { "messageSender": "RENGAS", "messageId": "RNG8778935909761832025", "countryCode": "NG", "timestamp": 1742300390 }, "instruction":         { "paymentTimestamp": 1742296796, "requiredExecutionDate": "2025-03-18", "amount": { "currencyCode": "NGN", "amount": 60 }, "referenceId": "REN00060285", "paymentType": "ACH", "debtor": { "name": "RENGAS SCB" }, "debtorAccount": { "id": "2402126942", "identifierType": "Other" }, "debtorAgent": { "financialInstitution": { "postalAddress": { "country": "NG" }, "name": "STANDARD CHARTERED BK", "BIC": "SCBLNGLAXXX" } }, "creditor": { "name": "Test Creditor" }, "creditorAgent": { "financialInstitution": { "name": "GUARANTY TRUST BANK PLC", "BIC": "GTBINGLAXXX" }, "branchCode": "52146", "clearingSystemId": "058" }, "creditorAccount": { "id": "0242700347", "identifierType": "Other" }, "remittanceInfo": { "multiUnstructured": [ "Payment to " ] } } }';
                     // ===== Convert to text and send =====
                     // RootObj.WriteTo(json);
@@ -196,6 +192,7 @@ Codeunit 90208 "Payment-Integr. Hook"
                     RequestType := 'POST';
                     //CallPaymentWebService(BaseUrl, RequestType, StringContent, HttpResponseMessage, BearerToken);
                     HttpContent.WriteFrom(json);
+                    Message(json);
                     HttpContent.GetHeaders(Headers);
                     Headers.Clear();
                     Headers.Add('Content-Type', 'application/json');
@@ -226,33 +223,38 @@ Codeunit 90208 "Payment-Integr. Hook"
                         //     ServiceResult := MyJsonToken.AsValue().AsText();
                         // JsonResponseObj.ReadFrom(ServiceResult);
                         if JsonResponseObj.Get('statusString', MyJsonToken) then
-                            if not MyJsonToken.AsValue().IsNull then
+                            if not MyJsonToken.AsValue().IsNull then begin
                                 PaymentTranLine."Status Description" := MyJsonToken.AsValue().AsText();
+                                //PaymentTranHdr."Check Status Response" := MyJsonToken.AsValue().AsText();
+                            end;
                         if JsonResponseObj.Get('statusCode', MyJsonToken) then
                             if not MyJsonToken.AsValue().IsNull then
                                 PaymentTranLine."Uploaded Status Code" := MyJsonToken.AsValue().AsText();
                         if JsonResponseObj.Get('reasonCode', MyJsonToken) then
                             if not MyJsonToken.AsValue().IsNull then
                                 PaymentTranLine."Reason Code" := MyJsonToken.AsValue().AsText();
-                        PaymentTranLine.Status := MyJsonToken.AsValue().AsText();
+                        if JsonResponseObj.Get('reasonInformation', MyJsonToken) then
+                            if not MyJsonToken.AsValue().IsNull then
+                                PaymentTranLine."Reason Information Text" := MyJsonToken.AsValue().AsText();
                         //PaymentTranHdr."Check Status Response" := MyJsonToken.AsValue().AsText();
-                        Message('Schedule created!!');
-                        Window.Close();
+
+                        PaymentTranLine.Modify();
                         PaymentTranHdr.Modify();
                         //exit
                     end;
                 //end;
                 until PaymentTranLine.Next() = 0;
+                Message('Schedule created!!');
             end;
-
             PaymentTranHdr.Modify();
-            Message('No schedule created!!');
+            //Message('No schedule created!!');
             Window.Close();
         end;
     end;
 
     procedure UpdatePaymentStatus(var PaymentTranHdr: Record "Payment Schedule Header")
     var
+        PaymentTranLine: Record "Payment Schedule Line";
         PayloadObj: JsonObject;
         InnerPayloadObj: JsonObject;
         ClientRefArray: JsonArray;
@@ -272,24 +274,32 @@ Codeunit 90208 "Payment-Integr. Hook"
         Success: Boolean;
     begin
         // Current Unix timestamp
+        PaymentTranLine.Reset;
+        PaymentTranLine.SetRange("Batch Number", PaymentTranHdr."Batch Number");
+        //PaymentTranLine.SetFilter("Status Description", '%1', 'Pending Status');
+        if PaymentTranLine.FindFirst() then begin
+            repeat
+                ClientRefArray.Add(PaymentTranLine."Reference Number");
+            until PaymentTranLine.Next() = 0;
+        end;
         PmtTranSetup.Get();
-
         Timestamp := ToUnixTimestamp(Format(CurrentDateTime()));
         //Root SCB Payload
         // ---- Inner "payload" object ----
-        ClientRefArray.Add(PaymentTranHdr."Batch Number");  // <-- Add more if you wantREN00060301
-        ClientRefArray.Add('REN00060303');
+        // <-- Add more if you wantREN00060301
+        //ClientRefArray.Add('REN00060303');
         // Convert to text
         WebhookUrl := PmtTranSetup."Update Schedule URL";
         ClientRefArray.WriteTo(ResultJson);
         HttpContent.WriteFrom(ResultJson);
         HttpContent.GetHeaders(Headers);
+        //Message(ResultJson);
         Headers.Clear();
         Headers.Add('Content-Type', 'application/json');
         // 🔹 Send POST request
         if HttpClient.Post(WebhookUrl, HttpContent, HttpResponse) then begin
             HttpResponse.Content().ReadAs(ServiceResult);
-            Message('Webhook POST succeeded:\%1', ServiceResult);
+            //Message('Webhook POST succeeded:\%1', ServiceResult);
             //ServiceResult := '{"status":true,"data":"¦ùä-GWÀÒâ44dier\":\"PSC000004\",\"internalTrackingId\":\"48a549de-7b03-4b54-be9f-be9fd36c1156\",\"clientReferenceId\":\"PSC000004\",\"referenceId\":\"PSC000004\",\"statusString\":\"Pending\",\"timestamp\":\"2025-11-29T15:43:32.294Z\"}"}';
             //DecodeSCBData(ServiceResult);
             JsonResponseObj.ReadFrom(ServiceResult);
@@ -298,11 +308,6 @@ Codeunit 90208 "Payment-Integr. Hook"
                     Success := MyJsonToken.AsValue().AsBoolean();
         end else
             Error('Failed to send webhook payload to %1', WebhookUrl);
-        // ===== Response handling =====
-        //JsonResponseObj.ReadFrom(ServiceResult);
-        //Message(ServiceResult);
-        //if StrPos(ServiceResult, 'Received') > 0 then
-        //    Success := true;
         PaymentTranHdr."Date Submitted" := CurrentDateTime;
     end;
 

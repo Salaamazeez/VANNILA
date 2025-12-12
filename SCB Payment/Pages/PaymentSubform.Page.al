@@ -63,31 +63,31 @@ Page 90241 "Payment Subform"
                 {
                     ApplicationArea = All;
                 }
-                field(ReasonCode; Rec."Reason Code")
-                {
-                    ApplicationArea = All;
-                }
+
                 field("Creditor BIC"; Rec."Creditor BIC")
                 {
                     ToolTip = 'Specifies the value of the Credit BIC field.';
                     ApplicationArea = All;
                 }
-                field(UploadedStatusText; Rec."Uploaded Status Text")
+                field("Reason Code"; Rec."Reason Code")
                 {
                     ApplicationArea = All;
                 }
-                field(UploadedStatusCode; Rec."Uploaded Status Code")
+                field("Creditor Identifier Type"; Rec."Creditor Identifier Type") { ApplicationArea = All; }
+                field("Reason Information Text"; Rec."Reason Information Text")
                 {
                     ApplicationArea = All;
                 }
-                field(NIBSSStatus; Rec.Status)
+                field(Status; Rec.Status)
+                {
+                    Visible = false;
+                    ApplicationArea = All;
+                }
+                field("Status Description"; Rec."Status Description")
                 {
                     ApplicationArea = All;
                 }
-                field(NIBSSStatusDescription; Rec."Status Description")
-                {
-                    ApplicationArea = All;
-                }
+
             }
         }
     }
@@ -154,6 +154,30 @@ Page 90241 "Payment Subform"
     trigger OnModifyRecord(): Boolean
     begin
         Rec.TestField("Source Type", Rec."source type"::Import);
+    end;
+
+    trigger OnDeleteRecord(): Boolean
+    var
+        FindGenJnl: Boolean;
+        PaymentLine: Record "Payment Schedule Line";
+        FindCashLine: Boolean;
+        PScheduleHeader: Record "Payment Schedule Header";
+        PVoucherHeader: Record "Payment Voucher Header";
+    begin
+        PaymentLine := Rec;
+        PaymentLine.SetRecFilter();
+        PaymentLine.TestStatusOpen;
+        PScheduleHeader.Get(PaymentLine."Batch Number");
+        if PScheduleHeader.Submitted then
+            Error('%1 already submitted', PScheduleHeader."Batch Number");
+        PVoucherHeader.Get(Rec."Source No.");
+        PVoucherHeader."Payment ID" := '';
+        PVoucherHeader.Modify();
+        PaymentLine.Reset();
+        PaymentLine.SetRange("Batch Number", Rec."Batch Number");
+        PaymentLine.SetRange("Source No.", Rec."Source No.");
+        PaymentLine.DeleteAll();
+
     end;
 
     // var

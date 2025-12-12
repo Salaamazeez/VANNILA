@@ -365,12 +365,6 @@ Table 90219 "Payment Schedule Header"
         field(50030; "Debit Account Id"; Text[100])
         {
             DataClassification = CustomerContent;
-        }
-        field(50031; "Creditor Identifier Type"; Option)
-        {
-            DataClassification = ToBeClassified;
-            OptionCaption = ' ,BAN,IBAN,Other';
-            OptionMembers = " ",BAN,IBAN,Other;
         }//BAN, IBAN, Other 
         field(50032; "Debtor BIC"; Text[30])
         {
@@ -384,6 +378,12 @@ Table 90219 "Payment Schedule Header"
             OptionCaption = ' ,BAN,IBAN,Other';
             OptionMembers = " ",BAN,IBAN,Other;
         }
+        field(50035; "Payment Type Preference"; Option)
+        {
+            Caption = ' ,Cross Border';
+            OptionMembers = " ",Explicit;
+        }
+
         // field(50035; "Debtor BIC Code"; Code[20])
         // {
         //     TableRelation = "SWIFT Code".Code;
@@ -419,8 +419,9 @@ Table 90219 "Payment Schedule Header"
 
     trigger OnModify()
     begin
-        if xRec.Submitted = Rec.Submitted then
-            if Submitted then Error(Error001Txt, "Batch Number");
+        // if xRec.Submitted then
+        //     if xRec.Submitted <> Rec.Submitted then
+        //         if Submitted then Error(Error001Txt, "Batch Number");
         "Last Modified Date" := CreateDatetime(Today, Time);
         "Last modified by" := Format(UserId());
         PmtTranSetup.Get();

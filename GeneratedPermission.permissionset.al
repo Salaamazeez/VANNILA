@@ -123,7 +123,7 @@ permissionset 50000 GeneratedPermission
         codeunit MyCodeunit=X,
         codeunit "Payment - Get Payment"=X,
         codeunit "Payment-Integr. Hook"=X,
-        //codeunit "Payment-_Webhook"=X,
+    //codeunit "Payment-_Webhook"=X,
         codeunit "Post E-Payment"=X,
         codeunit "Release Documents"=X,
         codeunit ReportSubstute=X,
@@ -155,7 +155,7 @@ permissionset 50000 GeneratedPermission
         page EmployeeLeaveSetup=X,
         page "Expense Code"=X,
         page "Get Payment Voucher"=X,
-        //page Instruction=X,
+    //page Instruction=X,
         page LeaveApplicationCard=X,
         page LeaveApplicationList=X,
         page LeaveCalendar=X,
@@ -223,4 +223,7 @@ permissionset 50000 GeneratedPermission
         page "Work Completion Certs (WCCs)"=X,
         codeunit CreateSchedule=X,
         page "SCB Http Helper"=X;
+        // tabledata "SWIFT/BIC Directory"=RIMD,
+        // table "SWIFT/BIC Directory"=X,
+        // page "SWIFT/BIC Directory List"=X;
 }

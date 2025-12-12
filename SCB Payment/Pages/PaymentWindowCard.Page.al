@@ -40,15 +40,18 @@ page 90237 "Payment Window Card"
                 {
                     ApplicationArea = All;
                 }
-                field("Creditor Identifier Type"; Rec."Creditor Identifier Type")
-                {
-                    ApplicationArea = All;
-                }
+                // field("Creditor Identifier Type"; Rec."Creditor Identifier Type")
+                // {
+                //     ApplicationArea = All;
+                // }
                 field("Debtor Identifier Type"; Rec."Debtor Identifier Type")
                 {
                     ApplicationArea = All;
                 }
-                
+                field("Payment Type Preference"; Rec."Payment Type Preference")
+                {
+                    ApplicationArea = All;
+                }
                 field(SubmissionResponse; Rec."Submission Response Code")
                 {
                     ToolTip = 'Specifies the value of the Submission Response Code field.';
@@ -84,21 +87,24 @@ page 90237 "Payment Window Card"
                 }
                 field("General Journal Template"; Rec."General Journal Template")
                 {
+                    Visible = false;
                     ToolTip = 'Specifies the value of the General Journal Template field.';
                     ApplicationArea = All;
                 }
                 field("General Journal Batch"; Rec."General Journal Batch")
                 {
+                    Visible = false;
                     ToolTip = 'Specifies the value of the General Journal Batch field.';
                     ApplicationArea = All;
                 }
                 field("Payment Method"; Rec."Payment Method")
                 {
+                    Visible = false;
                     ToolTip = 'Specifies the value of the Payment Method field.';
                     ApplicationArea = All;
                 }
 
-                field("Debtor BIC";Rec."Debtor BIC")
+                field("Debtor BIC"; Rec."Debtor BIC")
                 {
                     ToolTip = 'Specifies the value of the Credit BIC field.';
                     ApplicationArea = All;
@@ -392,7 +398,8 @@ page 90237 "Payment Window Card"
                         PmtTranSetup.Get();
                         Rec.TestField("Payment Type");
                         Rec.TestField("Debtor Identifier Type");
-                        Rec.TestField("Creditor Identifier Type");
+                        Rec.TestField(Status, Rec.Status::Approved);
+                        //Rec.TestField("Creditor Identifier Type");
                         Rec.TestField("Debtor BIC");
                         if PmtTranSetup."Use Pmt Authomation" then begin
                             if CONFIRM('Do you want to send batch', TRUE, false) then
@@ -419,8 +426,8 @@ page 90237 "Payment Window Card"
                         // UserSetup.Get(UserId);
                         //     Error(AdmTxt);
                         // if not (UserSetup."Send Payment Batch") then
-                        // UserSetup.TestField("Send Payment Batch", true);
-                        // Rec.TestField(Status, Rec.Status::Approved);
+                        UserSetup.TestField("Send Payment Batch", true);
+                        Rec.TestField(Status, Rec.Status::Approved);
                         PaymentIntegrHook.UpdatePaymentStatus(Rec);
 
                     end;
@@ -539,7 +546,7 @@ page 90237 "Payment Window Card"
 
     trigger OnModifyRecord(): Boolean
     begin
-        Rec.TestField(Status, Rec.Status::Open);
+        //Rec.TestField(Status, Rec.Status::Open);
 
     end;
 

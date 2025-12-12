@@ -10,9 +10,11 @@ tableextension 90206 VendorBankAccountExt extends "Vendor Bank Account"
             DataClassification = CustomerContent;
             TableRelation = "Bank";
         }
-        // field(50002; "Creditor BIC"; Text[30])
-        // {
-        //     TableRelation = "SWIFT Code".Code;
-        // }
+        field(50010; "Creditor Identifier Type"; Option)
+        {
+            DataClassification = ToBeClassified;
+            OptionCaption = ' ,BAN,IBAN,Other';
+            OptionMembers = " ",BAN,IBAN,Other;
+        }
     }
 }

@@ -31,10 +31,11 @@ Page 90240 "Payment Schedule Setup"
                 }
                 field("Get Payment Schedule URL"; Rec."Get Payment Schedule URL")
                 {
+                    Visible = false;
                     ToolTip = 'Specifies the value of the Get Payment Schedule URL field.';
                     ApplicationArea = All;
                 }
-                field("Update Schedule URL";Rec."Update Schedule URL")
+                field("Update Schedule URL"; Rec."Update Schedule URL")
                 {
                     ApplicationArea = Basic;
                 }
@@ -84,21 +85,25 @@ Page 90240 "Payment Schedule Setup"
                 }
                 field(SingleViewRequestNoSeries; Rec."Single View Request No. Series")
                 {
+                    Visible = false;
                     ToolTip = 'Specifies the value of the Single View Request No. Series field.';
                     ApplicationArea = All;
                 }
                 field("General Journal Template"; Rec."General Journal Template")
                 {
+                    Visible = false;
                     ToolTip = 'Specifies the value of the General Journal Template field.';
                     ApplicationArea = All;
                 }
                 field("General Journal Batch"; Rec."General Journal Batch")
                 {
+                    Visible = false;
                     ToolTip = 'Specifies the value of the General Journal Batch field.';
                     ApplicationArea = All;
                 }
                 field("Payment Method"; Rec."Payment Method")
                 {
+                    Visible = false;
                     ToolTip = 'Specifies the value of the Payment Method field.';
                     ApplicationArea = All;
                 }

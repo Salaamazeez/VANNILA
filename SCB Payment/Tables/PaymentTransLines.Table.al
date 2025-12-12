@@ -134,6 +134,7 @@ Table 90220 "Payment Schedule Line"
         }
         field(39; Status; Code[10])
         {
+            
             DataClassification = EndUserIdentifiableInformation;
             Caption = 'Status';
             Editable = false;
@@ -180,7 +181,7 @@ Table 90220 "Payment Schedule Line"
             Description = 'This is the serial number used to upload this record';
             DataClassification = EndUserIdentifiableInformation;
         }
-        field(47; "Uploaded Status Text"; Text[50])
+        field(47; "Reason Information Text"; Text[50])
         {
             DataClassification = EndUserIdentifiableInformation;
         }
@@ -249,6 +250,13 @@ Table 90220 "Payment Schedule Line"
         {
             TableRelation = "SWIFT Code".Code;
             ValidateTableRelation = false;
+        }
+        
+        field(50010; "Creditor Identifier Type"; Option)
+        {
+            DataClassification = ToBeClassified;
+            OptionCaption = ' ,BAN,IBAN,Other';
+            OptionMembers = " ",BAN,IBAN,Other;
         }
     }
 

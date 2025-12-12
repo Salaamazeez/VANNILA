@@ -4,7 +4,8 @@ Page 90230 "Archived Payment Schedule List"
     Editable = false;
     PageType = List;
     SourceTable = "Posted Payment Schedule Hdr";
-
+    UsageCategory = Lists;
+    ApplicationArea = All;
     layout
     {
         area(content)

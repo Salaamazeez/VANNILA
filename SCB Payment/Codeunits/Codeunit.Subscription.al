@@ -1,13 +1,76 @@
 codeunit 50403 "Subscription API"
 {
-    Permissions = tabledata "Payment Schedule Header"=RIMD;
+    Permissions = tabledata "Payment Schedule Header" = RIMD;
     procedure TestConnection(): Text
     begin
         exit('Connection established suscessfully')
     end;
 
-
     procedure UpdateBankTransaction(TransactionJson: Text): Text
+    var
+        OuterJson: JsonObject;
+        InnerJson: JsonObject;
+        Token: JsonToken;
+        InnerJsonText: Text;
+        PaymentTranHdr: Record "Payment Schedule Header";
+        PaymentTranLine: Record "Payment Schedule Line";
+        PaymentTranLine2: Record "Payment Schedule Line";
+        MyJsonToken: JsonToken;
+    begin
+        //exit('error');
+        // Read the outer JSON
+        //OuterJson.ReadFrom(TransactionJson);
+
+        // Extract the embedded JSON string
+        // if OuterJson.Get('transactionJson', Token) then
+        //     InnerJsonText := Token.AsValue().AsText();
+
+        // Remove wrapping quotes if present (e.g. "\"{...}\"")
+        //InnerJsonText := DelChr(InnerJsonText, '<>', '"');
+
+        // Parse the inner JSON
+        InnerJson.ReadFrom(TransactionJson);
+
+        // Lookup referenceId
+        if InnerJson.Get('referenceId', Token) then
+            if not Token.AsValue().IsNull then begin
+                PaymentTranLine.Reset();
+                PaymentTranLine.SetRange("Reference Number", Token.AsValue().AsText());
+                PaymentTranLine.FindFirst();
+                if InnerJson.Get('statusString', MyJsonToken) then
+                    if not MyJsonToken.AsValue().IsNull then begin
+                        PaymentTranLine."Status Description" := MyJsonToken.AsValue().AsText();
+
+                        // Update fields
+                        if InnerJson.Get('statusCode', MyJsonToken) then
+                            if not MyJsonToken.AsValue().IsNull then
+                                PaymentTranLine."Uploaded Status Code" := MyJsonToken.AsValue().AsText();
+                        if InnerJson.Get('reasonCode', MyJsonToken) then
+                            if not MyJsonToken.AsValue().IsNull then
+                                PaymentTranLine."Reason Code" := MyJsonToken.AsValue().AsText();
+                        if InnerJson.Get('reasonInformation', MyJsonToken) then
+                            if not MyJsonToken.AsValue().IsNull then
+                                PaymentTranLine."Reason Information Text" := MyJsonToken.AsValue().AsText();
+                        //PaymentTranHdr."Check Status Response" := MyJsonToken.AsValue().AsText();
+
+                        PaymentTranLine.Modify();
+
+
+                        exit('Schedule updated!!');
+                    end;
+            end;
+        PaymentTranLine2.Reset();
+        PaymentTranLine2.SetRange("Batch Number", PaymentTranLine."Batch Number");
+        PaymentTranLine2.SetFilter("Status Description", '<>%', 'Completed');
+        if not PaymentTranLine2.FindFirst() then begin
+            PaymentTranHdr.Get(PaymentTranLine."Batch Number");
+            PaymentTranHdr."Check Status Response" := PaymentTranLine."Status Description";
+            PaymentTranHdr."Process Completed" := true;
+            PaymentTranHdr.Modify()
+        end;
+    end;
+
+    procedure UpdateBankTransactionError2(TransactionJson: Text): Text
     var
         PaymentTranHdr: Record "Payment Schedule Header";
         JsonResponseObj: JsonObject;

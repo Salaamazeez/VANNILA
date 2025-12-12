@@ -32,7 +32,7 @@ page 90239 "Payment Role Centre"
             action(PaymentTransactions)
             {
                 ApplicationArea = All;
-                Caption = 'Payment Scheduleactions';
+                Caption = 'Payment Schedules';
                 RunObject = Page "Payment Window List";
             }
             action(Open)
@@ -82,18 +82,21 @@ page 90239 "Payment Role Centre"
                 Image = Administration;
                 action("Debit Accounts")
                 {
+                    Visible = false;
                     Image = BankAccount;
                     RunObject = Page "Payment-DebitAccounts";
                     ApplicationArea = All;
                 }
                 action(CBNBankCodes)
                 {
+                    Visible = false;
                     ApplicationArea = All;
                     Caption = 'CBN Bank Codes';
                     RunObject = Page "Banks";
                 }
                 action(PaymentBanks)
                 {
+                    Visible = false;
                     ApplicationArea = All;
                     Caption = 'Payment Banks';
                     RunObject = Page "Payment Window Banks";
@@ -111,6 +114,13 @@ page 90239 "Payment Role Centre"
                     Caption = 'Payment Setup';
                     Image = Setup;
                     RunObject = Page "Payment Schedule Setup";
+                }
+                action("SWIFT Codes")
+                {
+                    ApplicationArea = All;
+                    Caption = 'SWIFT Codes';
+                    Image = Setup;
+                    RunObject = Page "SWIFT Codes";
                 }
             }
 
