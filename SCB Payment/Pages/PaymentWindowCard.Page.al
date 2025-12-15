@@ -109,6 +109,10 @@ page 90237 "Payment Window Card"
                     ToolTip = 'Specifies the value of the Credit BIC field.';
                     ApplicationArea = All;
                 }
+                field("Charger Bearer"; Rec."Charger Bearer")
+                {
+                    ApplicationArea = All;
+                }
             }
 
             group("Payroll Details")
@@ -423,10 +427,10 @@ page 90237 "Payment Window Card"
                         UserSetup: Record "User Setup";
                         EnableErr: Label 'Kindly enable %1 on %2', Comment = '%1 is Use , %2 is Payment Setup';
                     begin
-                        // UserSetup.Get(UserId);
-                        //     Error(AdmTxt);
-                        // if not (UserSetup."Send Payment Batch") then
-                        UserSetup.TestField("Send Payment Batch", true);
+                        UserSetup.Get(UserId);
+                            //Error(AdmTxt);
+                        //if not (UserSetup."Send Payment Batch") then
+                        //UserSetup.TestField("Send Payment Batch", true);
                         Rec.TestField(Status, Rec.Status::Approved);
                         PaymentIntegrHook.UpdatePaymentStatus(Rec);
 

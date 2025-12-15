@@ -2,7 +2,19 @@ reportextension 50005 PurchaseOrderExt extends 1322
 {
     dataset
     {
-        
+        modify("Purchase Header")
+        {
+            trigger OnAfterPreDataItem()
+            begin
+                CompanyInfo.Get();
+                CompanyInfo.CalcFields(Picture)
+            end;
+        }
+        add("Purchase Header")
+        {
+            column(CompanyInfo_Picture; CompanyInfo.Picture) { }
+        }
+
 
     }
 
@@ -20,5 +32,5 @@ reportextension 50005 PurchaseOrderExt extends 1322
         }
     }
     var
-        //CompanyInfo: Record "Company Information";
+    //CompanyInfo: Record "Company Information";
 }

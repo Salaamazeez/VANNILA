@@ -130,6 +130,7 @@ Codeunit 90208 "Payment-Integr. Hook"
                     InstructionObj.Add('amount', AmountObj);
                     InstructionObj.Add('referenceId', PaymentTranLine."Reference Number");
                     InstructionObj.Add('paymentType', Format(PaymentTranHdr."Payment Type"));//
+                    InstructionObj.Add('chargerBearer', Format(PaymentTranHdr."Charger Bearer"));//
                     // Debtor
                     BankAccount.Get(PaymentTranHdr."Bank Account Code");
                     DebtorObj.Add('name', BankAccount.Name);
@@ -168,7 +169,8 @@ Codeunit 90208 "Payment-Integr. Hook"
                         CreditorAccountObj.Add('currency', PaymentTranLine."Currency Code");
                     CreditorAccountObj.Add('identifierType', Format(PaymentTranLine."Creditor Identifier Type"));
                     InstructionObj.Add('creditorAccount', CreditorAccountObj);
-                    InstructionObj.Add('purpose', PaymentTranLine.Description);
+                    if (PaymentTranHdr."Payment Type Preference" = PaymentTranHdr."Payment Type Preference"::Explicit) then
+                        InstructionObj.Add('purpose', CopyStr(PaymentTranLine.Description, 1, 3));
                     // Remittance Info
                     MultiUnstructuredArr.Add(DelChr(PaymentTranLine.Description));
                     RemittanceObj.Add('multiUnstructured', MultiUnstructuredArr);
@@ -311,45 +313,45 @@ Codeunit 90208 "Payment-Integr. Hook"
         PaymentTranHdr."Date Submitted" := CurrentDateTime;
     end;
 
-    local procedure CallPaymentWebService(BaseUrl: Text; RestMethod: Text; var HttpContent: HttpContent; var HttpResponseMessage: HttpResponseMessage; Bearer: Text)
-    var
-        HttpClient: HttpClient;
-        HttpRequestMessage: HttpRequestMessage;
-        myHttpRequestMessage: HttpRequestMessage;
-        ContentHeaders: HttpHeaders;
-        HttpClientHandler: Codeunit "Http Client Handler";
-        RestClient: Codeunit "Rest Client";
-        json: Text;
-        JsonArray: JsonArray;
-        myContent: HttpContent;
-    begin
-        HttpClient.SetBaseAddress(BaseUrl);
-        case RestMethod of
-            'GET':
-                begin
-                    myHttpRequestMessage.Method := RestMethod;
-                    HttpClient.DefaultRequestHeaders.Add('api-key', Bearer);
-                    HttpClient.DefaultRequestHeaders.Add('Accept', 'application/json');
-                    HttpClient.Send(myHttpRequestMessage, HttpResponseMessage);
-                end;
-            'POST':
-                begin
-                    HttpContent.GetHeaders(ContentHeaders);
-                    if ContentHeaders.Contains('Content-Type') then ContentHeaders.Remove('Content-Type');
-                    ContentHeaders.Add('Content-Type', 'text/plain');
-                    HttpContent.GetHeaders(ContentHeaders);
-                    HttpClient.DefaultRequestHeaders.Add('Routing-Identifier', 'IN');
-                    //HttpClient.DefaultRequestHeaders.Add('Accept', 'application/json');
-                    HttpClient.Post('', HttpContent, HttpResponseMessage);
+    // local procedure CallPaymentWebService(BaseUrl: Text; RestMethod: Text; var HttpContent: HttpContent; var HttpResponseMessage: HttpResponseMessage; Bearer: Text)
+    // var
+    //     HttpClient: HttpClient;
+    //     HttpRequestMessage: HttpRequestMessage;
+    //     myHttpRequestMessage: HttpRequestMessage;
+    //     ContentHeaders: HttpHeaders;
+    //     HttpClientHandler: Codeunit "Http Client Handler";
+    //     RestClient: Codeunit "Rest Client";
+    //     json: Text;
+    //     JsonArray: JsonArray;
+    //     myContent: HttpContent;
+    // begin
+    //     HttpClient.SetBaseAddress(BaseUrl);
+    //     case RestMethod of
+    //         'GET':
+    //             begin
+    //                 myHttpRequestMessage.Method := RestMethod;
+    //                 HttpClient.DefaultRequestHeaders.Add('api-key', Bearer);
+    //                 HttpClient.DefaultRequestHeaders.Add('Accept', 'application/json');
+    //                 HttpClient.Send(myHttpRequestMessage, HttpResponseMessage);
+    //             end;
+    //         'POST':
+    //             begin
+    //                 HttpContent.GetHeaders(ContentHeaders);
+    //                 if ContentHeaders.Contains('Content-Type') then ContentHeaders.Remove('Content-Type');
+    //                 ContentHeaders.Add('Content-Type', 'text/plain');
+    //                 HttpContent.GetHeaders(ContentHeaders);
+    //                 HttpClient.DefaultRequestHeaders.Add('Routing-Identifier', 'IN');
+    //                 //HttpClient.DefaultRequestHeaders.Add('Accept', 'application/json');
+    //                 HttpClient.Post('', HttpContent, HttpResponseMessage);
 
 
-                end;
-            'PUT':
-                HttpClient.Put('', HttpContent, HttpResponseMessage);
-            'DELETE':
-                HttpClient.Delete('', HttpResponseMessage);
-        end;
-    end;
+    //             end;
+    //         'PUT':
+    //             HttpClient.Put('', HttpContent, HttpResponseMessage);
+    //         'DELETE':
+    //             HttpClient.Delete('', HttpResponseMessage);
+    //     end;
+    // end;
 
 
     procedure ToUnixTimestamp(IsoString: Text): BigInteger
@@ -372,19 +374,19 @@ Codeunit 90208 "Payment-Integr. Hook"
     end;
 
 
-    procedure DecodeSCBData(DataEncoded: Text): Text
-    var
-        Base64: Codeunit "Base64 Convert";
-        Bytes: List of [Byte];
-        DecodedText: Text;
-    begin
-        // Convert Base64 string into bytes
-        DecodedText := Base64.FromBase64(DataEncoded);
+    // procedure DecodeSCBData(DataEncoded: Text): Text
+    // var
+    //     Base64: Codeunit "Base64 Convert";
+    //     Bytes: List of [Byte];
+    //     DecodedText: Text;
+    // begin
+    //     // Convert Base64 string into bytes
+    //     DecodedText := Base64.FromBase64(DataEncoded);
 
-        // Convert bytes into UTF-8 string
-        //DecodedText := Base64.ToText(Bytes);
-        Message(DataEncoded);
-        exit(DecodedText);
-    end;
+    //     // Convert bytes into UTF-8 string
+    //     //DecodedText := Base64.ToText(Bytes);
+    //     Message(DataEncoded);
+    //     exit(DecodedText);
+    // end;
 
 }

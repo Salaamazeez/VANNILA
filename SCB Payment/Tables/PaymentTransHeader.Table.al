@@ -383,11 +383,10 @@ Table 90219 "Payment Schedule Header"
             Caption = ' ,Cross Border';
             OptionMembers = " ",Explicit;
         }
-
-        // field(50035; "Debtor BIC Code"; Code[20])
-        // {
-        //     TableRelation = "SWIFT Code".Code;
-        // }
+        field(50036; "Charger Bearer"; Option)
+        {
+            OptionMembers = DEBT,CRED,SHAR,SLEV;
+        }
     }
 
     keys
