@@ -16,6 +16,11 @@ tableextension 50021 BankAccountExt extends "Bank Account"
             Editable = false;
             DataClassification = EndUserIdentifiableInformation;
         }
+        //  field(60004; "Debtor BIC"; Text[30])
+        // {
+        //     ValidateTableRelation = false;
+        //     TableRelation = "SWIFT Code".Code;
+        // }
     }
     keys
     {

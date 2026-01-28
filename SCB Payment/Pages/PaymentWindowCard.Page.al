@@ -104,11 +104,7 @@ page 90237 "Payment Window Card"
                     ApplicationArea = All;
                 }
 
-                field("Debtor BIC"; Rec."Debtor BIC")
-                {
-                    ToolTip = 'Specifies the value of the Credit BIC field.';
-                    ApplicationArea = All;
-                }
+               
                 field("Charger Bearer"; Rec."Charger Bearer")
                 {
                     ApplicationArea = All;
@@ -175,6 +171,11 @@ page 90237 "Payment Window Card"
                 field(BankAccountCode; Rec."Bank Account Code")
                 {
                     ToolTip = 'Specifies the value of the Bank Account Code field.';
+                    ApplicationArea = All;
+                }
+                 field("Debtor BIC"; Rec."Debtor BIC")
+                {
+                    ToolTip = 'Specifies the value of the Credit BIC field.';
                     ApplicationArea = All;
                 }
                 field(BankCBNCode; Rec."Bank CBN Code")

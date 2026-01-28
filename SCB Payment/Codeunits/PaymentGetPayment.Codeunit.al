@@ -315,11 +315,17 @@ codeunit 90210 "Payment - Get Payment"
                                 PaymentTransLine.Init;
                                 PaymentTransLine."Batch Number" := PaymentTransHeader."Batch Number";
                                 PaymentTransLine."Line No." := LineNo;
-                                if PaymentLine."Account Type" = PaymentLine."Account Type"::Vendor then
-                                    if VendorBankAcc.Get(PaymentLine."Account No.", VendorRec."Preferred Bank Account Code") then
-                                        PaymentTransLine."To Account Number" := VendorBankAcc."Bank Account No.";
+                                if PaymentLine."Account Type" = PaymentLine."Account Type"::Vendor then begin
+                                    //if PaymentLine."Preferred Bank Account Code" <> '' then
+                                    if VendorBankAcc.Get(PaymentLine."Account No.", PaymentLine."Preferred Bank Account Code") then
+                                        PaymentTransLine."To Account Number" := VendorBankAcc."Bank Account No."
+                                    else
+                                        if VendorBankAcc.Get(PaymentLine."Account No.", VendorRec."Preferred Bank Account Code") then
+                                            PaymentTransLine."To Account Number" := VendorBankAcc."Bank Account No.";
+                                    VendorBankAcc.TestField("Bank Account No.");
+                                end;
                                 PaymentTransLine.Amount := (PaymentLine.Amount);
-                                PaymentTransLine.Description := PaymentHeader."Request Description";
+                                PaymentTransLine.Description := PaymentLine. "Payment Details";
                                 PaymentTransLine."Payee No." := PaymentLine."Account No.";
                                 //VendorRec.Get( PaymentTransLine."Payee No.");
                                 PaymentTransLine.Payee := VendorRec.Name;
@@ -331,6 +337,7 @@ codeunit 90210 "Payment - Get Payment"
                                 PaymentTransLine."Source Type" := PaymentTransLine."Source Type"::Vendor;
                                 PaymentTransLine."Record ID" := RecdRef.RecordId;
                                 PaymentTransLine."Reference Number" := NoSeriesMgt.GetNextNo(PmtTranSetup."Reference No. Series");
+                                PaymentTransLine."Currency Code" := VendorBankAcc."Currency Code";
                                 // if Format(SerialNo) = PmtTranSetup."Nibss Schedule Size" then begin
                                 //     PageNo := PageNo + 1;
                                 //     SerialNo := 1;
@@ -414,8 +421,8 @@ codeunit 90210 "Payment - Get Payment"
                             end;
                         until PaymentLine.Next = 0;
                     end;
-                PaymentHeader."Payment ID" := PaymentTransHeader."Batch Number";
-                PaymentHeader.Modify;
+                    PaymentHeader."Payment ID" := PaymentTransHeader."Batch Number";
+                    PaymentHeader.Modify;
                 until PaymentHeader.Next = 0;
             end;
         end

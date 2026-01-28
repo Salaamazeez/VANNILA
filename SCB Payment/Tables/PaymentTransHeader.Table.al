@@ -119,7 +119,9 @@ Table 90219 "Payment Schedule Header"
                 Bank: Record "Bank Account";
             begin
                 Bank.Get("Bank Account Code");
-                "Bank Name" := Bank.Name
+                "Bank Name" := Bank.Name;
+                "Currency Code" := Bank."Currency Code";
+                "Debtor BIC" := Bank."SWIFT Code";
                 // if "Bank Account Code" <> '' then begin
                 //     if PaymentBankMapping.Get("Bank Account Code") then begin
                 //         //PaymentBankMapping.TestField(Blocked, false);
@@ -380,7 +382,7 @@ Table 90219 "Payment Schedule Header"
         }
         field(50035; "Payment Type Preference"; Option)
         {
-            Caption = ' ,Cross Border';
+            Caption = 'Cross Border';
             OptionMembers = " ",Explicit;
         }
         field(50036; "Charger Bearer"; Option)

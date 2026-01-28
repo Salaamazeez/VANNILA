@@ -169,51 +169,68 @@ page 50004 "Approved Payment Voucher Card"
                         Report.RunModal(60000, true, true, PaymentVoucherTbl);
                 end;
             }
+            
+            action("Re&open")
+                {
+                    Image = ReOpen;
+                    ////Promoted = true;
+                    //PromotedCategory = Process;
+                    Visible = financeAdmin;
+                    ApplicationArea = All;
+                    trigger OnAction()
+                    var
+                        RecRef: RecordRef;
+                        ReleaseDocument: Codeunit "Release Documents";
+                    begin
+                        RecRef.GetTable(Rec);
+                        ReleaseDocument.PerformManualReopen(RecRef);
+                        CurrPage.Update;
+                    end;
+                }
             group(Action13)
             {
                 Caption = 'Release';
                 Image = ReleaseDoc;
-                group(Release)
+
+                action("Re&lease")
                 {
-                    action("Re&lease")
-                    {
-                        ApplicationArea = Basic;
-                        Image = ReleaseDoc;
-                        Promoted = true;
-                        PromotedCategory = Process;
-                        ShortCutKey = 'Ctrl+F9';
-
-                        trigger OnAction()
-                        var
-                            RecRef: RecordRef;
-                            ReleaseDocument: Codeunit "Release Documents";
-                        begin
-                            Rec.TestField(Status, Rec.Status::Open);
-                            if Rec."Transaction type" = Rec."Transaction type"::Loan then
-                                Rec.TestField("Loan ID");
-                            RecRef.GetTable(Rec);
-                            ReleaseDocument.PerformanualManualDocRelease(RecRef);
-                            CurrPage.Update;
-                        end;
-                    }
-                    action("Re&open")
-                    {
-                        ApplicationArea = Basic;
-                        Image = ReOpen;
-                        Promoted = true;
-                        PromotedCategory = Process;
-
-                        trigger OnAction()
-                        var
-                            RecRef: RecordRef;
-                            ReleaseDocument: Codeunit "Release Documents";
-                        begin
-                            RecRef.GetTable(Rec);
-                            ReleaseDocument.PerformManualReopen(RecRef);
-                            CurrPage.Update;
-                        end;
-                    }
+                    Image = ReleaseDoc;
+                    //Promoted = true;
+                    //PromotedCategory = Process;
+                    ShortCutKey = 'Ctrl+F9';
+                    Visible = financeAdmin;
+                    ApplicationArea = All;
+                    trigger OnAction()
+                    var
+                        RecRef: RecordRef;
+                        ReleaseDocument: Codeunit "Release Documents";
+                    begin
+                        Rec.TestField(Status, Rec.Status::Open);
+                        if Rec."Transaction type" = Rec."Transaction type"::Loan then
+                            Rec.TestField("Loan ID");
+                        RecRef.GetTable(Rec);
+                        ReleaseDocument.PerformanualManualDocRelease(RecRef);
+                        CurrPage.Update;
+                    end;
                 }
+                // action("Re&open")
+                // {
+                //     Image = ReOpen;
+                //     ////Promoted = true;
+                //     //PromotedCategory = Process;
+                //     Visible = financeAdmin;
+                //     ApplicationArea = All;
+                //     trigger OnAction()
+                //     var
+                //         RecRef: RecordRef;
+                //         ReleaseDocument: Codeunit "Release Documents";
+                //     begin
+                //         RecRef.GetTable(Rec);
+                //         ReleaseDocument.PerformManualReopen(RecRef);
+                //         CurrPage.Update;
+                //     end;
+                // }
+
             }
 
         }
