@@ -101,6 +101,20 @@ page 90239 "Payment Role Centre"
                     Caption = 'Payment Banks';
                     RunObject = Page "Payment Window Banks";
                 }
+                 action(PaymentCategoryCodes)
+                {
+                    Visible = true;
+                    ApplicationArea = All;
+                    Caption = 'Payment Category Codes';
+                    RunObject = Page "Payment Category Codes";
+                }
+                  action(SectoralPurposeCodes)
+                {
+                    Visible = true;
+                    ApplicationArea = All;
+                    Caption = 'Payment Category Codes';
+                    RunObject = Page "Sectoral Purpose Codes";
+                }
             }
         }
         area(processing)

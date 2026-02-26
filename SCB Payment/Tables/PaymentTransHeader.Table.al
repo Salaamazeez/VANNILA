@@ -389,6 +389,11 @@ Table 90219 "Payment Schedule Header"
         {
             OptionMembers = DEBT,CRED,SHAR,SLEV;
         }
+
+        field(50038; "Payment Category Code"; Code[20])
+        {
+            TableRelation = "Payment Category Code";
+        }
     }
 
     keys
@@ -548,6 +553,24 @@ Table 90219 "Payment Schedule Header"
             Rec.DeleteLinks();
         Rec.Delete();
     end;
+
+    procedure MandatoryFields()
+    var
+        PaymentScheduleLine: Record "Payment Schedule Line";
+    begin
+        Rec.TestField("Payment Type");
+        Rec.TestField("Debtor Identifier Type");
+        Rec.TestField(Status, Rec.Status::Approved);
+        Rec.TestField("Payment Category Code");
+        Rec.TestField("Debtor BIC");
+        PaymentScheduleLine.SetRange("Batch Number", Rec."Batch Number");
+        PaymentScheduleLine.FindFirst();
+        repeat
+            PaymentScheduleLine.TestField("Sectorial Purpose Code")
+        until PaymentScheduleLine.Next() = 0
+
+    end;
+
 
 }
 

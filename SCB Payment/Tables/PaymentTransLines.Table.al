@@ -258,6 +258,10 @@ Table 90220 "Payment Schedule Line"
             OptionCaption = ' ,BAN,IBAN,Other';
             OptionMembers = " ",BAN,IBAN,Other;
         }
+        field(50011; "Sectorial Purpose Code"; Code[20])
+        {
+            TableRelation = "Sectoral Purpose Code";
+        }
     }
 
     keys

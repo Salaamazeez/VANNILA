@@ -87,6 +87,10 @@ Page 90241 "Payment Subform"
                 {
                     ApplicationArea = All;
                 }
+                field("Sectorial Purpose Code";Rec."Sectorial Purpose Code")
+                {
+                    ApplicationArea = All;
+                }
 
             }
         }
@@ -166,10 +170,10 @@ Page 90241 "Payment Subform"
     begin
         PaymentLine := Rec;
         PaymentLine.SetRecFilter();
-        PaymentLine.TestStatusOpen;
+        PaymentLine.TestStatusOpen; 
         PScheduleHeader.Get(PaymentLine."Batch Number");
-        if PScheduleHeader.Submitted then
-            Error('%1 already submitted', PScheduleHeader."Batch Number");
+        // if PScheduleHeader.Submitted then
+        //     Error('%1 already submitted', PScheduleHeader."Batch Number");
         PVoucherHeader.Get(Rec."Source No.");
         PVoucherHeader."Payment ID" := '';
         PVoucherHeader.Modify();

@@ -244,6 +244,7 @@ codeunit 90210 "Payment - Get Payment"
     begin
         PaymentTransHeader.Get(Rec."Batch Number");
         PaymentTransHeader.TestField("Bank Account Code");
+
         PaymentHeader.SetRange("Status", PaymentHeader."Status"::Approved);
         PaymentHeader.SetRange("Payment Method", PaymentHeader."payment method"::"E-Payment");
         PaymentHeader.SetRange(PaymentHeader."Bal Account No.", PaymentTransHeader."Bank Account Code");
@@ -255,6 +256,7 @@ codeunit 90210 "Payment - Get Payment"
                 //if (PaymentHeader."Payment Type" = PaymentHeader."payment type"::"Supp. Invoice") then begin
                 //PaymentHeader.TestField("Payee Bank Code");
                 PaymentHeader.TestField("Bal Account No.");
+
             //PaymentHeader.TestField("Payee");
             //end;
             until PaymentHeader.Next = 0;
@@ -311,6 +313,8 @@ codeunit 90210 "Payment - Get Payment"
                                 // PaymentLine.SetRange("Document No.", PaymentHeader."No.");
                                 // PaymentLine.FindFirst();
                                 VendorRec.Get(PaymentLine."Account No.");
+                                Vendor.get(PaymentLine."Account No.");
+                                Vendor.TestField("Sectorial Purpose Code");
                                 LineNo := LineNo + 10000;
                                 PaymentTransLine.Init;
                                 PaymentTransLine."Batch Number" := PaymentTransHeader."Batch Number";
@@ -322,10 +326,13 @@ codeunit 90210 "Payment - Get Payment"
                                     else
                                         if VendorBankAcc.Get(PaymentLine."Account No.", VendorRec."Preferred Bank Account Code") then
                                             PaymentTransLine."To Account Number" := VendorBankAcc."Bank Account No.";
-                                    VendorBankAcc.TestField("Bank Account No.");
+                                    if VendorBankAcc."Bank Account No." = '' then
+                                        Error('Bank Account No. cannot be empty vendor payee %1', Vendor."No.");
+                                    if VendorBankAcc."SWIFT Code" = '' then
+                                        Error('Swift Code cannot be empty vendor payee %1', Vendor."No.");
                                 end;
                                 PaymentTransLine.Amount := (PaymentLine.Amount);
-                                PaymentTransLine.Description := PaymentLine. "Payment Details";
+                                PaymentTransLine.Description := PaymentLine."Payment Details";
                                 PaymentTransLine."Payee No." := PaymentLine."Account No.";
                                 //VendorRec.Get( PaymentTransLine."Payee No.");
                                 PaymentTransLine.Payee := VendorRec.Name;
@@ -346,6 +353,7 @@ codeunit 90210 "Payment - Get Payment"
                                 PaymentTransLine."Source No." := PaymentHeader."No.";
                                 PaymentTransLine."Schedule Page No." := PageNo;
                                 PaymentTransLine."Schedule Serial No." := SerialNo;
+                                PaymentTransLine."Sectorial Purpose Code" := Vendor."Sectorial Purpose Code";
                                 SerialNo := SerialNo + 1;
                                 PaymentTransLine.Insert();
                                 SerialNo := SerialNo + 1;

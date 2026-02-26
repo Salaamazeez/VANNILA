@@ -53,6 +53,9 @@ Codeunit 90208 "Payment-Integr. Hook"
         HttpClient: HttpClient;
         WebhookUrl: Text;
         Description: Text[100];
+        Purpose: Code[20];
+        SectorialPurpose: Record "Sectoral Purpose Code";
+        PaymentCategory: Record "Payment Category Code";
     begin
         Success := false;
         CompanyInfo.Get();
@@ -147,15 +150,18 @@ Codeunit 90208 "Payment-Integr. Hook"
                     FinInstObj.Add('postalAddress', PostalAddressObj);
                     FinInstObj.Add('name', BankAccount.Name);
                     FinInstObj.Add('BIC', Format(PaymentTranHdr."Debtor BIC"));
+
                     DebtorAgentObj.Add('financialInstitution', FinInstObj);
+                    // if BankAccount."Bank Clearing Standard" <> '' then
+                    //     DebtorAgentObj.Add('clearingSystemId', BankAccount."Bank Clearing Standard");
                     InstructionObj.Add('debtorAgent', DebtorAgentObj);
 
                     // Creditor (from PaymentTranLine)
-                    CreditorObj.Add('name', CopyStr(PaymentTranLine.Payee,1,35));
+                    CreditorObj.Add('name', CopyStr(PaymentTranLine.Payee, 1, 35));
                     InstructionObj.Add('creditor', CreditorObj);
 
                     // Creditor Agent
-                    CreditorFinInstObj.Add('name', CopyStr(PaymentTranLine.Payee,1,35));
+                    CreditorFinInstObj.Add('name', CopyStr(PaymentTranLine.Payee, 1, 35));
                     CreditorFinInstObj.Add('BIC', Format(PaymentTranLine."Creditor BIC"));
                     CreditorAgentObj.Add('financialInstitution', CreditorFinInstObj);
                     if not (PaymentTranHdr."Payment Type Preference" = PaymentTranHdr."Payment Type Preference"::Explicit) then begin
@@ -170,12 +176,23 @@ Codeunit 90208 "Payment-Integr. Hook"
                         CreditorAccountObj.Add('currency', PaymentTranLine."Currency Code");
                     CreditorAccountObj.Add('identifierType', Format(PaymentTranLine."Creditor Identifier Type"));
                     InstructionObj.Add('creditorAccount', CreditorAccountObj);
-                    if (PaymentTranHdr."Payment Type Preference" = PaymentTranHdr."Payment Type Preference"::Explicit) then
-                        InstructionObj.Add('purpose', CopyStr(PaymentTranLine.Description, 1, 3));
+                    //if (PaymentTranHdr."Payment Type Preference" = PaymentTranHdr."Payment Type Preference"::Explicit) then
+                    PaymentCategory.Get(PaymentTranHdr."Payment Category Code");
+                    Purpose := PaymentCategory."4 Character Code";
+                    //Purpose := 'OTHR';
+                    //else
+                    //     Purpose := CopyStr(PaymentTranLine.Description, 1, 10);
+                    InstructionObj.Add('purpose', Purpose);
                     // Remittance Info
-                    //Description := DelChr(PaymentTranLine.Description);
-                    Description := DelChr(Description, '->');
-                    MultiUnstructuredArr.Add(DelChr(Description));
+                    if (PaymentTranHdr."Payment Type Preference" = PaymentTranHdr."Payment Type Preference"::Explicit) then begin
+                        SectorialPurpose.Get(PaymentTranLine."Sectorial Purpose Code");
+                        Description := DelChr(SectorialPurpose."Purpose Code" + SectorialPurpose.Description)
+                        //Description := 'HF120OtherBusinessServicesOther'
+                    end else begin
+                        Description := DelChr(PaymentTranLine.Description);
+                        Description := DelChr(Description, '=', '->');
+                    end;
+                    MultiUnstructuredArr.Add(DelChr(Description, '=', ' '));
                     RemittanceObj.Add('multiUnstructured', MultiUnstructuredArr);
                     InstructionObj.Add('remittanceInfo', RemittanceObj);
 
@@ -191,8 +208,10 @@ Codeunit 90208 "Payment-Integr. Hook"
                     //json :='{ "header": { "messageId": "RNG8778935909761832025", "countryCode": "NG", "timestamp": 1742300390 }, "instruction":         { "paymentTimestamp": 1742296796, "paymentTypePreference": "Explicit", "requiredExecutionDate": "2025-03-18", "amount": { "currencyCode": "USD", "amount": 60 }, "referenceId": "REN00060285", "paymentType": "TT", "chargerBearer": "SHAR", "debtor": { "name": "RENGAS SCB" }, "debtorAccount": { "id": "2402126942 ", "identifierType": "Other" }, "debtorAgent": { "financialInstitution": { "postalAddress": { "country": "US" }, "name": "STANDARD CHARTERED BK", "BIC": "SCBLNGLAXXX" } }, "creditor": { "name": "Test Creditor" }, "creditorAgent": { "financialInstitution": { "name": "STANDARD CHARTERED BK", "BIC": "SCBLNGLAXXX" } }, "creditorAccount": { "id": "91701015012", "currency": "USD", "identifierType": "Other" }, "purpose": "MSC", "remittanceInfo": { "multiUnstructured": [ "Payment to " ] } } }';
                     //json := '{ "header": { "messageId": "RNG8778935909761832025", "countryCode": "NG", "timestamp": 1742300390 }, "instruction":        { "paymentTimestamp": 1742296796, "paymentTypePreference": "Explicit", "requiredExecutionDate": "2025-03-18", "amount": { "currencyCode": "USD", "amount": 60 }, "referenceId": "REN_00060285", "paymentType": "TT", "chargerBearer": "SHAR", "debtor": { "name": "RENGAS SCB" }, "debtorAccount": { "id": "0006579807", "identifierType": "Other", "currency": "USD" }, "debtorAgent": { "financialInstitution": { "postalAddress": { "country": "NG" }, "name": "STANDARD CHARTERED BK", "BIC": "SCBLNGLAXXX" } }, "creditor": { "name": "Test Creditor" }, "creditorAgent": { "financialInstitution": { "name": "STANDARD CHARTERED BK", "BIC": "SCBLNGLAXXX" } }, "creditorAccount": { "id": "91701015012", "currency": "USD", "identifierType": "Other" }, "purpose": "MSC", "remittanceInfo": { "multiUnstructured": [ "Payment to " ] } } }';
                     //json   := '{ "header": { "messageId": "RNG8778935909761832025", "countryCode": "NG", "timestamp": 1742300390 }, "instruction":        { "paymentTimestamp": 1742296796, "paymentTypePreference": "Explicit", "requiredExecutionDate": "2025-03-18", "amount": { "currencyCode": "USD", "amount": 60 }, "referenceId": "REN__00060285", "paymentType": "TT", "chargerBearer": "SHAR", "debtor": { "name": "RENGAS SCB" }, "debtorAccount": { "id": "0006579807", "identifierType": "Other", "currency": "USD" }, "debtorAgent": { "financialInstitution": { "postalAddress": { "country": "NG" }, "name": "STANDARD CHARTERED BK", "BIC": "SCBLNGLAXXX" } }, "creditor": { "name": "Test Creditor" }, "creditorAgent": { "financialInstitution": { "name": "STANDARD CHARTERED BK", "BIC": "SCBLNGLAXXX" } }, "creditorAccount": { "id": "91701015012", "currency": "GBP", "identifierType": "Other" }, "purpose": "MSC", "remittanceInfo": { "multiUnstructured": [ "Payment to " ] } } }';
-                    //Message(json);
-                    //json := '{ "header": { "messageSender": "RENGAS", "messageId": "RNG8778935909761832025", "countryCode": "NG", "timestamp": 1742300390 }, "instruction":         { "paymentTimestamp": 1742296796, "requiredExecutionDate": "2025-03-18", "amount": { "currencyCode": "NGN", "amount": 60 }, "referenceId": "REN00060285", "paymentType": "ACH", "debtor": { "name": "RENGAS SCB" }, "debtorAccount": { "id": "2402126942", "identifierType": "Other" }, "debtorAgent": { "financialInstitution": { "postalAddress": { "country": "NG" }, "name": "STANDARD CHARTERED BK", "BIC": "SCBLNGLAXXX" } }, "creditor": { "name": "Test Creditor" }, "creditorAgent": { "financialInstitution": { "name": "GUARANTY TRUST BANK PLC", "BIC": "GTBINGLAXXX" }, "branchCode": "52146", "clearingSystemId": "058" }, "creditorAccount": { "id": "0242700347", "identifierType": "Other" }, "remittanceInfo": { "multiUnstructured": [ "Payment to " ] } } }';
+                    //Message(json);  //json := '{ "header": { "messageSender": "RENGAS", "messageId": "RNG8778935909761832025", "countryCode": "NG", "timestamp": 1742300390 }, "instruction":         { "paymentTimestamp": 1742296796, "requiredExecutionDate": "2025-03-18", "amount": { "currencyCode": "NGN", "amount": 60 }, "referenceId": "REN00060285", "paymentType": "ACH", "debtor": { "name": "RENGAS SCB" }, "debtorAccount": { "id": "2402126942", "identifierType": "Other" }, "debtorAgent": { "financialInstitution": { "postalAddress": { "country": "NG" }, "name": "STANDARD CHARTERED BK", "BIC": "SCBLNGLAXXX" } }, "creditor": { "name": "Test Creditor" }, "creditorAgent": { "financialInstitution": { "name": "GUARANTY TRUST BANK PLC", "BIC": "GTBINGLAXXX" }, "branchCode": "52146", "clearingSystemId": "058" }, "creditorAccount": { "id": "0242700347", "identifierType": "Other" }, "remittanceInfo": { "multiUnstructured": [ "Payment to " ] } } }';
+                    //json :=  '{ "header": { "messageId": "EEC8EC9A-0BFD-4417-99DD-F395485D8C41", "countryCode": "NG", "timestamp": 1769725080 }, "instruction": { "paymentTimestamp": 1769725080, "requiredExecutionDate": "2026-01-29", "amount": { "currencyCode": "NGN", "amount": 45000 }, "referenceId": "PEF000019", "paymentType": "ACH", "chargerBearer": "DEBT", "debtor": { "name": "REONL SCB NIG NGN A/C (Pymt)" }, "debtorAccount": { "id": "2402126942", "identifierType": "Other" }, "debtorAgent": { "financialInstitution": { "postalAddress": { "country": "NG" }, "name": "REONL SCB NIG NGN A/C (Pymt)", "BIC": "SCBLNGLAXXX" } }, "creditor": { "name": "RG02- 0000153986" }, "creditorAgent": { "financialInstitution": { "name": "RG02- 0000153986", "BIC": "GTBINGLAXXX" }, "branchCode": "52146", "clearingSystemId": "058" }, "creditorAccount": { "id": "0000153986", "identifierType": "Other" }, "remittanceInfo": { "multiUnstructured": [ "" ] } } }';
+                    //json := '{"header":{"messageId":"96951A6A-01D0-454A-B4BA-EB66376B8097","countryCode":"NG","timestamp":1770416160},"instruction":{"paymentTimestamp":1770416160,"requiredExecutionDate":"2026-02-06","amount":{"currencyCode":"NGN","amount":45000.0},"referenceId":"PREF000031","paymentType":"ACH","chargerBearer":"DEBT","debtor":{"name":"REONL SCB NIG NGN A/C (Pymt)"},"debtorAccount":{"id":"2402126942","identifierType":"Other"},"debtorAgent":{"financialInstitution":{"postalAddress":{"country":"NG"},"name":"REONL SCB NIG NGN A/C (Pymt)","BIC":"SCBLNGLAXXX"}},"creditor":{"name":"RG02- 0000153986"},"creditorAgent":{"financialInstitution":{"name":"RG02- 0000153986","BIC":"GTBINGLAXXX"},"branchCode":"52146","clearingSystemId":"058"},"creditorAccount":{"id":"0000153986","identifierType":"Other"},"purpose":"OTHR","remittanceInfo":{"multiUnstructured":["Multipledomesticpayment"]}}}';
+
                     // ===== Convert to text and send =====
                     // RootObj.WriteTo(json);
                     //StringContent.WriteFrom(json);
@@ -201,7 +220,7 @@ Codeunit 90208 "Payment-Integr. Hook"
                     RequestType := 'POST';
                     //CallPaymentWebService(BaseUrl, RequestType, StringContent, HttpResponseMessage, BearerToken);
                     HttpContent.WriteFrom(json);
-                    Message(json);
+                    //Message(json);
                     HttpContent.GetHeaders(Headers);
                     Headers.Clear();
                     Headers.Add('Content-Type', 'application/json');
@@ -209,7 +228,7 @@ Codeunit 90208 "Payment-Integr. Hook"
                     if HttpClient.Post(WebhookUrl, HttpContent, HttpResponse) then begin
                         HttpResponse.Content().ReadAs(ServiceResult);
                         //Message('Webhook POST succeeded:\%1', ServiceResult);
-                        //ServiceResult := '{"status":true,"data":"¦ùä-GWÀÒâ44dier\":\"PSC000004\",\"internalTrackingId\":\"48a549de-7b03-4b54-be9f-be9fd36c1156\",\"clientReferenceId\":\"PSC000004\",\"referenceId\":\"PSC000004\",\"statusString\":\"Pending\",\"timestamp\":\"2025-11-29T15:43:32.294Z\"}"}';
+                        //ServiceResult := '{"status":1etrue,"data":"¦ùä-GWÀÒâ44dier\":\"PSC000004\",\"internalTrackingId\":\"48a549de-7b03-4b54-be9f-be9fd36c1156\",\"clientReferenceId\":\"PSC000004\",\"referenceId\":\"PSC000004\",\"statusString\":\"Pending\",\"timestamp\":\"2025-11-29T15:43:32.294Z\"}"}';
                         JsonResponseObj.ReadFrom(ServiceResult);
                         //Message(ServiceResult);
                         if JsonResponseObj.Get('status', MyJsonToken) then
@@ -219,7 +238,7 @@ Codeunit 90208 "Payment-Integr. Hook"
                         Error('Failed to send webhook payload to %1', WebhookUrl);
                     // ===== Response handling =====
                     //JsonResponseObj.ReadFrom(ServiceResult);
-                    Message(ServiceResult);
+                    //Message(ServiceResult);
                     //if StrPos(ServiceResult, 'Received') > 0 then
                     //    Success := true;
                     PaymentTranHdr."Date Submitted" := CurrentDateTime;

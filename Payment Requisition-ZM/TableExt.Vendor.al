@@ -3,6 +3,14 @@ tableextension 50003 VendorExt extends Vendor
     fields
     {
         field(50002; "No. 2"; Text[50]) { }
+        field(50003; "Sectorial Purpose Code"; Code[20])
+        {
+            TableRelation = "Sectoral Purpose Code";
+        }
+         field(50004; "Payment Category Code"; Code[20])
+        {
+            TableRelation = "Payment Category Code";
+        }
     }
 
     keys

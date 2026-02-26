@@ -9,6 +9,7 @@ pageextension 50040 BankAccountExt extends "Bank Account Card"
                 ApplicationArea = All;
             }
         }
+        
     }
 
     actions

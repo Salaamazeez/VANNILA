@@ -104,8 +104,12 @@ page 90237 "Payment Window Card"
                     ApplicationArea = All;
                 }
 
-               
+
                 field("Charger Bearer"; Rec."Charger Bearer")
+                {
+                    ApplicationArea = All;
+                }
+                field("Payment Category Code"; Rec."Payment Category Code")
                 {
                     ApplicationArea = All;
                 }
@@ -173,7 +177,7 @@ page 90237 "Payment Window Card"
                     ToolTip = 'Specifies the value of the Bank Account Code field.';
                     ApplicationArea = All;
                 }
-                 field("Debtor BIC"; Rec."Debtor BIC")
+                field("Debtor BIC"; Rec."Debtor BIC")
                 {
                     ToolTip = 'Specifies the value of the Credit BIC field.';
                     ApplicationArea = All;
@@ -400,12 +404,8 @@ page 90237 "Payment Window Card"
                         UserSetup: Record "User Setup";
                         EnableErr: Label 'Kindly enable %1 on %2', Comment = '%1 is Use , %2 is Payment Setup';
                     begin
+                        Rec.MandatoryFields();
                         PmtTranSetup.Get();
-                        Rec.TestField("Payment Type");
-                        Rec.TestField("Debtor Identifier Type");
-                        Rec.TestField(Status, Rec.Status::Approved);
-                        //Rec.TestField("Creditor Identifier Type");
-                        Rec.TestField("Debtor BIC");
                         if PmtTranSetup."Use Pmt Authomation" then begin
                             if CONFIRM('Do you want to send batch', TRUE, false) then
                                 PaymentIntegrHook.CreateSchedule(Rec)
@@ -429,7 +429,7 @@ page 90237 "Payment Window Card"
                         EnableErr: Label 'Kindly enable %1 on %2', Comment = '%1 is Use , %2 is Payment Setup';
                     begin
                         UserSetup.Get(UserId);
-                            //Error(AdmTxt);
+                        //Error(AdmTxt);
                         //if not (UserSetup."Send Payment Batch") then
                         //UserSetup.TestField("Send Payment Batch", true);
                         Rec.TestField(Status, Rec.Status::Approved);
@@ -508,7 +508,7 @@ page 90237 "Payment Window Card"
                         ReleaseDocument: Codeunit "Release Documents";
                         RecRef: RecordRef;
                     begin
-                        Rec.TestField(Submitted, false);
+                        //Rec.TestField(Submitted, false);
                         RecRef.GetTable(Rec);
                         ReleaseDocument.PerformManualReopen(RecRef);
                         CurrPage.Update();
