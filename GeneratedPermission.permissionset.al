@@ -222,8 +222,22 @@ permissionset 50000 GeneratedPermission
         page "Work Completion Cert. (WCC)"=X,
         page "Work Completion Certs (WCCs)"=X,
         codeunit CreateSchedule=X,
-        page "SCB Http Helper"=X;
-        // tabledata "SWIFT/BIC Directory"=RIMD,
-        // table "SWIFT/BIC Directory"=X,
-        // page "SWIFT/BIC Directory List"=X;
+        page "SCB Http Helper"=X,
+        tabledata "Bank Statement"=RIMD,
+        tabledata "Payment Category Code"=RIMD,
+        tabledata "Sectoral Purpose Code"=RIMD,
+        tabledata "Statement Setup"=RIMD,
+        table "Bank Statement"=X,
+        table "Payment Category Code"=X,
+        table "Sectoral Purpose Code"=X,
+        table "Statement Setup"=X,
+        report "Bank Statement"=X,
+        codeunit Statement=X,
+        page "Bank Statement Setup"=X,
+        page "Bank Statements"=X,
+        page "Payment Category Codes"=X,
+        page "Sectoral Purpose Codes"=X;
+// tabledata "SWIFT/BIC Directory"=RIMD,
+// table "SWIFT/BIC Directory"=X,
+// page "SWIFT/BIC Directory List"=X;
 }

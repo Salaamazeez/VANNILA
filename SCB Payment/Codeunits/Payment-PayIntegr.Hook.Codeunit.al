@@ -267,7 +267,7 @@ Codeunit 90208 "Payment-Integr. Hook"
                                 PaymentTranLine."Reason Information Text" := MyJsonToken.AsValue().AsText();
                         //PaymentTranHdr."Check Status Response" := MyJsonToken.AsValue().AsText();
 
-                        PaymentTranLine.Modify();
+                      if  PaymentTranLine.Modify() then;
 
                     end;
                 //end;
