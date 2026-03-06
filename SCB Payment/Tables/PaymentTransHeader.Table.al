@@ -384,6 +384,13 @@ Table 90219 "Payment Schedule Header"
         {
             Caption = 'Cross Border';
             OptionMembers = " ",Explicit;
+            trigger OnValidate()
+            begin
+                if "Payment Type Preference" = "Payment Type Preference"::Explicit then begin
+                    "Payment Type" := "Payment Type"::TT;
+                    "Charger Bearer" := "Charger Bearer"::SHAR;
+                end;
+            end;
         }
         field(50036; "Charger Bearer"; Option)
         {

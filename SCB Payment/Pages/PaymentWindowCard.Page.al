@@ -36,6 +36,10 @@ page 90237 "Payment Window Card"
                     ApplicationArea = All;
                     Editable = false;
                 }
+                field("Payment Type Preference"; Rec."Payment Type Preference")
+                {
+                    ApplicationArea = All;
+                }
                 field("Payment Type"; Rec."Payment Type")
                 {
                     ApplicationArea = All;
@@ -45,10 +49,6 @@ page 90237 "Payment Window Card"
                 //     ApplicationArea = All;
                 // }
                 field("Debtor Identifier Type"; Rec."Debtor Identifier Type")
-                {
-                    ApplicationArea = All;
-                }
-                field("Payment Type Preference"; Rec."Payment Type Preference")
                 {
                     ApplicationArea = All;
                 }
@@ -490,6 +490,10 @@ page 90237 "Payment Window Card"
                         ReleaseDocument: Codeunit "Release Documents";
                         RecRef: RecordRef;
                     begin
+                        if Rec."Payment Type Preference" = Rec."Payment Type Preference"::Explicit then begin
+                            Rec.TestField("Charger Bearer", Rec."Charger Bearer"::SHAR);
+                            Rec.TestField("Payment Type", Rec."Payment Type"::TT);
+                        end;
                         RecRef.GetTable(Rec);
                         ReleaseDocument.PerformanualManualDocRelease(RecRef);
                         CurrPage.Update();

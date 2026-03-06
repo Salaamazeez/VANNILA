@@ -36,6 +36,10 @@ page 50031 "Sectoral Purpose Codes"
                 {
                     ApplicationArea = All;
                 }
+                field("FCY Transaction"; Rec."FCY Transaction")
+                {
+                    ApplicationArea = All;
+                }
             }
         }
     }

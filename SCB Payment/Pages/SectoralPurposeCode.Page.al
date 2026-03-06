@@ -40,6 +40,9 @@ table 50031 "Sectoral Purpose Code"
         {
             Caption = 'Blocked';
         }
+        field(6;"FCY Transaction";Boolean)
+        {
+        }
     }
 
     keys

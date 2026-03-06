@@ -244,6 +244,9 @@ codeunit 90210 "Payment - Get Payment"
     begin
         PaymentTransHeader.Get(Rec."Batch Number");
         PaymentTransHeader.TestField("Bank Account Code");
+        //PaymentTransHeader.TestField("Payment Type Preference");
+        PaymentTransHeader.TestField("Payment Type");
+        PaymentTransHeader.TestField("Debtor Identifier Type");
 
         PaymentHeader.SetRange("Status", PaymentHeader."Status"::Approved);
         PaymentHeader.SetRange("Payment Method", PaymentHeader."payment method"::"E-Payment");
@@ -285,6 +288,7 @@ codeunit 90210 "Payment - Get Payment"
         SerialNo: Integer;
         PmtTranSetup: Record "Payment Schedule Setup";
         Vendor: Record Vendor;
+        SectoralPurposeCode: Record "Sectoral Purpose Code";
     begin
         PaymentTransLine.SetRange("Batch Number", PaymentTransHeader."Batch Number");
         PmtTranSetup.Get;
@@ -315,6 +319,11 @@ codeunit 90210 "Payment - Get Payment"
                                 VendorRec.Get(PaymentLine."Account No.");
                                 Vendor.get(PaymentLine."Account No.");
                                 Vendor.TestField("Sectorial Purpose Code");
+
+                                SectoralPurposeCode.Get(Vendor."Sectorial Purpose Code");
+                                if PaymentTransHeader."Payment Type Preference" = PaymentTransHeader."Payment Type Preference"::Explicit then
+                                    if not SectoralPurposeCode."FCY Transaction" then
+                                        Error('Cross border tranction must have sectorial purpose FCY set to true on venodr no.: %1', Vendor."No.");
                                 LineNo := LineNo + 10000;
                                 PaymentTransLine.Init;
                                 PaymentTransLine."Batch Number" := PaymentTransHeader."Batch Number";
