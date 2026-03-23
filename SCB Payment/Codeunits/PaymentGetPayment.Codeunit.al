@@ -344,8 +344,9 @@ codeunit 90210 "Payment - Get Payment"
                                 PaymentTransLine.Description := PaymentLine."Payment Details";
                                 PaymentTransLine."Payee No." := PaymentLine."Account No.";
                                 //VendorRec.Get( PaymentTransLine."Payee No.");
+                                VendorBankAcc.TestField("Name 2");
                                 PaymentTransLine.Payee := VendorRec.Name;
-                                PaymentTransLine."Bank Name" := VendorBankAcc.Name;
+                                PaymentTransLine."Bank Name" := VendorBankAcc."Name 2";
                                 PaymentTransLine."Bank CBN Code" := VendorBankAcc."CBN Code";
                                 PaymentTransLine."Branch Code" := VendorBankAcc."Bank Branch No.";
                                 PaymentTransLine."Reference Type" := PaymentTransLine."reference type"::Voucher;

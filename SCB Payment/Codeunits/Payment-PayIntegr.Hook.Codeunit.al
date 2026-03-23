@@ -28,11 +28,12 @@ Codeunit 90208 "Payment-Integr. Hook"
         DebtorAgentObj: JsonObject;
         FinInstObj: JsonObject;
         PostalAddressObj: JsonObject;
-
+        Vendor: Record Vendor;
         CreditorObj: JsonObject;
         CreditorAgentObj: JsonObject;
         CreditorFinInstObj: JsonObject;
         CreditorAccountObj: JsonObject;
+        postalAddress: JsonObject;
 
         HttpResponse: HttpResponseMessage;
         RemittanceObj: JsonObject;
@@ -56,11 +57,13 @@ Codeunit 90208 "Payment-Integr. Hook"
         Purpose: Code[20];
         SectorialPurpose: Record "Sectoral Purpose Code";
         PaymentCategory: Record "Payment Category Code";
+        GeneralLedgerSetup: Record "General Ledger Setup";
     begin
         Success := false;
         CompanyInfo.Get();
         Window.Open('Progressing.....');
         PmtTranSetup.Get();
+        GeneralLedgerSetup.Get();
         if PaymentTranHdr."API Platform" = PaymentTranHdr."API Platform"::SCB then begin
             PaymentTranLine.Reset;
             PaymentTranLine.SetRange("Batch Number", PaymentTranHdr."Batch Number");
@@ -106,7 +109,7 @@ Codeunit 90208 "Payment-Integr. Hook"
 
                     // ===== Header =====
                     //HeaderObj.Add('messageSender', CompanyInfo.Name);
-                    HeaderObj.Add('messageId', DelChr(CreateGuid(), '=', '{}'));
+                    HeaderObj.Add('messageId', DelChr(CreateGuid(), '=', '-{}'));
                     HeaderObj.Add('countryCode', CopyStr(CompanyInfo."Country/Region Code", 1, 2));
                     HeaderObj.Add('timestamp', ToUnixTimestamp(Format(CurrentDateTime())));
 
@@ -128,7 +131,7 @@ Codeunit 90208 "Payment-Integr. Hook"
                     if PaymentTranHdr."Currency Code" <> '' then
                         CurrCode := PaymentTranHdr."Currency Code"
                     else
-                        CurrCode := 'USD';
+                        CurrCode := GeneralLedgerSetup."LCY Code";
                     AmountObj.Add('currencyCode', CurrCode);
                     AmountObj.Add('amount', PaymentTranLine.Amount);
                     InstructionObj.Add('amount', AmountObj);
@@ -143,26 +146,41 @@ Codeunit 90208 "Payment-Integr. Hook"
                     // Debtor Account
                     DebtorAccountObj.Add('id', BankAccount."Bank Account No.");
                     DebtorAccountObj.Add('identifierType', Format(PaymentTranHdr."Debtor Identifier Type"));//DebitAccount."Identifier Type"
+                    if BankAccount."Currency Code" <> '' then
+                        DebtorAccountObj.Add('currency', BankAccount."Currency Code")
+                    else begin                        
+                        DebtorAccountObj.Add('currency', GeneralLedgerSetup."LCY Code");
+                    end;
                     InstructionObj.Add('debtorAccount', DebtorAccountObj);
 
                     // Debtor Agent -> Financial Institution -> Postal Address
                     PostalAddressObj.Add('country', CopyStr(BankAccount."Country/Region Code", 1, 2));
                     FinInstObj.Add('postalAddress', PostalAddressObj);
-                    FinInstObj.Add('name', BankAccount.Name);
+                    FinInstObj.Add('name', BankAccount."Name 2");
                     FinInstObj.Add('BIC', Format(PaymentTranHdr."Debtor BIC"));
 
                     DebtorAgentObj.Add('financialInstitution', FinInstObj);
                     // if BankAccount."Bank Clearing Standard" <> '' then
                     //     DebtorAgentObj.Add('clearingSystemId', BankAccount."Bank Clearing Standard");
                     InstructionObj.Add('debtorAgent', DebtorAgentObj);
-
-                    // Creditor (from PaymentTranLine)
+                    //if PaymentTranHdr."Payment Type Preference" = PaymentTranHdr."Payment Type Preference"::Explicit then begin
+                        Clear(PostalAddressObj);
+                        Vendor.Get(PaymentTranLine."Payee No.");
+                        Vendor.TestField("Country/Region Code");
+                        Vendor.TestField(City);
+                        PostalAddressObj.Add('country', CopyStr(Vendor."Country/Region Code", 1, 2));
+                        PostalAddressObj.Add('city', Vendor.City);
+                    //end;
                     CreditorObj.Add('name', CopyStr(PaymentTranLine.Payee, 1, 35));
+                    //if PaymentTranHdr."Payment Type Preference" = PaymentTranHdr."Payment Type Preference"::Explicit then
+                        CreditorObj.Add('postalAddress', PostalAddressObj);
                     InstructionObj.Add('creditor', CreditorObj);
 
                     // Creditor Agent
-                    CreditorFinInstObj.Add('name', CopyStr(PaymentTranLine.Payee, 1, 35));
+                    CreditorFinInstObj.Add('name', CopyStr(PaymentTranLine."Bank Name", 1, 35));
                     CreditorFinInstObj.Add('BIC', Format(PaymentTranLine."Creditor BIC"));
+                    if PaymentTranHdr."Payment Type Preference" = PaymentTranHdr."Payment Type Preference"::Explicit then
+                        CreditorFinInstObj.Add('postalAddress', PostalAddressObj);
                     CreditorAgentObj.Add('financialInstitution', CreditorFinInstObj);
                     if not (PaymentTranHdr."Payment Type Preference" = PaymentTranHdr."Payment Type Preference"::Explicit) then begin
                         CreditorAgentObj.Add('branchCode', PaymentTranLine."Branch Code");
@@ -178,7 +196,7 @@ Codeunit 90208 "Payment-Integr. Hook"
                     InstructionObj.Add('creditorAccount', CreditorAccountObj);
                     //if (PaymentTranHdr."Payment Type Preference" = PaymentTranHdr."Payment Type Preference"::Explicit) then
                     PaymentCategory.Get(PaymentTranHdr."Payment Category Code");
-                    Purpose := PaymentCategory."4 Character Code";
+                    Purpose := PaymentCategory."Category Code";
                     //Purpose := 'OTHR';
                     //else
                     //     Purpose := CopyStr(PaymentTranLine.Description, 1, 10);
@@ -220,13 +238,17 @@ Codeunit 90208 "Payment-Integr. Hook"
                     RequestType := 'POST';
                     //CallPaymentWebService(BaseUrl, RequestType, StringContent, HttpResponseMessage, BearerToken);
                     HttpContent.WriteFrom(json);
-                    //Message(json);
+                    if PmtTranSetup."Print Payload" then
+                        Message(json);
                     HttpContent.GetHeaders(Headers);
                     Headers.Clear();
                     Headers.Add('Content-Type', 'application/json');
-                    // 🔹 Send POST request
+                    //  Send POST request
+                    //exit;
                     if HttpClient.Post(WebhookUrl, HttpContent, HttpResponse) then begin
                         HttpResponse.Content().ReadAs(ServiceResult);
+                        if PmtTranSetup."Print Payload" then
+                            Message(ServiceResult);
                         //Message('Webhook POST succeeded:\%1', ServiceResult);
                         //ServiceResult := '{"status":1etrue,"data":"¦ùä-GWÀÒâ44dier\":\"PSC000004\",\"internalTrackingId\":\"48a549de-7b03-4b54-be9f-be9fd36c1156\",\"clientReferenceId\":\"PSC000004\",\"referenceId\":\"PSC000004\",\"statusString\":\"Pending\",\"timestamp\":\"2025-11-29T15:43:32.294Z\"}"}';
                         JsonResponseObj.ReadFrom(ServiceResult);
@@ -266,8 +288,8 @@ Codeunit 90208 "Payment-Integr. Hook"
                             if not MyJsonToken.AsValue().IsNull then
                                 PaymentTranLine."Reason Information Text" := MyJsonToken.AsValue().AsText();
                         //PaymentTranHdr."Check Status Response" := MyJsonToken.AsValue().AsText();
-
-                      if  PaymentTranLine.Modify() then;
+                        Commit();
+                        if PaymentTranLine.Modify() then;
 
                     end;
                 //end;

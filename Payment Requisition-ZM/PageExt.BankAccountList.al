@@ -9,7 +9,15 @@ pageextension 50041 BankAccountListExt extends "Bank Account List"
                 ApplicationArea = All;
             }
         }
-        
+         addafter(Name)
+        {
+            field("Name 2";Rec."Name 2")
+            {
+                ApplicationArea = All;
+
+            }
+
+        }
     }
 
     actions

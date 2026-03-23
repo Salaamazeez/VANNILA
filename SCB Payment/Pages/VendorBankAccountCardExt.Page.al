@@ -4,6 +4,13 @@ pageextension 90223 VendorBankAccountCardExt extends "Vendor Bank Account Card"
 {
     layout
     {
+        addafter(Name)
+        {
+            field("Name 2"; Rec."Name 2")
+            {
+                ApplicationArea = All;
+            }
+        }
         addafter("Bank Branch No.")
         {
             field("CBN Code"; Rec."CBN Code")

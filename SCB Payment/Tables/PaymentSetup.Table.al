@@ -108,6 +108,10 @@ Table 90218 "Payment Schedule Setup"
         {
             DataClassification = CustomerContent;
         }
+        field(50069; "Print Payload"; Boolean)
+        {
+            DataClassification = CustomerContent;
+        }
     }
 
     keys

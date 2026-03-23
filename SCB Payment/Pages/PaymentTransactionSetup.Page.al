@@ -68,7 +68,10 @@ Page 90240 "Payment Schedule Setup"
                 {
                     ApplicationArea = Basic;
                 }
+                field("Print Payload"; Rec."Print Payload")
+                {
 
+                }
             }
             group(Numbering)
             {
